@@ -24,6 +24,20 @@ public class BusinessFlow<Sad, Happy> {
         this.technicalFailure = technicalFailure;
     }
 
+    public interface HappyAttempt<Sad extends Exception, Happy> {
+        Happy happy() throws Sad;
+    }
+
+    //TODO: think about this
+    @SuppressWarnings("unchecked")
+    public static <Sad extends Exception, Happy> BusinessFlow<Sad, Happy> businessFlow(HappyAttempt<Sad, Happy> happyAttempt) {
+        try {
+            return happyPath(happyAttempt.happy(), e -> {throw new RuntimeException();});
+        } catch (Exception sad) {
+            return sadPath((Sad) sad, e -> {throw new RuntimeException();});
+        }
+    }
+
     public static <Sad, Happy > BusinessFlow<Sad, Happy> happyPath(Happy happy, Function<Exception, Sad> technicalFailure) {
         return new BusinessFlow<>(ofRight(happy), technicalFailure);
     }

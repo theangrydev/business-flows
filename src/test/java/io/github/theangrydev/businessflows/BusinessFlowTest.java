@@ -3,6 +3,7 @@ package io.github.theangrydev.businessflows;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -39,8 +40,14 @@ public class BusinessFlowTest implements WithAssertions {
 
     }
 
+    private Happy happyAttempt() throws IOException {
+        return new Happy();
+    }
+
     @Test
     public void thenWithUnexpectedRuntimeExceptionIsATechnicalFailure() {
+        BusinessFlow<IOException, Happy> ioExceptionHappyBusinessFlow = BusinessFlow.businessFlow(this::happyAttempt);
+
         RuntimeException runtimeException = new RuntimeException();
 
         Sad actualSad = happyPath(new Happy(), Sad::technicalFailure)
