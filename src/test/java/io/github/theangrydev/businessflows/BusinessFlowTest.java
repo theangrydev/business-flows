@@ -41,12 +41,16 @@ public class BusinessFlowTest implements WithAssertions {
     }
 
     private Happy happyAttempt() throws IOException {
+        process();
         return new Happy();
+    }
+    private String process() throws IOException {
+        return "";
     }
 
     @Test
     public void thenWithUnexpectedRuntimeExceptionIsATechnicalFailure() {
-        BusinessFlow<IOException, Happy> ioExceptionHappyBusinessFlow = BusinessFlow.businessFlow(this::happyAttempt);
+        BusinessFlow.happyAttempt(this::happyAttempt, Sad::technicalFailure);
 
         RuntimeException runtimeException = new RuntimeException();
 
@@ -138,7 +142,7 @@ public class BusinessFlowTest implements WithAssertions {
                 .sadPath()
                 .get();
 
-        assertThat(actualSads).containsExactly(firstSad, secondSad);
+        assertThat(actualSads).containsOnly(firstSad, secondSad);
     }
 
     @Test

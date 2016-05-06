@@ -2,14 +2,12 @@ package io.github.theangrydev.businessflows;
 
 import com.codepoetics.ambivalence.Either;
 
-import java.util.function.Function;
-
 public class SadPath<Sad, Happy>{
 
     private final Either<Sad, Happy> either;
-    private final Function<Exception, Sad> technicalFailure;
+    private final TechnicalFailure<Sad> technicalFailure;
 
-    public SadPath(Either<Sad, Happy> either, Function<Exception, Sad> technicalFailure) {
+    public SadPath(Either<Sad, Happy> either, TechnicalFailure<Sad> technicalFailure) {
         this.either = either;
         this.technicalFailure = technicalFailure;
     }
