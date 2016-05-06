@@ -15,31 +15,13 @@ import static java.util.stream.Collectors.toSet;
 public class BusinessFlow<Sad, Happy> {
 
     private final Either<Sad, Happy> either;
+    private final UncaughtExceptionHandler uncaughtExceptionHandler;
     private final TechnicalFailure<Sad> technicalFailure;
 
-    private BusinessFlow(Either<Sad, Happy> either, TechnicalFailure<Sad> technicalFailure) {
+    BusinessFlow(Either<Sad, Happy> either, UncaughtExceptionHandler uncaughtExceptionHandler, TechnicalFailure<Sad> technicalFailure) {
         this.either = either;
+        this.uncaughtExceptionHandler = uncaughtExceptionHandler;
         this.technicalFailure = technicalFailure;
-    }
-
-    public static <Happy> BusinessFlow<Exception, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
-        return happyAttempt(happyAttempt, exception -> exception);
-    }
-
-    public static <Sad, Happy> BusinessFlow<Sad, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt, TechnicalFailure<Sad> technicalFailure) {
-        try {
-            return happyPath(happyAttempt.happy(), technicalFailure);
-        } catch (Exception sad) {
-            return sadPath(technicalFailure.wrap(sad), technicalFailure);
-        }
-    }
-
-    public static <Sad, Happy > BusinessFlow<Sad, Happy> happyPath(Happy happy, TechnicalFailure<Sad> technicalFailure) {
-        return new BusinessFlow<>(ofRight(happy), technicalFailure);
-    }
-
-    public static <Sad, Happy > BusinessFlow<Sad, Happy> sadPath(Sad sad, TechnicalFailure<Sad> technicalFailure) {
-        return new BusinessFlow<>(Either.ofLeft(sad), technicalFailure);
     }
 
     public <NewHappy> BusinessFlow<Sad, NewHappy> then(HappyMapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
@@ -82,6 +64,7 @@ public class BusinessFlow<Sad, Happy> {
             consumer.accept(happy);
             return either;
         } catch (RuntimeException exception) {
+            uncaughtExceptionHandler.handle(exception);
             return Either.ofLeft(technicalFailure.wrap(exception));
         }
     }
@@ -89,7 +72,7 @@ public class BusinessFlow<Sad, Happy> {
     @SafeVarargs
     public final BusinessFlow<Set<Sad>, Happy> attemptAll(ActionThatMightFail<Sad, Happy>... validators) {
         RightProjection<Set<Sad>, Happy> attempt = either.left().map(Collections::singleton).right().flatMap(happy -> attemptAll(happy, validators));
-        return new BusinessFlow<>(attempt, technicalFailure.andThen(Collections::singleton));
+        return new BusinessFlow<>(attempt, uncaughtExceptionHandler, technicalFailure.andThen(Collections::singleton));
     }
 
     private Either<Set<Sad>, Happy> attemptAll(Happy happy, ActionThatMightFail<Sad, Happy>[] validators) {
@@ -109,16 +92,17 @@ public class BusinessFlow<Sad, Happy> {
         try {
             return actionThatMightFail.attempt(happy);
         } catch (Exception exception) {
+            uncaughtExceptionHandler.handle(exception);
             return Optional.of(technicalFailure.wrap(exception));
         }
     }
 
     private <NewHappy> BusinessFlow<Sad, NewHappy> happyPath(Either<Sad, NewHappy> either) {
-        return new BusinessFlow<>(either, technicalFailure);
+        return new BusinessFlow<>(either, uncaughtExceptionHandler, technicalFailure);
     }
 
     private <NewHappy> BusinessFlow<Sad, NewHappy> happyPath(NewHappy happy) {
-        return happyPath(happy, technicalFailure);
+        return happyPath(Either.ofRight(happy));
     }
 
     private <NewHappy> Either<Sad, NewHappy> tryHappyMapping(Happy happy, HappyMapping<Happy, NewHappy> mapping) {
@@ -129,6 +113,7 @@ public class BusinessFlow<Sad, Happy> {
         try {
             return action.map(happy).either;
         } catch (Exception exception) {
+            uncaughtExceptionHandler.handle(exception);
             return Either.ofLeft(technicalFailure.wrap(exception));
         }
     }

@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.github.theangrydev.businessflows.BusinessFlow.happyPath;
-import static io.github.theangrydev.businessflows.BusinessFlow.sadPath;
 
 public class BusinessFlowTest implements WithAssertions {
 
@@ -48,13 +46,15 @@ public class BusinessFlowTest implements WithAssertions {
         return "";
     }
 
+    private final BusinessFlows businessFlows = new BusinessFlows(exception -> System.out.println("exception = " + exception));
+
     @Test
     public void thenWithUnexpectedRuntimeExceptionIsATechnicalFailure() {
-        BusinessFlow.happyAttempt(this::happyAttempt, Sad::technicalFailure);
+        businessFlows.happyAttempt(this::happyAttempt, Sad::technicalFailure);
 
         RuntimeException runtimeException = new RuntimeException();
 
-        Sad actualSad = happyPath(new Happy(), Sad::technicalFailure)
+        Sad actualSad = businessFlows.happyPath(new Happy(), Sad::technicalFailure)
                 .then(happy -> {throw runtimeException;})
                 .sadPath()
                 .get();
@@ -66,8 +66,8 @@ public class BusinessFlowTest implements WithAssertions {
     public void thenWithPossibleSadPathThatIsSad() {
         Sad expectedSad = new Sad();
 
-        Sad actualSad = happyPath(new Happy(), Sad::technicalFailure)
-                .then(happy -> sadPath(expectedSad, Sad::technicalFailure))
+        Sad actualSad = businessFlows.happyPath(new Happy(), Sad::technicalFailure)
+                .then(happy -> businessFlows.sadPath(expectedSad, Sad::technicalFailure))
                 .sadPath()
                 .get();
 
@@ -78,8 +78,8 @@ public class BusinessFlowTest implements WithAssertions {
     public void thenWithPossibleHappyPathThatIsHappy() {
         Happy2 expectedHappy = new Happy2();
 
-        Happy2 actualHappy = happyPath(new Happy(), Sad::technicalFailure)
-                .then(happy -> happyPath(expectedHappy, Sad::technicalFailure))
+        Happy2 actualHappy = businessFlows.happyPath(new Happy(), Sad::technicalFailure)
+                .then(happy -> businessFlows.happyPath(expectedHappy, Sad::technicalFailure))
                 .get();
 
         assertThat(actualHappy).isSameAs(expectedHappy);
@@ -89,7 +89,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void mapWithUnexpectedRuntimeExceptionIsATechnicalFailure() {
         RuntimeException runtimeException = new RuntimeException();
 
-        Sad actualSad = happyPath(new Happy(), Sad::technicalFailure)
+        Sad actualSad = businessFlows.happyPath(new Happy(), Sad::technicalFailure)
                 .map(happy -> {throw runtimeException;})
                 .sadPath()
                 .get();
@@ -101,7 +101,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void mapThatIsHappy() {
         Happy2 expectedHappy = new Happy2();
 
-        Happy2 actualHappy = happyPath(new Happy(), Sad::technicalFailure)
+        Happy2 actualHappy = businessFlows.happyPath(new Happy(), Sad::technicalFailure)
                 .map(happy -> expectedHappy)
                 .get();
 
@@ -113,7 +113,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void attemptWithNoFailureRemainsHappy() {
         Happy originalHappy = new Happy();
 
-        Happy actualHappy = happyPath(originalHappy, Sad::technicalFailure)
+        Happy actualHappy = businessFlows.happyPath(originalHappy, Sad::technicalFailure)
                 .attempt(happy -> Optional.empty())
                 .get();
 
@@ -124,7 +124,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void attemptWithFailureTurnsSad() {
         Sad expectedSad = new Sad();
 
-        Sad actualSad = happyPath(new Happy(), Sad::technicalFailure)
+        Sad actualSad = businessFlows.happyPath(new Happy(), Sad::technicalFailure)
                 .attempt(happy -> Optional.of(expectedSad))
                 .sadPath()
                 .get();
@@ -137,7 +137,7 @@ public class BusinessFlowTest implements WithAssertions {
         Sad firstSad = new Sad();
         Sad secondSad = new Sad();
 
-        Set<Sad> actualSads = happyPath(new Happy(), Sad::technicalFailure)
+        Set<Sad> actualSads = businessFlows.happyPath(new Happy(), Sad::technicalFailure)
                 .attemptAll(happy -> Optional.of(firstSad), happy -> Optional.of(secondSad))
                 .sadPath()
                 .get();
@@ -149,7 +149,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void attemptWithMultiplePassesStaysHappy() {
         Happy originalHappy = new Happy();
 
-        Happy actualHappy = happyPath(originalHappy, Sad::technicalFailure)
+        Happy actualHappy = businessFlows.happyPath(originalHappy, Sad::technicalFailure)
                 .attemptAll(happy -> Optional.empty(), happy -> Optional.empty())
                 .get();
 
