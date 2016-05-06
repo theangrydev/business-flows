@@ -55,10 +55,7 @@ public class BusinessFlow<Sad, Happy> {
     }
 
     public BusinessFlow<Sad, Happy> attempt(ActionThatMightFail<Sad, Happy>... actionsThatMightFail) {
-        if (actionsThatMightFail.length == 0) {
-            return this;
-        }
-        BusinessFlow<Sad, Happy> attempt = null;
+        BusinessFlow<Sad, Happy> attempt = this;
         for (ActionThatMightFail<Sad, Happy> actionThatMightFail : actionsThatMightFail) {
             attempt = attempt(actionThatMightFail);
             if (attempt.either.isLeft()) {
