@@ -138,7 +138,7 @@ public class BusinessFlowTest implements WithAssertions {
         Sad secondSad = new Sad();
 
         Set<Sad> actualSads = happyPath(new Happy(), Sad::technicalFailure)
-                .attempt(happy -> Optional.of(firstSad), happy -> Optional.of(secondSad))
+                .attemptAll(happy -> Optional.of(firstSad), happy -> Optional.of(secondSad))
                 .sadPath()
                 .get();
 
@@ -150,7 +150,7 @@ public class BusinessFlowTest implements WithAssertions {
         Happy originalHappy = new Happy();
 
         Happy actualHappy = happyPath(originalHappy, Sad::technicalFailure)
-                .attempt(happy -> Optional.empty(), happy -> Optional.empty())
+                .attemptAll(happy -> Optional.empty(), happy -> Optional.empty())
                 .get();
 
         assertThat(actualHappy).isSameAs(originalHappy);

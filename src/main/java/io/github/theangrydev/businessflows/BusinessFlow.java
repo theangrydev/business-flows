@@ -54,6 +54,20 @@ public class BusinessFlow<Sad, Happy> {
         return happyPath(either.right().flatMap(happy -> attempt(actionThatMightFail, happy)));
     }
 
+    public BusinessFlow<Sad, Happy> attempt(ActionThatMightFail<Sad, Happy>... actionsThatMightFail) {
+        if (actionsThatMightFail.length == 0) {
+            return this;
+        }
+        BusinessFlow<Sad, Happy> attempt = null;
+        for (ActionThatMightFail<Sad, Happy> actionThatMightFail : actionsThatMightFail) {
+            attempt = attempt(actionThatMightFail);
+            if (attempt.either.isLeft()) {
+                return attempt;
+            }
+        }
+        return attempt;
+    }
+
     public BusinessFlow<Sad, Happy> peek(Consumer<Happy> consumer) {
         return happyPath(either.right().flatMap(happy -> tryToConsume(happy, consumer)));
     }
@@ -76,12 +90,12 @@ public class BusinessFlow<Sad, Happy> {
     }
 
     @SafeVarargs
-    public final BusinessFlow<Set<Sad>, Happy> attempt(ActionThatMightFail<Sad, Happy>... validators) {
-        RightProjection<Set<Sad>, Happy> attempt = either.left().map(Collections::singleton).right().flatMap(happy -> attempt(happy, validators));
+    public final BusinessFlow<Set<Sad>, Happy> attemptAll(ActionThatMightFail<Sad, Happy>... validators) {
+        RightProjection<Set<Sad>, Happy> attempt = either.left().map(Collections::singleton).right().flatMap(happy -> attemptAll(happy, validators));
         return new BusinessFlow<>(attempt, technicalFailure.andThen(Collections::singleton));
     }
 
-    private Either<Set<Sad>, Happy> attempt(Happy happy, ActionThatMightFail<Sad, Happy>[] validators) {
+    private Either<Set<Sad>, Happy> attemptAll(Happy happy, ActionThatMightFail<Sad, Happy>[] validators) {
         List<Sad> failures = stream(validators).map(validator -> attempt(validator, happy)).collect(split()).getLefts();
         if (failures.isEmpty()) {
             return Either.ofRight(happy);
