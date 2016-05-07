@@ -202,6 +202,35 @@ public class BusinessFlowTest implements WithAssertions {
     }
 
     @Test
+    public void sadPeek() {
+        Sad originalSad = new Sad();
+        AtomicReference<Sad> peekedSad = new AtomicReference<>();
+
+        Sad actualSad = businessFlows.sadPath(originalSad, Sad::technicalFailure)
+                .sadPath()
+                .peek(peekedSad::set)
+                .sadPath()
+                .get();
+
+        assertThat(peekedSad.get()).isSameAs(originalSad);
+        assertThat(actualSad).isSameAs(originalSad);
+    }
+
+    @Test
+    public void sadPeekWithUncaughtExceptionFailureTurnsSad() {
+        Exception uncaughtException = new Exception();
+
+        Sad actualSad = businessFlows.sadPath(new Sad(), Sad::technicalFailure)
+                .sadPath()
+                .peek(happy -> {throw uncaughtException;})
+                .sadPath()
+                .get();
+
+        verify(uncaughtExceptionHandler).handle(uncaughtException);
+        assertThat(actualSad.exception).isSameAs(uncaughtException);
+    }
+
+    @Test
     public void peekWithNoFailureRemainsHappy() {
         Happy originalHappy = new Happy();
         AtomicReference<Happy> peekedHappy = new AtomicReference<>();

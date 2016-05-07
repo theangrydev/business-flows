@@ -2,17 +2,19 @@ package io.github.theangrydev.businessflows;
 
 import com.codepoetics.ambivalence.Either;
 
-public class SadPath<Sad, Happy>{
+import static java.lang.String.format;
 
-    private final Either<Sad, Happy> either;
-    private final TechnicalFailure<Sad> technicalFailure;
+public class SadPath<Sad, Happy> extends Projection<Sad, Happy> {
 
-    public SadPath(Either<Sad, Happy> either, TechnicalFailure<Sad> technicalFailure) {
-        this.either = either;
-        this.technicalFailure = technicalFailure;
+    protected SadPath(Either<Sad, Happy> either, UncaughtExceptionHandler uncaughtExceptionHandler, TechnicalFailure<Sad> technicalFailure) {
+        super(either, uncaughtExceptionHandler, technicalFailure);
+    }
+
+    public BusinessFlow<Sad, Happy> peek(Peek<Sad> peek) {
+        return new BusinessFlow<>(either.left().<Sad>flatMap(sad -> tryToConsume(sad, peek)), uncaughtExceptionHandler,  technicalFailure);
     }
 
     public Sad get() {
-        return either.left().orElseThrow(() -> new RuntimeException("Sad path not present"));
+        return either.left().orElseThrow(() -> new RuntimeException(format("Sad path not present. Happy path was '%s'", either.right().toOptional())));
     }
 }
