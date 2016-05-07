@@ -3,14 +3,14 @@ package io.github.theangrydev.businessflows;
 import com.codepoetics.ambivalence.Either;
 import com.codepoetics.ambivalence.RightProjection;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static com.codepoetics.ambivalence.Either.ofRight;
 import static com.codepoetics.ambivalence.Eithers.split;
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toSet;
 
 public class BusinessFlow<Sad, Happy> {
 
@@ -36,51 +36,38 @@ public class BusinessFlow<Sad, Happy> {
         return happyPath(either.right().flatMap(happy -> attempt(actionThatMightFail, happy)));
     }
 
-    public BusinessFlow<Sad, Happy> attempt(ActionThatMightFail<Sad, Happy>... actionsThatMightFail) {
-        BusinessFlow<Sad, Happy> attempt = this;
-        for (ActionThatMightFail<Sad, Happy> actionThatMightFail : actionsThatMightFail) {
-            attempt = attempt(actionThatMightFail);
-            if (attempt.either.isLeft()) {
-                return attempt;
-            }
-        }
-        return attempt;
-    }
-
-    public BusinessFlow<Sad, Happy> peek(Consumer<Happy> consumer) {
-        return happyPath(either.right().flatMap(happy -> tryToConsume(happy, consumer)));
-    }
-
-    public BusinessFlow<Sad, Happy> peek(Consumer<Happy> happyConsumer, Consumer<Sad> sadConsumer) {
-        return happyPath(either.right().flatMap(happy -> tryToConsume(happy, happyConsumer)).left().flatMap(sad -> tryToConsume(sad, sadConsumer)));
+    public BusinessFlow<Sad, Happy> peek(Peek<Happy> peek) {
+        return happyPath(either.right().flatMap(happy -> tryToConsume(happy, peek)));
     }
 
     public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) {
         return either.join(sadJoiner, happyJoiner);
     }
 
-    private <Argument> Either<Sad, Happy> tryToConsume(Argument happy, Consumer<Argument> consumer) {
-        try {
-            consumer.accept(happy);
-            return either;
-        } catch (RuntimeException exception) {
-            uncaughtExceptionHandler.handle(exception);
-            return Either.ofLeft(technicalFailure.wrap(exception));
-        }
-    }
-
     @SafeVarargs
-    public final BusinessFlow<Set<Sad>, Happy> attemptAll(ActionThatMightFail<Sad, Happy>... validators) {
-        RightProjection<Set<Sad>, Happy> attempt = either.left().map(Collections::singleton).right().flatMap(happy -> attemptAll(happy, validators));
-        return new BusinessFlow<>(attempt, uncaughtExceptionHandler, technicalFailure.andThen(Collections::singleton));
+    public final BusinessFlow<List<Sad>, Happy> validate(ActionThatMightFail<Sad, Happy>... validators) {
+        RightProjection<List<Sad>, Happy> attempt = either.left().map(Collections::singletonList).right().flatMap(happy -> validate(happy, validators));
+        return new BusinessFlow<>(attempt, uncaughtExceptionHandler, technicalFailure.andThen(Collections::singletonList));
     }
 
-    private Either<Set<Sad>, Happy> attemptAll(Happy happy, ActionThatMightFail<Sad, Happy>[] validators) {
+    public SadPath<Sad, Happy> sadPath() {
+        return new SadPath<>(either, technicalFailure);
+    }
+
+    public Happy get() {
+        return either.right().orElseThrow(() -> new RuntimeException("Happy path not present"));
+    }
+
+    private <Argument> Either<Sad, Happy> tryToConsume(Argument argument, Peek<Argument> consumer) {
+        return tryCatch(Either::ofLeft, () -> {consumer.peek(argument); return either; });
+    }
+
+    private Either<List<Sad>, Happy> validate(Happy happy, ActionThatMightFail<Sad, Happy>[] validators) {
         List<Sad> failures = stream(validators).map(validator -> attempt(validator, happy)).collect(split()).getLefts();
         if (failures.isEmpty()) {
             return Either.ofRight(happy);
         } else {
-            return Either.ofLeft(failures.stream().collect(toSet()));
+            return Either.ofLeft(failures);
         }
     }
 
@@ -89,12 +76,7 @@ public class BusinessFlow<Sad, Happy> {
     }
 
     private Optional<Sad> tryActionThatMightFail(ActionThatMightFail<Sad, Happy> actionThatMightFail, Happy happy) {
-        try {
-            return actionThatMightFail.attempt(happy);
-        } catch (Exception exception) {
-            uncaughtExceptionHandler.handle(exception);
-            return Optional.of(technicalFailure.wrap(exception));
-        }
+        return tryCatch(Optional::of, () -> actionThatMightFail.attempt(happy));
     }
 
     private <NewHappy> BusinessFlow<Sad, NewHappy> happyPath(Either<Sad, NewHappy> either) {
@@ -110,19 +92,20 @@ public class BusinessFlow<Sad, Happy> {
     }
 
     private <NewHappy> Either<Sad, NewHappy> tryHappyAction(Happy happy, HappyMapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
+        return tryCatch(Either::ofLeft, () -> action.map(happy).either);
+    }
+
+    @FunctionalInterface
+    private interface SupplierThatMightThrowException<Result> {
+        Result supply() throws Exception;
+    }
+
+    private <Result> Result tryCatch(Function<Sad, Result> onException, SupplierThatMightThrowException<Result> something) {
         try {
-            return action.map(happy).either;
+            return something.supply();
         } catch (Exception exception) {
             uncaughtExceptionHandler.handle(exception);
-            return Either.ofLeft(technicalFailure.wrap(exception));
+            return onException.apply(technicalFailure.wrap(exception));
         }
-    }
-
-    public SadPath<Sad, Happy> sadPath() {
-        return new SadPath<>(either, technicalFailure);
-    }
-
-    public Happy get() {
-        return either.right().orElseThrow(() -> new RuntimeException("Happy path not present"));
     }
 }
