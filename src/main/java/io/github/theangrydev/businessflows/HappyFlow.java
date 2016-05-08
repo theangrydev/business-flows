@@ -9,10 +9,10 @@ import static java.lang.String.format;
 
 public class HappyFlow<Happy> {
 
-    final Happy happyPath;
-    final Exception exceptionPath;
+    private final Happy happyPath;
+    private final Exception exceptionPath;
 
-    HappyFlow(Happy happyPath, Exception exceptionPath) {
+    private HappyFlow(Happy happyPath, Exception exceptionPath) {
         this.happyPath = happyPath;
         this.exceptionPath = exceptionPath;
     }
