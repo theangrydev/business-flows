@@ -94,7 +94,7 @@ public class HappyFlow<Happy> {
         return new BusinessFlow<Sad, Happy>(null, happy, technicalFailure).attempt(actionThatMightFail);
     }
 
-    public HappyFlow<Happy> ifHappy(Peek<Happy> peek) {
+    public HappyFlow<Happy> peek(Peek<Happy> peek) {
         return flatMap(happy -> {
             peek.peek(happy);
             return this;

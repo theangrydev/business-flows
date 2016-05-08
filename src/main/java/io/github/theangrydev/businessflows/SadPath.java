@@ -32,13 +32,6 @@ public class SadPath<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
         return then(mapping.andThen(BusinessFlow::sadPath));
     }
 
-    public BusinessFlow<Sad, Happy> ifSad(Peek<Sad> peek) {
-        return then(sad -> {
-            peek.peek(sad);
-            return BusinessFlow.sadPath(sad);
-        });
-    }
-
     public HappyFlow<Happy> technicalFailure(Function<Sad, Exception> sadToTechnicalFailure) {
         return join(sadToTechnicalFailure.andThen(HappyFlow::technicalFailure), HappyFlow::happyPath, HappyFlow::technicalFailure);
     }

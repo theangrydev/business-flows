@@ -1,7 +1,6 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static java.lang.String.format;
 
@@ -10,14 +9,24 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlowProjection<Sad, Ha
         super(sadPath, happyPath, technicalFailure);
     }
 
-    public BusinessFlow<Sad, Happy> peek(Consumer<Exception> peek) {
+    private BusinessFlow<Sad, Happy> then(Mapping<Exception, BusinessFlow<Sad, Happy>> action) {
         return join(BusinessFlow::sadPath, BusinessFlow::happyPath, technicalFailure -> {
             try {
-                peek.accept(technicalFailure);
-                return BusinessFlow.technicalFailure(technicalFailure);
-            } catch (Exception peekTechnicalFailure) {
-                return BusinessFlow.technicalFailure(peekTechnicalFailure);
+                return action.map(technicalFailure);
+            } catch (Exception technicalFailureDuringAction) {
+                return BusinessFlow.technicalFailure(technicalFailureDuringAction);
             }
+        });
+    }
+
+    public BusinessFlow<Sad, Happy> map(Mapping<Exception, Exception> mapping) {
+        return then(mapping.andThen(BusinessFlow::technicalFailure));
+    }
+
+    public BusinessFlow<Sad, Happy> peek(Peek<Exception> peek) {
+        return then(technicalFailure -> {
+            peek.peek(technicalFailure);
+            return BusinessFlow.technicalFailure(technicalFailure);
         });
     }
 
