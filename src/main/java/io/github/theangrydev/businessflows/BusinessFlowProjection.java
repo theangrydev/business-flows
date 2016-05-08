@@ -1,6 +1,5 @@
 package io.github.theangrydev.businessflows;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 abstract class BusinessFlowProjection<Sad, Happy> {
@@ -16,10 +15,15 @@ abstract class BusinessFlowProjection<Sad, Happy> {
     }
 
     public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner, Function<Exception, Result> exceptionJoiner) {
-        return Optional.ofNullable(happyPath).map(happyJoiner)
-                .orElseGet(() -> Optional.ofNullable(sadPath).map(sadJoiner)
-                        .orElseGet(() -> Optional.ofNullable(exceptionPath).map(exceptionJoiner)
-                                .orElseThrow(() -> new RuntimeException("Impossible scenario. There must always be a happy or sad or exception."))));
+        if (happyPath != null) {
+            return happyJoiner.apply(happyPath);
+        } else if (sadPath != null) {
+            return sadJoiner.apply(sadPath);
+        } else if (exceptionPath != null) {
+            return exceptionJoiner.apply(exceptionPath);
+        } else {
+            throw new IllegalStateException("Impossible scenario. There must always be a happy or sad or exception.");
+        }
     }
 
     public HappyFlow<Happy> failIfSad(Function<Sad, Exception> failure) {
