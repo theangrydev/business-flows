@@ -22,7 +22,7 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
         return new BusinessFlow<>(null, null, exception);
     }
 
-    public <NewHappy> BusinessFlow<Sad, NewHappy> then(HappyMapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
+    public <NewHappy> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
         return join(BusinessFlow::sadPath, happy -> {
             try {
                 return action.map(happy);
@@ -32,7 +32,7 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
         }, BusinessFlow::failure);
     }
 
-    public <NewHappy> BusinessFlow<Sad, NewHappy> map(HappyMapping<Happy, NewHappy> mapping) {
+    public <NewHappy> BusinessFlow<Sad, NewHappy> map(Mapping<Happy, NewHappy> mapping) {
         return then(mapping.andThen(BusinessFlow::happyPath));
     }
 

@@ -72,15 +72,15 @@ public class HappyFlow<Happy> {
         }
     }
 
-    public  <Sad, NewHappy> BusinessFlow<Sad, NewHappy> then(HappyMapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
+    public  <Sad, NewHappy> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
         return new BusinessFlow<Sad, Happy>(null, happyPath, exceptionPath).then(action);
     }
 
-    public <NewHappy> HappyFlow<NewHappy> map(HappyMapping<Happy, NewHappy> mapping) {
+    public <NewHappy> HappyFlow<NewHappy> map(Mapping<Happy, NewHappy> mapping) {
         return flatMap(mapping.andThen(happy -> new HappyFlow<>(happy, exceptionPath)));
     }
 
-    private <NewHappy> HappyFlow<NewHappy> flatMap(HappyMapping<Happy, HappyFlow<NewHappy>> action) {
+    private <NewHappy> HappyFlow<NewHappy> flatMap(Mapping<Happy, HappyFlow<NewHappy>> action) {
         return happyPath().map(happy -> tryHappyAction(happy, action)).orElse(HappyFlow.failure(exceptionPath));
     }
 
@@ -99,7 +99,7 @@ public class HappyFlow<Happy> {
         return happyPath().orElseThrow(() -> new RuntimeException(format("Happy path not present. Exception was '%s'", exceptionPath)));
     }
 
-    private <NewHappy> HappyFlow<NewHappy> tryHappyAction(Happy happy, HappyMapping<Happy, HappyFlow<NewHappy>> action) {
+    private <NewHappy> HappyFlow<NewHappy> tryHappyAction(Happy happy, Mapping<Happy, HappyFlow<NewHappy>> action) {
         return tryCatch(HappyFlow::failure, () -> action.map(happy));
     }
 
