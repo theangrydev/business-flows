@@ -163,7 +163,7 @@ public class BusinessFlowTest implements WithAssertions {
         Sad firstSad = new Sad();
         Sad secondSad = new Sad();
 
-        List<Sad> actualSads = BusinessFlow.<Sad, Happy>happyPath(new Happy())
+        List<Sad> actualSads = HappyFlow.happyPath(new Happy())
                 .validate(happy -> Optional.of(firstSad), happy -> Optional.of(secondSad))
                 .sadPath()
                 .get();
@@ -175,7 +175,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void validateWithMultiplePassesStaysHappy() {
         Happy originalHappy = new Happy();
 
-        Happy actualHappy = happyPath(originalHappy)
+        Happy actualHappy = HappyFlow.happyPath(originalHappy)
                 .validate(happy -> Optional.empty(), happy -> Optional.empty())
                 .get();
 

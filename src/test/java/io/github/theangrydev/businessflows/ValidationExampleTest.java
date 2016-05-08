@@ -61,7 +61,7 @@ public class ValidationExampleTest {
                 .validate(registrationForm -> Optional.empty());
 
         BusinessFlow<ValidationError, RegistrationForm> attempt = registrationForm()
-                .attempt(registrationForm -> Optional.empty())
+                .attempt(registrationForm -> Optional.<ValidationError>empty())
                 .attempt(registrationForm -> Optional.empty())
                 .attempt(registrationForm -> Optional.empty());
 
@@ -74,8 +74,8 @@ public class ValidationExampleTest {
 
     }
 
-    private BusinessFlow<ValidationError, RegistrationForm> registrationForm() {
-        return happyPath(new RegistrationForm("first", "last", "25"));
+    private HappyFlow<RegistrationForm> registrationForm() {
+        return HappyFlow.happyPath(new RegistrationForm("first", "last", "25"));
     }
 
 //    private BusinessFlow<List<ValidationError>, RegistrationForm> validateAge(BusinessFlows businessFlows, RegistrationForm registrationForm) {

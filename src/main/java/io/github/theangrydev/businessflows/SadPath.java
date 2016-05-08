@@ -1,6 +1,7 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 
@@ -27,5 +28,9 @@ public class SadPath<Sad, Happy> extends Projection<Sad, Happy> {
 
     private Optional<Sad> sadPath() {
         return Optional.ofNullable(sadPath);
+    }
+
+    public HappyFlow<Happy> fail(Function<Sad, Exception> failure) {
+        return join(failure.andThen(HappyFlow::technicalFailure), HappyFlow::happyPath, HappyFlow::technicalFailure);
     }
 }

@@ -24,7 +24,7 @@ public class ValidationFlow<Sad, Happy> extends BaseBusinessFlow<List<Sad>, Happ
     @SafeVarargs
     public final ValidationFlow<Sad, Happy> validate(ActionThatMightFail<Sad, Happy>... validators) {
         BusinessFlow<List<Sad>, Happy> then = then(happy -> {
-            ValidationFlow<Sad, Happy> validate = new BusinessFlow<Sad, Happy>(null, happy, null).validate(validators);
+            ValidationFlow<Sad, Happy> validate = HappyFlow.happyPath(happy).validate(validators);
             return new BusinessFlow<>(validate.sadPath, validate.happyPath, validate.exceptionPath);
         });
         return new ValidationFlow<>(then.sadPath, then.happyPath, then.exceptionPath);

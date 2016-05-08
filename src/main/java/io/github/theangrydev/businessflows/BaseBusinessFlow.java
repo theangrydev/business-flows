@@ -33,8 +33,8 @@ class BaseBusinessFlow<Sad, Happy> extends Projection<Sad, Happy> {
         return new SadPath<>(sadPath, happyPath, exceptionPath);
     }
 
-    public TechnicalFailure<Sad, Happy> technicalFailure() {
-        return new TechnicalFailure<>(sadPath, happyPath, exceptionPath);
+    public BusinessFlowTechnicalFailure<Sad, Happy> technicalFailure() {
+        return new BusinessFlowTechnicalFailure<>(sadPath, happyPath, exceptionPath);
     }
 
     public Happy get() {
@@ -42,7 +42,7 @@ class BaseBusinessFlow<Sad, Happy> extends Projection<Sad, Happy> {
     }
 
     private <NewHappy> BusinessFlow<Sad, NewHappy> tryHappyAction(Happy happy, HappyMapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
-        return tryCatch(exception -> new BusinessFlow<>(null, null, exception), () -> action.map(happy));
+        return tryCatch(BusinessFlow::technicalFailure, () -> action.map(happy));
     }
 
     private Optional<Happy> happyPath() {
