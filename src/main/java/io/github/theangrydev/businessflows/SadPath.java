@@ -12,14 +12,31 @@ public class SadPath<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
     }
 
     public BusinessFlow<Sad, Happy> peek(Peek<Sad> peek) {
+        return then(sad -> {
+            peek.peek(sad);
+            return BusinessFlow.sadPath(sad);
+        });
+    }
+
+    public <NewSad> BusinessFlow<NewSad, Happy> then(Mapping<Sad, BusinessFlow<NewSad, Happy>> action) {
         return join(sad -> {
             try {
-                peek.peek(sad);
-                return BusinessFlow.sadPath(sad);
-            } catch (Exception e) {
-                return BusinessFlow.technicalFailure(e);
+                return action.map(sad);
+            } catch (Exception technicalFailure) {
+                return BusinessFlow.technicalFailure(technicalFailure);
             }
         }, BusinessFlow::happyPath, BusinessFlow::technicalFailure);
+    }
+
+    public <NewSad> BusinessFlow<NewSad, Happy> map(Mapping<Sad, NewSad> mapping) {
+        return then(mapping.andThen(BusinessFlow::sadPath));
+    }
+
+    public BusinessFlow<Sad, Happy> ifSad(Peek<Sad> peek) {
+        return then(sad -> {
+            peek.peek(sad);
+            return BusinessFlow.sadPath(sad);
+        });
     }
 
     public HappyFlow<Happy> technicalFailure(Function<Sad, Exception> sadToTechnicalFailure) {
