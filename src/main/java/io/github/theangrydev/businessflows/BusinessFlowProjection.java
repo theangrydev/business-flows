@@ -26,8 +26,8 @@ abstract class BusinessFlowProjection<Sad, Happy> {
         return join(technicalFailure.andThen(HappyFlow::technicalFailure), HappyFlow::happyPath, HappyFlow::technicalFailure);
     }
 
-    public Optional<Exception> technicalFailure() {
-        return Optional.ofNullable(exceptionPath);
+    public TechnicalFailure<Sad, Happy> technicalFailure() {
+        return new TechnicalFailure<>(sadPath, happyPath, exceptionPath);
     }
 
     @FunctionalInterface
@@ -35,11 +35,4 @@ abstract class BusinessFlowProjection<Sad, Happy> {
         Result supply() throws Exception;
     }
 
-    <Result> Result tryCatch(Function<Exception, Result> onException, SupplierThatMightThrowException<Result> something) {
-        try {
-            return something.supply();
-        } catch (Exception exception) {
-            return onException.apply(exception);
-        }
-    }
 }

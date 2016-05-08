@@ -2,6 +2,7 @@ package io.github.theangrydev.businessflows;
 
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -53,39 +54,47 @@ public class ValidationExampleTest {
 
     @Test
     public void validateRegistrationForm() {
-        ValidationFlow<ValidationError, RegistrationForm> validate = registrationForm()
+        registrationForm()
                 .validate(ageValidator()::validate)
-                .validate(registrationForm -> Optional.empty());
+                .validate(lastNameValidator()::validate, firstNameValidator()::validate)
+                .peek(this::registerUser)
+                .technicalFailure().peek(this::logTechnicalFailure)
+                .join(this::renderValidationErrors, this::renderJoinedPage, this::renderTechnicalFailure);
+    }
 
-        BusinessFlow<ValidationError, RegistrationForm> attempt = registrationForm()
-                .attempt(registrationForm -> Optional.<ValidationError>empty())
-                .attempt(registrationForm -> Optional.empty())
-                .attempt(registrationForm -> Optional.empty());
+    private void logTechnicalFailure(Exception exception) {
+        System.out.println("e = " + exception);
+    }
 
-//        validateNames(registrationForm(businessFlows)
-//            .then(registrationForm -> validateNames(registrationForm));
-//        BusinessFlow<List<ValidationError>, RegistrationForm> names = validateNames(registrationForm);
-//        names
-//            .then(registrationForm -> validateAge(businessFlows, registrationForm))
-//            .then(registrationForm -> validateAge(businessFlows, registrationForm));
+    private String renderJoinedPage(RegistrationForm registrationForm) {
+        return "You joined!";
+    }
 
+    private String renderValidationErrors(List<ValidationError> validationErrors) {
+        return "Please fix the errors: " + validationErrors;
+    }
+
+    private String renderTechnicalFailure(Exception e) {
+        return "There was a technical failure. Please try again.";
+    }
+
+    private void registerUser(RegistrationForm registrationForm) {
+        System.out.println("Register in database");
     }
 
     private HappyFlow<RegistrationForm> registrationForm() {
         return HappyFlow.happyPath(new RegistrationForm("first", "last", "25"));
     }
 
-//    private BusinessFlow<List<ValidationError>, RegistrationForm> validateAge(BusinessFlows businessFlows, RegistrationForm registrationForm) {
-//        return businessFlows.happyPathValidation(registrationForm, ValidationError::technicalFailureValidation).validate(ageValidator()::validate);
-//    }
-
     private Validator<RegistrationForm> ageValidator() {
         return RegistrationForm.validator(x -> x.age, new NotBlankValidator());
     }
 
-//    private BusinessFlow<List<ValidationError>, RegistrationForm> validateNames(BusinessFlow<ValidationError, RegistrationForm> registrationForm) {
-//        Validator<RegistrationForm> firstName = RegistrationForm.validator(x -> x.firstName, new NotBlankValidator());
-//        Validator<RegistrationForm> lastName = RegistrationForm.validator(x -> x.lastName, new NotBlankValidator());
-//        return registrationForm.validate(firstName::validate, lastName::validate);
-//    }
+    private Validator<RegistrationForm> lastNameValidator() {
+        return RegistrationForm.validator(x -> x.lastName, new NotBlankValidator());
+    }
+
+    private Validator<RegistrationForm> firstNameValidator() {
+        return RegistrationForm.validator(x -> x.firstName, new NotBlankValidator());
+    }
 }

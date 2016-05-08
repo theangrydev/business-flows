@@ -1,6 +1,7 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 
@@ -23,11 +24,17 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
     }
 
     public <NewHappy> BusinessFlow<Sad, NewHappy> then(HappyMapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
-        return happyPath().map(happy -> tryHappyAction(happy, action)).orElse(new BusinessFlow<>(sadPath, null, exceptionPath));
+        return join(BusinessFlow::sadPath, happy -> {
+            try {
+                return action.map(happy);
+            } catch (Exception exception) {
+                return BusinessFlow.technicalFailure(exception);
+            }
+        }, BusinessFlow::technicalFailure);
     }
 
     public <NewHappy> BusinessFlow<Sad, NewHappy> map(HappyMapping<Happy, NewHappy> mapping) {
-        return then(mapping.andThen(happyPath -> new BusinessFlow<>(sadPath, happyPath, exceptionPath)));
+        return then(mapping.andThen(BusinessFlow::happyPath));
     }
 
     public BusinessFlow<Sad, Happy> attempt(ActionThatMightFail<Sad, Happy> actionThatMightFail) {
@@ -37,7 +44,7 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
     public BusinessFlow<Sad, Happy> peek(Peek<Happy> peek) {
         return then(happy -> {
             peek.peek(happy);
-            return new BusinessFlow<>(sadPath, happyPath, exceptionPath);
+            return this;
         });
     }
 
@@ -47,10 +54,6 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
 
     public Happy get() {
         return happyPath().orElseThrow(() -> new RuntimeException(format("Happy path not present. Sad path was '%s'. Exception was '%s'", sadPath, exceptionPath)));
-    }
-
-    private <NewHappy> BusinessFlow<Sad, NewHappy> tryHappyAction(Happy happy, HappyMapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
-        return tryCatch(BusinessFlow::technicalFailure, () -> action.map(happy));
     }
 
     private Optional<Happy> happyPath() {
