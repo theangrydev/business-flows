@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static io.github.theangrydev.businessflows.BusinessFlow.happyPath;
+
 public class ValidationExampleTest {
 
     private static class ValidationError {
@@ -54,16 +56,11 @@ public class ValidationExampleTest {
 
     @Test
     public void validateRegistrationForm() {
-
-        BusinessFlows businessFlows = new BusinessFlows(exception -> {
-            throw new RuntimeException(exception);
-        });
-
-        ValidationFlow<ValidationError, RegistrationForm> validate = registrationForm(businessFlows)
+        ValidationFlow<ValidationError, RegistrationForm> validate = registrationForm()
                 .validate(ageValidator()::validate)
                 .validate(registrationForm -> Optional.empty());
 
-        BusinessFlow<ValidationError, RegistrationForm> attempt = registrationForm(businessFlows)
+        BusinessFlow<ValidationError, RegistrationForm> attempt = registrationForm()
                 .attempt(registrationForm -> Optional.empty())
                 .attempt(registrationForm -> Optional.empty())
                 .attempt(registrationForm -> Optional.empty());
@@ -77,8 +74,8 @@ public class ValidationExampleTest {
 
     }
 
-    private BusinessFlow<ValidationError, RegistrationForm> registrationForm(BusinessFlows businessFlows) {
-        return businessFlows.happyPath(new RegistrationForm("first", "last", "25"), ValidationError::technicalFailure);
+    private BusinessFlow<ValidationError, RegistrationForm> registrationForm() {
+        return happyPath(new RegistrationForm("first", "last", "25"));
     }
 
 //    private BusinessFlow<List<ValidationError>, RegistrationForm> validateAge(BusinessFlows businessFlows, RegistrationForm registrationForm) {

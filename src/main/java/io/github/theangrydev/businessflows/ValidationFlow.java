@@ -1,20 +1,32 @@
 package io.github.theangrydev.businessflows;
 
-import com.codepoetics.ambivalence.Either;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ValidationFlow<Sad, Happy> extends BaseBusinessFlow<List<Sad>, Happy> {
-    private final TechnicalFailure<Sad> validationTechnicalFailure;
 
-    ValidationFlow(Either<List<Sad>, Happy> either, UncaughtExceptionHandler uncaughtExceptionHandler, TechnicalFailure<Sad> technicalFailure) {
-        super(either, uncaughtExceptionHandler, technicalFailure.andThen(Collections::singletonList));
-        this.validationTechnicalFailure = technicalFailure;
+    private ValidationFlow(List<Sad> sadPath, Happy happyPath, Exception exceptionPath) {
+        super(sadPath, happyPath, exceptionPath);
+    }
+
+    static <Sad, Happy> ValidationFlow<Sad, Happy> happyPath(Happy happy) {
+        return new ValidationFlow<>(null, happy, null);
+    }
+
+    static <Sad, Happy> ValidationFlow<Sad, Happy> sadPath(List<Sad> sad) {
+        return new ValidationFlow<>(sad, null, null);
+    }
+
+    static <Sad, Happy> ValidationFlow<Sad, Happy> technicalFailure(Exception exception) {
+        return new ValidationFlow<>(null, null, exception);
     }
 
     @SafeVarargs
     public final ValidationFlow<Sad, Happy> validate(ActionThatMightFail<Sad, Happy>... validators) {
-        return new ValidationFlow<>(then(happy -> new BusinessFlow<>(Either.ofRight(happy), uncaughtExceptionHandler, validationTechnicalFailure).validate(validators)).either, uncaughtExceptionHandler, validationTechnicalFailure);
+        BusinessFlow<List<Sad>, Happy> then = then(happy -> {
+            ValidationFlow<Sad, Happy> validate = new BusinessFlow<Sad, Happy>(null, happy, null).validate(validators);
+            return new BusinessFlow<>(validate.sadPath, validate.happyPath, validate.exceptionPath);
+        });
+        return new ValidationFlow<>(then.sadPath, then.happyPath, then.exceptionPath);
     }
 }

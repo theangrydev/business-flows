@@ -1,23 +1,25 @@
 package io.github.theangrydev.businessflows;
 
-import com.codepoetics.ambivalence.Either;
-
+import java.util.Optional;
 import java.util.function.Function;
 
 abstract class Projection<Sad, Happy> {
 
-    final Either<Sad, Happy> either;
-    final UncaughtExceptionHandler uncaughtExceptionHandler;
-    final TechnicalFailure<Sad> technicalFailure;
+    final Sad sadPath;
+    final Happy happyPath;
+    final Exception exceptionPath;
 
-    Projection(Either<Sad, Happy> either, UncaughtExceptionHandler uncaughtExceptionHandler, TechnicalFailure<Sad> technicalFailure) {
-        this.either = either;
-        this.uncaughtExceptionHandler = uncaughtExceptionHandler;
-        this.technicalFailure = technicalFailure;
+    Projection(Sad sadPath, Happy happyPath, Exception exceptionPath) {
+        this.sadPath = sadPath;
+        this.happyPath = happyPath;
+        this.exceptionPath = exceptionPath;
     }
 
-    <Argument> Either<Sad, Happy> tryToConsume(Argument argument, Peek<Argument> consumer) {
-        return tryCatch(Either::ofLeft, () -> {consumer.peek(argument); return either; });
+    public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner, Function<Exception, Result> exceptionJoiner) {
+        return Optional.ofNullable(happyPath).map(happyJoiner)
+                .orElseGet(() -> Optional.ofNullable(sadPath).map(sadJoiner)
+                        .orElseGet(() -> Optional.ofNullable(exceptionPath).map(exceptionJoiner)
+                                .orElseThrow(() -> new RuntimeException("Impossible scenario. There must always be a happy or sad or exception."))));
     }
 
     @FunctionalInterface
@@ -25,12 +27,11 @@ abstract class Projection<Sad, Happy> {
         Result supply() throws Exception;
     }
 
-    <Result> Result tryCatch(Function<Sad, Result> onException, SupplierThatMightThrowException<Result> something) {
+    <Result> Result tryCatch(Function<Exception, Result> onException, SupplierThatMightThrowException<Result> something) {
         try {
             return something.supply();
         } catch (Exception exception) {
-            uncaughtExceptionHandler.handle(exception);
-            return onException.apply(technicalFailure.wrap(exception));
+            return onException.apply(exception);
         }
     }
 }
