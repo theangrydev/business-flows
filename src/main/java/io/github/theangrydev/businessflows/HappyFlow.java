@@ -1,5 +1,7 @@
 package io.github.theangrydev.businessflows;
 
+import io.github.theangrydev.businessflows.BusinessFlowProjection.SupplierThatMightThrowException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,24 +10,24 @@ import java.util.function.Function;
 
 import static io.github.theangrydev.businessflows.ValidationFlow.validationSuccess;
 import static io.github.theangrydev.businessflows.ValidationFlow.validationFailed;
-import static io.github.theangrydev.businessflows.ValidationFlow.failureDuringValidation;
+import static io.github.theangrydev.businessflows.ValidationFlow.technicalFailureDuringValidation;
 import static java.lang.String.format;
 
 public class HappyFlow<Happy> {
 
-    private final Happy happyPath;
-    private final Exception exceptionPath;
+    private final Happy happy;
+    private final Exception technicalFailure;
 
-    private HappyFlow(Happy happyPath, Exception exceptionPath) {
-        this.happyPath = happyPath;
-        this.exceptionPath = exceptionPath;
+    private HappyFlow(Happy happy, Exception technicalFailure) {
+        this.happy = happy;
+        this.technicalFailure = technicalFailure;
     }
 
     public static <Happy> HappyFlow<Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
         try {
             return happyPath(happyAttempt.happy());
-        } catch (Exception exception) {
-            return failure(exception);
+        } catch (Exception technicalFailure) {
+            return technicalFailure(technicalFailure);
         }
     }
 
@@ -33,8 +35,8 @@ public class HappyFlow<Happy> {
         return new HappyFlow<>(happyPath, null);
     }
 
-    public static <Happy> HappyFlow<Happy> failure(Exception exception) {
-        return new HappyFlow<>(null, exception);
+    public static <Happy> HappyFlow<Happy> technicalFailure(Exception technicalFailure) {
+        return new HappyFlow<>(null, technicalFailure);
     }
 
     @SafeVarargs
@@ -43,49 +45,53 @@ public class HappyFlow<Happy> {
     }
 
     public final <Sad> ValidationFlow<Sad, Happy> validate(List<ActionThatMightFail<Sad, Happy>>validators) {
-        return join(happy -> validate(happy, validators), ValidationFlow::failureDuringValidation);
+        return join(happy -> validate(happy, validators), ValidationFlow::technicalFailureDuringValidation);
     }
 
-    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Exception, Result> exceptionJoiner) {
-        return Optional.ofNullable(happyPath).map(happyJoiner)
-                    .orElseGet(() -> Optional.ofNullable(exceptionPath).map(exceptionJoiner)
-                            .orElseThrow(() -> new RuntimeException("Impossible scenario. There must always be a happy or exception.")));
+    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Exception, Result> technicalFailureJoiner) {
+        if (happy != null) {
+            return happyJoiner.apply(happy);
+        } else if (technicalFailure != null) {
+            return technicalFailureJoiner.apply(technicalFailure);
+        } else {
+            throw new IllegalStateException("Impossible scenario. There must always be a happy value or technical failure.");
+        }
     }
 
-    public Optional<Exception> ifFailure() {
-        return Optional.ofNullable(exceptionPath);
+    public Optional<Exception> ifTechnicalFailure() {
+        return Optional.ofNullable(technicalFailure);
     }
 
     private <Sad> ValidationFlow<Sad, Happy> validate(Happy happy, List<ActionThatMightFail<Sad, Happy>> validators) {
-        List<Sad> failures = new ArrayList<>();
+        List<Sad> validationFailures = new ArrayList<>();
         for (ActionThatMightFail<Sad, Happy> validator : validators) {
             BusinessFlow<Sad, Happy> attempt =  attempt(validator);
-            if (attempt.exceptionPath != null) {
-                return failureDuringValidation(attempt.exceptionPath);
+            if (attempt.technicalFailure != null) {
+                return technicalFailureDuringValidation(attempt.technicalFailure);
             }
-            attempt.ifSad().peek(failures::add);
+            attempt.ifSad().peek(validationFailures::add);
         }
-        if (failures.isEmpty()) {
+        if (validationFailures.isEmpty()) {
             return validationSuccess(happy);
         } else {
-            return validationFailed(failures);
+            return validationFailed(validationFailures);
         }
     }
 
     public  <Sad, NewHappy> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
-        return new BusinessFlow<Sad, Happy>(null, happyPath, exceptionPath).then(action);
+        return new BusinessFlow<Sad, Happy>(null, happy, technicalFailure).then(action);
     }
 
     public <NewHappy> HappyFlow<NewHappy> map(Mapping<Happy, NewHappy> mapping) {
-        return flatMap(mapping.andThen(happy -> new HappyFlow<>(happy, exceptionPath)));
+        return flatMap(mapping.andThen(happy -> new HappyFlow<>(happy, technicalFailure)));
     }
 
     private <NewHappy> HappyFlow<NewHappy> flatMap(Mapping<Happy, HappyFlow<NewHappy>> action) {
-        return happyPath().map(happy -> tryHappyAction(happy, action)).orElse(HappyFlow.failure(exceptionPath));
+        return happyPath().map(happy -> tryHappyAction(happy, action)).orElse(HappyFlow.technicalFailure(technicalFailure));
     }
 
     public <Sad> BusinessFlow<Sad, Happy> attempt(ActionThatMightFail<Sad, Happy> actionThatMightFail) {
-        return new BusinessFlow<Sad, Happy>(null, happyPath, exceptionPath).attempt(actionThatMightFail);
+        return new BusinessFlow<Sad, Happy>(null, happy, technicalFailure).attempt(actionThatMightFail);
     }
 
     public HappyFlow<Happy> ifHappy(Peek<Happy> peek) {
@@ -96,22 +102,22 @@ public class HappyFlow<Happy> {
     }
 
     public Happy get() {
-        return happyPath().orElseThrow(() -> new RuntimeException(format("Happy path not present. Exception was '%s'", exceptionPath)));
+        return happyPath().orElseThrow(() -> new RuntimeException(format("Happy path not present. Exception was '%s'", technicalFailure)));
     }
 
     private <NewHappy> HappyFlow<NewHappy> tryHappyAction(Happy happy, Mapping<Happy, HappyFlow<NewHappy>> action) {
-        return tryCatch(HappyFlow::failure, () -> action.map(happy));
+        return tryCatch(HappyFlow::technicalFailure, () -> action.map(happy));
     }
 
     private Optional<Happy> happyPath() {
-        return Optional.ofNullable(happyPath);
+        return Optional.ofNullable(happy);
     }
 
-    private <Result> Result tryCatch(Function<Exception, Result> onException, BusinessFlowProjection.SupplierThatMightThrowException<Result> something) {
+    private <Result> Result tryCatch(Function<Exception, Result> onTechnicalFailure, SupplierThatMightThrowException<Result> supplier) {
         try {
-            return something.supply();
-        } catch (Exception exception) {
-            return onException.apply(exception);
+            return supplier.supply();
+        } catch (Exception technicalFailure) {
+            return onTechnicalFailure.apply(technicalFailure);
         }
     }
 }

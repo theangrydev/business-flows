@@ -6,8 +6,8 @@ import static java.lang.String.format;
 
 public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
 
-    BusinessFlow(Sad sadPath, Happy happyPath, Exception exceptionPath) {
-        super(sadPath, happyPath, exceptionPath);
+    BusinessFlow(Sad sadPath, Happy happyPath, Exception technicalFailure) {
+        super(sadPath, happyPath, technicalFailure);
     }
 
     public static <Sad, Happy> BusinessFlow<Sad, Happy> happyPath(Happy happy) {
@@ -18,18 +18,18 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
         return new BusinessFlow<>(sad, null, null);
     }
 
-    public static <Sad, Happy> BusinessFlow<Sad, Happy> failure(Exception exception) {
-        return new BusinessFlow<>(null, null, exception);
+    public static <Sad, Happy> BusinessFlow<Sad, Happy> technicalFailure(Exception technicalFailure) {
+        return new BusinessFlow<>(null, null, technicalFailure);
     }
 
     public <NewHappy> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
         return join(BusinessFlow::sadPath, happy -> {
             try {
                 return action.map(happy);
-            } catch (Exception exception) {
-                return BusinessFlow.failure(exception);
+            } catch (Exception technicalFailure) {
+                return BusinessFlow.technicalFailure(technicalFailure);
             }
-        }, BusinessFlow::failure);
+        }, BusinessFlow::technicalFailure);
     }
 
     public <NewHappy> BusinessFlow<Sad, NewHappy> map(Mapping<Happy, NewHappy> mapping) {
@@ -48,14 +48,14 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
     }
 
     public SadPath<Sad, Happy> ifSad() {
-        return new SadPath<>(sadPath, happyPath, exceptionPath);
+        return new SadPath<>(sad, happy, technicalFailure);
     }
 
     public Happy get() {
-        return happyPath().orElseThrow(() -> new RuntimeException(format("Happy path not present. Sad path was '%s'. Exception was '%s'", sadPath, exceptionPath)));
+        return happyPath().orElseThrow(() -> new RuntimeException(format("Happy path not present. Sad path was '%s'. Technical failure was '%s'", sad, technicalFailure)));
     }
 
     private Optional<Happy> happyPath() {
-        return Optional.ofNullable(happyPath);
+        return Optional.ofNullable(happy);
     }
 }
