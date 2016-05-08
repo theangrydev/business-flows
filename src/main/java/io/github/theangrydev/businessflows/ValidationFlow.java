@@ -3,21 +3,21 @@ package io.github.theangrydev.businessflows;
 
 import java.util.List;
 
-public class ValidationFlow<Sad, Happy> extends BaseBusinessFlow<List<Sad>, Happy> {
+public class ValidationFlow<Sad, Happy> extends BusinessFlow<List<Sad>, Happy> {
 
     private ValidationFlow(List<Sad> sadPath, Happy happyPath, Exception exceptionPath) {
         super(sadPath, happyPath, exceptionPath);
     }
 
-    static <Sad, Happy> ValidationFlow<Sad, Happy> happyPath(Happy happy) {
+    static <Sad, Happy> ValidationFlow<Sad, Happy> happyPathValidation(Happy happy) {
         return new ValidationFlow<>(null, happy, null);
     }
 
-    static <Sad, Happy> ValidationFlow<Sad, Happy> sadPath(List<Sad> sad) {
+    static <Sad, Happy> ValidationFlow<Sad, Happy> sadPathValidation(List<Sad> sad) {
         return new ValidationFlow<>(sad, null, null);
     }
 
-    static <Sad, Happy> ValidationFlow<Sad, Happy> technicalFailure(Exception exception) {
+    static <Sad, Happy> ValidationFlow<Sad, Happy> technicalFailureValidation(Exception exception) {
         return new ValidationFlow<>(null, null, exception);
     }
 

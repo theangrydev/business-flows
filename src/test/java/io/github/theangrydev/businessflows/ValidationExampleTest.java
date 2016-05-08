@@ -76,7 +76,7 @@ public class ValidationExampleTest {
     }
 
 //    private BusinessFlow<List<ValidationError>, RegistrationForm> validateAge(BusinessFlows businessFlows, RegistrationForm registrationForm) {
-//        return businessFlows.happyPath(registrationForm, ValidationError::technicalFailure).validate(ageValidator()::validate);
+//        return businessFlows.happyPathValidation(registrationForm, ValidationError::technicalFailureValidation).validate(ageValidator()::validate);
 //    }
 
     private Validator<RegistrationForm> ageValidator() {

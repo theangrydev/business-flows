@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static io.github.theangrydev.businessflows.ValidationFlow.happyPathValidation;
+import static io.github.theangrydev.businessflows.ValidationFlow.sadPathValidation;
+import static io.github.theangrydev.businessflows.ValidationFlow.technicalFailureValidation;
 import static java.lang.String.format;
 
 public class HappyFlow<Happy> {
@@ -35,7 +38,7 @@ public class HappyFlow<Happy> {
 
     @SafeVarargs
     public final <Sad> ValidationFlow<Sad, Happy> validate(ActionThatMightFail<Sad, Happy>... validators) {
-        return join(happy -> validate(happy, validators), ValidationFlow::technicalFailure);
+        return join(happy -> validate(happy, validators), ValidationFlow::technicalFailureValidation);
     }
 
     public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Exception, Result> exceptionJoiner) {
@@ -53,14 +56,14 @@ public class HappyFlow<Happy> {
         for (ActionThatMightFail<Sad, Happy> validator : validators) {
             BusinessFlow<Sad, Happy> attempt =  attempt(validator);
             if (attempt.exceptionPath != null) {
-                return ValidationFlow.technicalFailure(attempt.exceptionPath);
+                return technicalFailureValidation(attempt.exceptionPath);
             }
             attempt.sadPath().peek(failures::add);
         }
         if (failures.isEmpty()) {
-            return ValidationFlow.happyPath(happy);
+            return happyPathValidation(happy);
         } else {
-            return ValidationFlow.sadPath(failures);
+            return sadPathValidation(failures);
         }
     }
 
