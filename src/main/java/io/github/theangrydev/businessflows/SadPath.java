@@ -16,9 +16,9 @@ public class SadPath<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
                 peek.peek(sad);
                 return BusinessFlow.sadPath(sad);
             } catch (Exception e) {
-                return BusinessFlow.technicalFailure(e);
+                return BusinessFlow.failure(e);
             }
-        }, BusinessFlow::happyPath, BusinessFlow::technicalFailure);
+        }, BusinessFlow::happyPath, BusinessFlow::failure);
     }
 
     public Sad get() {

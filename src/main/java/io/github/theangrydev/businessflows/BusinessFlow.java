@@ -1,7 +1,6 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import static java.lang.String.format;
 
@@ -19,7 +18,7 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
         return new BusinessFlow<>(sad, null, null);
     }
 
-    public static <Sad, Happy> BusinessFlow<Sad, Happy> technicalFailure(Exception exception) {
+    public static <Sad, Happy> BusinessFlow<Sad, Happy> failure(Exception exception) {
         return new BusinessFlow<>(null, null, exception);
     }
 
@@ -28,9 +27,9 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
             try {
                 return action.map(happy);
             } catch (Exception exception) {
-                return BusinessFlow.technicalFailure(exception);
+                return BusinessFlow.failure(exception);
             }
-        }, BusinessFlow::technicalFailure);
+        }, BusinessFlow::failure);
     }
 
     public <NewHappy> BusinessFlow<Sad, NewHappy> map(HappyMapping<Happy, NewHappy> mapping) {
@@ -41,14 +40,14 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
         return then(happy -> actionThatMightFail.attempt(happy).map(BusinessFlow::<Sad, Happy>sadPath).orElse(BusinessFlow.happyPath(happy)));
     }
 
-    public BusinessFlow<Sad, Happy> peek(Peek<Happy> peek) {
+    public BusinessFlow<Sad, Happy> ifHappy(Peek<Happy> peek) {
         return then(happy -> {
             peek.peek(happy);
             return this;
         });
     }
 
-    public SadPath<Sad, Happy> sadPath() {
+    public SadPath<Sad, Happy> ifSad() {
         return new SadPath<>(sadPath, happyPath, exceptionPath);
     }
 

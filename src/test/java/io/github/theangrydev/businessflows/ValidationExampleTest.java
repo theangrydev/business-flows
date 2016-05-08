@@ -2,6 +2,7 @@ package io.github.theangrydev.businessflows;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -13,10 +14,6 @@ public class ValidationExampleTest {
 
         private ValidationError(String error) {
             this.error = error;
-        }
-
-        public static ValidationError technicalFailure(Exception exception) {
-            return new ValidationError(exception.getMessage());
         }
     }
 
@@ -55,14 +52,22 @@ public class ValidationExampleTest {
     @Test
     public void validateRegistrationForm() {
         registrationForm()
-                .validate(ageValidator()::validate)
-                .validate(lastNameValidator()::validate, firstNameValidator()::validate)
-                .peek(this::registerUser)
-                .technicalFailure().peek(this::logTechnicalFailure)
-                .join(this::renderValidationErrors, this::renderJoinedPage, this::renderTechnicalFailure);
+                .validate(cheapValidators())
+                .validate(expensiveValidators())
+                .ifHappy(this::registerUser)
+                .ifFailure().peek(this::logFailure)
+                .join(this::renderValidationErrors, this::renderJoinedPage, this::renderFailure);
     }
 
-    private void logTechnicalFailure(Exception exception) {
+    private ActionThatMightFail<ValidationError, RegistrationForm> cheapValidators() {
+        return ageValidator()::validate;
+    }
+
+    private List<ActionThatMightFail<ValidationError, RegistrationForm>> expensiveValidators() {
+        return Arrays.asList(lastNameValidator()::validate, firstNameValidator()::validate);
+    }
+
+    private void logFailure(Exception exception) {
         System.out.println("e = " + exception);
     }
 
@@ -74,7 +79,7 @@ public class ValidationExampleTest {
         return "Please fix the errors: " + validationErrors;
     }
 
-    private String renderTechnicalFailure(Exception e) {
+    private String renderFailure(Exception e) {
         return "There was a technical failure. Please try again.";
     }
 

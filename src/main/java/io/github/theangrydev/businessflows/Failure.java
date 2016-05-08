@@ -5,8 +5,8 @@ import java.util.function.Consumer;
 
 import static java.lang.String.format;
 
-public class TechnicalFailure<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>  {
-    TechnicalFailure(Sad sadPath, Happy happyPath, Exception exceptionPath) {
+public class Failure<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>  {
+    Failure(Sad sadPath, Happy happyPath, Exception exceptionPath) {
         super(sadPath, happyPath, exceptionPath);
     }
 
@@ -14,9 +14,9 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlowProjection<Sad, Ha
         return join(BusinessFlow::sadPath, BusinessFlow::happyPath, exception -> {
             try {
                 peek.accept(exception);
-                return BusinessFlow.technicalFailure(exception);
-            } catch (Exception technicalFailure) {
-                return BusinessFlow.technicalFailure(technicalFailure);
+                return BusinessFlow.failure(exception);
+            } catch (Exception failure) {
+                return BusinessFlow.failure(failure);
             }
         });
     }

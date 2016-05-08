@@ -22,12 +22,12 @@ abstract class BusinessFlowProjection<Sad, Happy> {
                                 .orElseThrow(() -> new RuntimeException("Impossible scenario. There must always be a happy or sad or exception."))));
     }
 
-    public HappyFlow<Happy> fail(Function<Sad, Exception> technicalFailure) {
-        return join(technicalFailure.andThen(HappyFlow::technicalFailure), HappyFlow::happyPath, HappyFlow::technicalFailure);
+    public HappyFlow<Happy> failIfSad(Function<Sad, Exception> failure) {
+        return join(failure.andThen(HappyFlow::failure), HappyFlow::happyPath, HappyFlow::failure);
     }
 
-    public TechnicalFailure<Sad, Happy> technicalFailure() {
-        return new TechnicalFailure<>(sadPath, happyPath, exceptionPath);
+    public Failure<Sad, Happy> ifFailure() {
+        return new Failure<>(sadPath, happyPath, exceptionPath);
     }
 
     @FunctionalInterface

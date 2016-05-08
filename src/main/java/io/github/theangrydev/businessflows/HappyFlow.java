@@ -1,13 +1,14 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static io.github.theangrydev.businessflows.ValidationFlow.happyPathValidation;
-import static io.github.theangrydev.businessflows.ValidationFlow.sadPathValidation;
-import static io.github.theangrydev.businessflows.ValidationFlow.technicalFailureValidation;
+import static io.github.theangrydev.businessflows.ValidationFlow.validationSuccess;
+import static io.github.theangrydev.businessflows.ValidationFlow.validationFailed;
+import static io.github.theangrydev.businessflows.ValidationFlow.failureDuringValidation;
 import static java.lang.String.format;
 
 public class HappyFlow<Happy> {
@@ -24,7 +25,7 @@ public class HappyFlow<Happy> {
         try {
             return happyPath(happyAttempt.happy());
         } catch (Exception exception) {
-            return technicalFailure(exception);
+            return failure(exception);
         }
     }
 
@@ -32,13 +33,17 @@ public class HappyFlow<Happy> {
         return new HappyFlow<>(happyPath, null);
     }
 
-    public static <Happy> HappyFlow<Happy> technicalFailure(Exception exception) {
+    public static <Happy> HappyFlow<Happy> failure(Exception exception) {
         return new HappyFlow<>(null, exception);
     }
 
     @SafeVarargs
     public final <Sad> ValidationFlow<Sad, Happy> validate(ActionThatMightFail<Sad, Happy>... validators) {
-        return join(happy -> validate(happy, validators), ValidationFlow::technicalFailureValidation);
+        return validate(Arrays.asList(validators));
+    }
+
+    public final <Sad> ValidationFlow<Sad, Happy> validate(List<ActionThatMightFail<Sad, Happy>>validators) {
+        return join(happy -> validate(happy, validators), ValidationFlow::failureDuringValidation);
     }
 
     public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Exception, Result> exceptionJoiner) {
@@ -47,23 +52,23 @@ public class HappyFlow<Happy> {
                             .orElseThrow(() -> new RuntimeException("Impossible scenario. There must always be a happy or exception.")));
     }
 
-    public Optional<Exception> technicalFailure() {
+    public Optional<Exception> ifFailure() {
         return Optional.ofNullable(exceptionPath);
     }
 
-    private <Sad> ValidationFlow<Sad, Happy> validate(Happy happy, ActionThatMightFail<Sad, Happy>[] validators) {
+    private <Sad> ValidationFlow<Sad, Happy> validate(Happy happy, List<ActionThatMightFail<Sad, Happy>> validators) {
         List<Sad> failures = new ArrayList<>();
         for (ActionThatMightFail<Sad, Happy> validator : validators) {
             BusinessFlow<Sad, Happy> attempt =  attempt(validator);
             if (attempt.exceptionPath != null) {
-                return technicalFailureValidation(attempt.exceptionPath);
+                return failureDuringValidation(attempt.exceptionPath);
             }
-            attempt.sadPath().peek(failures::add);
+            attempt.ifSad().peek(failures::add);
         }
         if (failures.isEmpty()) {
-            return happyPathValidation(happy);
+            return validationSuccess(happy);
         } else {
-            return sadPathValidation(failures);
+            return validationFailed(failures);
         }
     }
 
@@ -76,14 +81,14 @@ public class HappyFlow<Happy> {
     }
 
     private <NewHappy> HappyFlow<NewHappy> flatMap(HappyMapping<Happy, HappyFlow<NewHappy>> action) {
-        return happyPath().map(happy -> tryHappyAction(happy, action)).orElse(HappyFlow.technicalFailure(exceptionPath));
+        return happyPath().map(happy -> tryHappyAction(happy, action)).orElse(HappyFlow.failure(exceptionPath));
     }
 
     public <Sad> BusinessFlow<Sad, Happy> attempt(ActionThatMightFail<Sad, Happy> actionThatMightFail) {
         return new BusinessFlow<Sad, Happy>(null, happyPath, exceptionPath).attempt(actionThatMightFail);
     }
 
-    public HappyFlow<Happy> peek(Peek<Happy> peek) {
+    public HappyFlow<Happy> ifHappy(Peek<Happy> peek) {
         return flatMap(happy -> {
             peek.peek(happy);
             return this;
@@ -95,7 +100,7 @@ public class HappyFlow<Happy> {
     }
 
     private <NewHappy> HappyFlow<NewHappy> tryHappyAction(Happy happy, HappyMapping<Happy, HappyFlow<NewHappy>> action) {
-        return tryCatch(HappyFlow::technicalFailure, () -> action.map(happy));
+        return tryCatch(HappyFlow::failure, () -> action.map(happy));
     }
 
     private Optional<Happy> happyPath() {
