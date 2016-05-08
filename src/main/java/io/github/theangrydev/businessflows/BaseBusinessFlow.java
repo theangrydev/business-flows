@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 
-class BaseBusinessFlow<Sad, Happy> extends Projection<Sad, Happy> {
+class BaseBusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
 
     BaseBusinessFlow(Sad sadPath, Happy happyPath, Exception exceptionPath) {
         super(sadPath, happyPath, exceptionPath);
@@ -31,10 +31,6 @@ class BaseBusinessFlow<Sad, Happy> extends Projection<Sad, Happy> {
 
     public SadPath<Sad, Happy> sadPath() {
         return new SadPath<>(sadPath, happyPath, exceptionPath);
-    }
-
-    public BusinessFlowTechnicalFailure<Sad, Happy> technicalFailure() {
-        return new BusinessFlowTechnicalFailure<>(sadPath, happyPath, exceptionPath);
     }
 
     public Happy get() {

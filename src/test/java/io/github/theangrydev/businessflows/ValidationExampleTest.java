@@ -2,11 +2,8 @@ package io.github.theangrydev.businessflows;
 
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
-import static io.github.theangrydev.businessflows.BusinessFlow.happyPath;
 
 public class ValidationExampleTest {
 

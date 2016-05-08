@@ -7,14 +7,6 @@ public class BusinessFlow<Sad, Happy> extends BaseBusinessFlow<Sad, Happy> {
         super(sadPath, happyPath, exceptionPath);
     }
 
-    public static <Sad, Happy> BusinessFlow<Sad, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
-        try {
-            return happyPath(happyAttempt.happy());
-        } catch (Exception exception) {
-            return technicalFailure(exception);
-        }
-    }
-
     public static <Sad, Happy> BusinessFlow<Sad, Happy> happyPath(Happy happy) {
         return new BusinessFlow<>(null, happy, null);
     }

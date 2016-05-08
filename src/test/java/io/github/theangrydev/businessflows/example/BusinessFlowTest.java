@@ -1,5 +1,7 @@
-package io.github.theangrydev.businessflows;
+package io.github.theangrydev.businessflows.example;
 
+import io.github.theangrydev.businessflows.BusinessFlow;
+import io.github.theangrydev.businessflows.HappyFlow;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
@@ -7,9 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static io.github.theangrydev.businessflows.BusinessFlow.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 
 public class BusinessFlowTest implements WithAssertions {
@@ -29,7 +28,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void happyAttemptThatSucceedsWithTechnicalFailureMappingResultsInHappy() {
         Happy originalHappy = new Happy();
 
-        Happy actualHappy = happyAttempt(() -> originalHappy).get();
+        Happy actualHappy = HappyFlow.happyAttempt(() -> originalHappy).get();
 
         assertThat(actualHappy).isSameAs(originalHappy);
     }
@@ -38,7 +37,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void happyAttemptThatSucceedsWithNoTechnicalFailureMappingResultsInHappy() {
         Happy originalHappy = new Happy();
 
-        Happy actualHappy = happyAttempt(() -> originalHappy).get();
+        Happy actualHappy = HappyFlow.happyAttempt(() -> originalHappy).get();
 
         assertThat(actualHappy).isSameAs(originalHappy);
     }
@@ -47,7 +46,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void happyAttemptThatFailsWithNoTechnicalFailureMappingResultsInException() {
         Exception exceptionDuringAttempt = new Exception();
 
-        Exception actualException = happyAttempt(() -> {throw exceptionDuringAttempt;})
+        Exception actualException = HappyFlow.happyAttempt(() -> {throw exceptionDuringAttempt;})
                 .technicalFailure()
                 .get();
 
@@ -58,7 +57,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void happyAttemptThatFailsWithTechnicalFailureMappingResultsInSad() {
         Exception exceptionDuringAttempt = new Exception();
 
-        Exception exception = happyAttempt(() -> {throw exceptionDuringAttempt;})
+        Exception exception = HappyFlow.happyAttempt(() -> {throw exceptionDuringAttempt;})
                 .technicalFailure()
                 .get();
 
@@ -69,7 +68,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void thenWithUncaughtExceptionIsATechnicalFailure() {
         Exception exceptionDuringThen = new Exception();
 
-        Exception exception = happyPath(new Happy())
+        Exception exception = HappyFlow.happyPath(new Happy())
                 .then(happy -> {throw exceptionDuringThen;})
                 .technicalFailure()
                 .get();
@@ -81,8 +80,8 @@ public class BusinessFlowTest implements WithAssertions {
     public void thenWithPossibleSadPathThatIsSad() {
         Sad expectedSad = new Sad();
 
-        Sad actualSad = BusinessFlow.<Sad, Happy>happyPath(new Happy())
-                .then(happy -> sadPath(expectedSad))
+        Sad actualSad = HappyFlow.happyPath(new Happy())
+                .then(happy -> BusinessFlow.sadPath(expectedSad))
                 .sadPath()
                 .get();
 
@@ -93,8 +92,8 @@ public class BusinessFlowTest implements WithAssertions {
     public void thenWithPossibleHappyPathThatIsHappy() {
         Happy2 expectedHappy = new Happy2();
 
-        Happy2 actualHappy = happyPath(new Happy())
-                .then(happy -> happyPath(expectedHappy))
+        Happy2 actualHappy = HappyFlow.happyPath(new Happy())
+                .then(happy -> BusinessFlow.happyPath(expectedHappy))
                 .get();
 
         assertThat(actualHappy).isSameAs(expectedHappy);
@@ -104,7 +103,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void mapWithUncaughtExceptionIsATechnicalFailure() {
         Exception uncaughtException = new Exception();
 
-        Exception exception = happyPath(new Happy())
+        Exception exception = HappyFlow.happyPath(new Happy())
                 .map(happy -> {throw uncaughtException;})
                 .technicalFailure()
                 .get();
@@ -116,7 +115,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void mapThatIsHappy() {
         Happy2 expectedHappy = new Happy2();
 
-        Happy2 actualHappy = happyPath(new Happy())
+        Happy2 actualHappy = HappyFlow.happyPath(new Happy())
                 .map(happy -> expectedHappy)
                 .get();
 
@@ -127,7 +126,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void attemptWithNoFailureRemainsHappy() {
         Happy originalHappy = new Happy();
 
-        Happy actualHappy = happyPath(originalHappy)
+        Happy actualHappy = HappyFlow.happyPath(originalHappy)
                 .attempt(happy -> Optional.empty())
                 .get();
 
@@ -138,7 +137,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void attemptWithUncaughtExceptionFailureTurnsSad() {
         Exception uncaughtException = new Exception();
 
-        Exception exception = happyPath(new Happy())
+        Exception exception = HappyFlow.happyPath(new Happy())
                 .attempt(happy -> {throw uncaughtException;})
                 .technicalFailure()
                 .get();
@@ -183,11 +182,24 @@ public class BusinessFlowTest implements WithAssertions {
     }
 
     @Test
+    public void sadToFail() {
+        Sad originalSad = new Sad();
+        Exception failure = new Exception();
+
+        Exception actualFailure = BusinessFlow.sadPath(originalSad)
+                .fail(sad -> failure)
+                .technicalFailure()
+                .get();
+
+        assertThat(actualFailure).isSameAs(failure);
+    }
+
+    @Test
     public void sadPeek() {
         Sad originalSad = new Sad();
         AtomicReference<Sad> peekedSad = new AtomicReference<>();
 
-        Sad actualSad = sadPath(originalSad)
+        Sad actualSad = BusinessFlow.sadPath(originalSad)
                 .sadPath()
                 .peek(peekedSad::set)
                 .sadPath()
@@ -201,7 +213,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void sadPeekWithUncaughtExceptionFailureTurnsSad() {
         Exception uncaughtException = new Exception();
 
-        Exception exception = sadPath(new Sad())
+        Exception exception = BusinessFlow.sadPath(new Sad())
                 .sadPath()
                 .peek(happy -> {throw uncaughtException;})
                 .technicalFailure()
@@ -215,7 +227,7 @@ public class BusinessFlowTest implements WithAssertions {
         Happy originalHappy = new Happy();
         AtomicReference<Happy> peekedHappy = new AtomicReference<>();
 
-        Happy actualHappy = happyPath(originalHappy)
+        Happy actualHappy = HappyFlow.happyPath(originalHappy)
                 .peek(peekedHappy::set)
                 .get();
 
@@ -227,7 +239,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void peekWithUncaughtExceptionFailureTurnsSad() {
         Exception uncaughtException = new Exception();
 
-        Exception exception = happyPath(new Happy())
+        Exception exception = HappyFlow.happyPath(new Happy())
                 .peek(happy -> {throw uncaughtException;})
                 .technicalFailure()
                 .get();
@@ -239,7 +251,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void joinHappy() {
         Happy originalHappy = new Happy();
 
-        String join = happyPath(originalHappy)
+        String join = BusinessFlow.happyPath(originalHappy)
                 .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e ->  e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalHappy.getClass().getSimpleName());
@@ -249,7 +261,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void joinSad() {
         Sad originalSad = new Sad();
 
-        String join = sadPath(originalSad)
+        String join = BusinessFlow.sadPath(originalSad)
                 .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalSad.getClass().getSimpleName());
@@ -259,7 +271,7 @@ public class BusinessFlowTest implements WithAssertions {
     public void joinException() {
         IllegalStateException technicalFailure = new IllegalStateException();
 
-        String join = technicalFailure(technicalFailure)
+        String join = BusinessFlow.technicalFailure(technicalFailure)
                 .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(technicalFailure.getClass().getSimpleName());
