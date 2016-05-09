@@ -78,9 +78,24 @@ public class HappyFlow<Happy> {
         }
     }
 
-    public  <Sad, NewHappy, Result extends BusinessFlow<Sad, NewHappy>> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, Result> action) {
+    public <Sad, NewHappy, Result extends BusinessFlow<Sad, NewHappy>> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, Result> action) {
         return new BusinessFlow<Sad, Happy>(null, happy, technicalFailure).then(action);
     }
+
+    //TODO: technical failure projection
+//    public HappyFlow<Happy> recover(Mapping<Exception, Happy> recovery) {
+//        return Optional.ofNullable(technicalFailure).map(exception -> tryRecovery(exception, recovery.andThen(HappyFlow::happyPath))).orElse(HappyFlow.technicalFailure(technicalFailure));
+//    }
+//
+//    private <NewHappy> HappyFlow<NewHappy> tryRecovery(Exception exception, Mapping<Exception, HappyFlow<NewHappy>> recovery) {
+//        try {
+//            return recovery.map(exception);
+//        } catch (Exception technicalFailureDuringMapping) {
+//            return HappyFlow.technicalFailure(technicalFailureDuringMapping);
+//        }
+//    }
+
+
 
     public <NewHappy> HappyFlow<NewHappy> map(Mapping<Happy, NewHappy> mapping) {
         return flatMap(mapping.andThen(happy -> new HappyFlow<>(happy, technicalFailure)));
@@ -106,18 +121,15 @@ public class HappyFlow<Happy> {
     }
 
     private <NewHappy> HappyFlow<NewHappy> tryHappyAction(Happy happy, Mapping<Happy, HappyFlow<NewHappy>> action) {
-        return tryCatch(HappyFlow::technicalFailure, () -> action.map(happy));
+        try {
+            return action.map(happy);
+        } catch (Exception technicalFailureDuringAction) {
+            return HappyFlow.technicalFailure(technicalFailureDuringAction);
+        }
     }
 
     private Optional<Happy> happyPath() {
         return Optional.ofNullable(happy);
     }
 
-    private <Result> Result tryCatch(Function<Exception, Result> onTechnicalFailure, SupplierThatMightThrowException<Result> supplier) {
-        try {
-            return supplier.supply();
-        } catch (Exception technicalFailure) {
-            return onTechnicalFailure.apply(technicalFailure);
-        }
-    }
 }
