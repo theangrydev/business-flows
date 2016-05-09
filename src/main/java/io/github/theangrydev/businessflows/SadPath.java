@@ -28,6 +28,8 @@ public class SadPath<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
         }, BusinessFlow::happyPath, BusinessFlow::technicalFailure);
     }
 
+    //TODO: recovery to happy?
+
     public <NewSad> BusinessFlow<NewSad, Happy> map(Mapping<Sad, NewSad> mapping) {
         return then(mapping.andThen(BusinessFlow::sadPath));
     }
