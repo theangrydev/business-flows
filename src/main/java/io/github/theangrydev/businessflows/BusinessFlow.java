@@ -8,11 +8,11 @@ import static java.lang.String.format;
 
 public abstract class BusinessFlow<Sad, Happy, Bias> {
 
-    final Sad sad;
-    final Happy happy;
-    final Exception technicalFailure;
+    protected final Sad sad;
+    protected final Happy happy;
+    protected final Exception technicalFailure;
 
-    BusinessFlow(Sad sad, Happy happy, Exception technicalFailure) {
+    protected BusinessFlow(Sad sad, Happy happy, Exception technicalFailure) {
         this.sad = sad;
         this.happy = happy;
         this.technicalFailure = technicalFailure;

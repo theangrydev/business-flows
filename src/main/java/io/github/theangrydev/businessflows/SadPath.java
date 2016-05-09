@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
 
-    SadPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
+    protected SadPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
     }
 

@@ -7,19 +7,19 @@ import java.util.List;
 
 public class ValidationFlow<Sad, Happy> extends HappyPath<List<Sad>, Happy> {
 
-    private ValidationFlow(List<Sad> sadPath, Happy happyPath, Exception technicalFailure) {
+    protected ValidationFlow(List<Sad> sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
     }
 
-    private static <Sad, Happy> ValidationFlow<Sad, Happy> validationSuccess(Happy happy) {
+    public static <Sad, Happy> ValidationFlow<Sad, Happy> validationSuccess(Happy happy) {
         return new ValidationFlow<>(null, happy, null);
     }
 
-    private static <Sad, Happy> ValidationFlow<Sad, Happy> validationFailed(List<Sad> sad) {
+    public static <Sad, Happy> ValidationFlow<Sad, Happy> validationFailed(List<Sad> sad) {
         return new ValidationFlow<>(sad, null, null);
     }
 
-    private static <Sad, Happy> ValidationFlow<Sad, Happy> technicalFailureDuringValidation(Exception technicalFailure) {
+    public static <Sad, Happy> ValidationFlow<Sad, Happy> technicalFailureDuringValidation(Exception technicalFailure) {
         return new ValidationFlow<>(null, null, technicalFailure);
     }
 

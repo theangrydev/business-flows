@@ -3,7 +3,7 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 
 public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Exception> {
-    TechnicalFailure(Sad sadPath, Happy happyPath, Exception technicalFailure) {
+    protected TechnicalFailure(Sad sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
     }
 
@@ -24,7 +24,7 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Excep
         return Optional.ofNullable(technicalFailure);
     }
 
-    private TechnicalFailure<Sad, Happy> then(Mapping<Exception, TechnicalFailure<Sad, Happy>> action) {
+    public TechnicalFailure<Sad, Happy> then(Mapping<Exception, TechnicalFailure<Sad, Happy>> action) {
         return join(TechnicalFailure::sadPath, TechnicalFailure::happyPath, technicalFailure1 -> {
             try {
                 return action.map(technicalFailure1);
