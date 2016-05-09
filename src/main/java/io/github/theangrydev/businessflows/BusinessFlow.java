@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
-abstract class BusinessFlow<Sad, Happy, Actual> {
+public abstract class BusinessFlow<Sad, Happy, Bias> {
 
     final Sad sad;
     final Happy happy;
@@ -30,21 +30,21 @@ abstract class BusinessFlow<Sad, Happy, Actual> {
         }
     }
 
-    public abstract Optional<Actual> toOptional();
+    public abstract Optional<Bias> toOptional();
 
-    public Actual get() {
+    public Bias get() {
         return toOptional().orElseThrow(() -> new RuntimeException(format("Not present. Happy path was '%s'. Sad path was '%s'. Exception was '%s'.", happy, sad, technicalFailure)));
     }
 
-    public Actual orElse(Actual alternative) {
+    public Bias orElse(Bias alternative) {
         return toOptional().orElse(alternative);
     }
 
-    public Actual orElseGet(Supplier<Actual> alternativeSupplier) {
+    public Bias orElseGet(Supplier<Bias> alternativeSupplier) {
         return toOptional().orElseGet(alternativeSupplier);
     }
 
-    public <X extends Throwable> Actual orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Throwable> Bias orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         return toOptional().orElseThrow(exceptionSupplier);
     }
 
