@@ -6,13 +6,13 @@ import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
-abstract class Projection<Sad, Happy, Actual> {
+abstract class BusinessFlow<Sad, Happy, Actual> {
 
     final Sad sad;
     final Happy happy;
     final Exception technicalFailure;
 
-    Projection(Sad sad, Happy happy, Exception technicalFailure) {
+    BusinessFlow(Sad sad, Happy happy, Exception technicalFailure) {
         this.sad = sad;
         this.happy = happy;
         this.technicalFailure = technicalFailure;

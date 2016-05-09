@@ -3,7 +3,7 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class HappyPath<Sad, Happy> extends Projection<Sad, Happy, Happy> {
+public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
 
     HappyPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
