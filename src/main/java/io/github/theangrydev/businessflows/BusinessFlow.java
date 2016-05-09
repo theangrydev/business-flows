@@ -48,10 +48,6 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
         });
     }
 
-    public SadPath<Sad, Happy> ifSad() {
-        return new SadPath<>(sad, happy, technicalFailure);
-    }
-
     public Happy get() {
         return happyPath().orElseThrow(() -> new RuntimeException(format("Happy path not present. Sad path was '%s'. Technical failure was '%s'", sad, technicalFailure)));
     }
