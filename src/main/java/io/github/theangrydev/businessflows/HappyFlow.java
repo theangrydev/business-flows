@@ -78,7 +78,7 @@ public class HappyFlow<Happy> {
         }
     }
 
-    public  <Sad, NewHappy> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
+    public  <Sad, NewHappy, Result extends BusinessFlow<Sad, NewHappy>> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, Result> action) {
         return new BusinessFlow<Sad, Happy>(null, happy, technicalFailure).then(action);
     }
 

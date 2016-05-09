@@ -1,6 +1,7 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 
@@ -22,7 +23,7 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
         return new BusinessFlow<>(null, null, technicalFailure);
     }
 
-    public <NewHappy> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy>> action) {
+    public <NewHappy, Result extends BusinessFlow<Sad, NewHappy>> BusinessFlow<Sad, NewHappy> then(Mapping<Happy, Result> action) {
         return join(BusinessFlow::sadPath, happy -> {
             try {
                 return action.map(happy);
