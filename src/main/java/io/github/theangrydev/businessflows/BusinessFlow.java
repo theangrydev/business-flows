@@ -33,7 +33,7 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
     public abstract Optional<Bias> toOptional();
 
     public Bias get() {
-        return toOptional().orElseThrow(() -> new RuntimeException(format("Not present. Happy path was '%s'. Sad path was '%s'. Exception was '%s'.", happy, sad, technicalFailure)));
+        return orElseThrow(() -> new RuntimeException(format("Not present. Happy path was '%s'. Sad path was '%s'. Exception was '%s'.", happy, sad, technicalFailure)));
     }
 
     public Bias orElse(Bias alternative) {
