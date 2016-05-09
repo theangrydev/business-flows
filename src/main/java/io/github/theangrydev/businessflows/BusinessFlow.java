@@ -56,7 +56,7 @@ public class BusinessFlow<Sad, Happy> extends Projection<Sad, Happy, Happy> {
         return then(happy -> actionThatMightFail.attempt(happy).map(BusinessFlow::<Sad, Happy>sadPath).orElse(BusinessFlow.happyPath(happy)));
     }
 
-    public BusinessFlow<Sad, Happy> ifHappy(Peek<Happy> peek) {
+    public BusinessFlow<Sad, Happy> peek(Peek<Happy> peek) {
         return then(happy -> {
             peek.peek(happy);
             return this;

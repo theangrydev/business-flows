@@ -1,6 +1,7 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static io.github.theangrydev.businessflows.BusinessFlow.happyPath;
 
@@ -9,37 +10,49 @@ public class TechnicalFailure<Sad, Happy> extends Projection<Sad, Happy, Excepti
         super(sadPath, happyPath, technicalFailure);
     }
 
+    public static <Sad, Happy> TechnicalFailure<Sad, Happy> sadPath(Sad sad) {
+        return new TechnicalFailure<>(sad, null, null);
+    }
+
+    public static <Sad, Happy> TechnicalFailure<Sad, Happy> happyPath(Happy happy) {
+        return new TechnicalFailure<>(null, happy, null);
+    }
+
+    public static <Sad, Happy> TechnicalFailure<Sad, Happy> technicalFailure(Exception technicalFailure) {
+        return new TechnicalFailure<>(null, null, technicalFailure);
+    }
+
     @Override
     public Optional<Exception> toOptional() {
         return Optional.ofNullable(technicalFailure);
     }
 
-    private BusinessFlow<Sad, Happy> then(Mapping<Exception, BusinessFlow<Sad, Happy>> action) {
-        return join(BusinessFlow::sadPath, BusinessFlow::happyPath, technicalFailure -> {
+    private TechnicalFailure<Sad, Happy> then(Mapping<Exception, TechnicalFailure<Sad, Happy>> action) {
+        return join(TechnicalFailure::sadPath, TechnicalFailure::happyPath, technicalFailure1 -> {
             try {
-                return action.map(technicalFailure);
+                return action.map(technicalFailure1);
             } catch (Exception technicalFailureDuringAction) {
-                return BusinessFlow.technicalFailure(technicalFailureDuringAction);
+                return TechnicalFailure.technicalFailure(technicalFailureDuringAction);
             }
         });
     }
 
     public BusinessFlow<Sad, Happy> recover(Mapping<Exception, Happy> recovery) {
-        return then(technicalFailure -> happyPath(recovery.map(technicalFailure)));
+        return then(technicalFailure -> happyPath(recovery.map(technicalFailure))).ifHappy();
     }
 
-    public BusinessFlow<Sad, Happy> mapToSadPath(Mapping<Exception, Sad> mapping) {
-        return then(mapping.andThen(BusinessFlow::sadPath));
+    public SadPath<Sad, Happy> mapToSadPath(Mapping<Exception, Sad> mapping) {
+        return then(mapping.andThen(TechnicalFailure::sadPath)).ifSad();
     }
 
-    public BusinessFlow<Sad, Happy> map(Mapping<Exception, Exception> mapping) {
-        return then(mapping.andThen(BusinessFlow::technicalFailure));
+    public TechnicalFailure<Sad, Happy> map(Mapping<Exception, Exception> mapping) {
+        return then(mapping.andThen(TechnicalFailure::technicalFailure));
     }
 
-    public BusinessFlow<Sad, Happy> peek(Peek<Exception> peek) {
+    public TechnicalFailure<Sad, Happy> peek(Peek<Exception> peek) {
         return then(technicalFailure -> {
             peek.peek(technicalFailure);
-            return BusinessFlow.technicalFailure(technicalFailure);
+            return technicalFailure(technicalFailure);
         });
     }
 }

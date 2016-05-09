@@ -50,7 +50,7 @@ public class ValidationExampleTest {
     @Test
     public void validateRegistrationForm() {
         validate(registrationForm())
-                .ifHappy(this::registerUser)
+                .peek(this::registerUser)
                 .ifTechnicalFailure().peek(this::logFailure)
                 .join(this::renderValidationErrors, this::renderJoinedPage, this::renderFailure);
     }

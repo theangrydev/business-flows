@@ -168,7 +168,7 @@ public class BusinessFlowTest implements WithAssertions {
 
         Exception actualFailure = BusinessFlow.sadPath(originalSad)
                 .ifSad().technicalFailure(sad -> failure)
-                .ifTechnicalFailure().get();
+                .get();
 
         assertThat(actualFailure).isSameAs(failure);
     }
@@ -180,7 +180,7 @@ public class BusinessFlowTest implements WithAssertions {
 
         Sad actualSad = BusinessFlow.sadPath(originalSad)
                 .ifSad().peek(peekedSad::set)
-                .ifSad().get();
+                .get();
 
         assertThat(peekedSad.get()).isSameAs(originalSad);
         assertThat(actualSad).isSameAs(originalSad);
@@ -203,7 +203,7 @@ public class BusinessFlowTest implements WithAssertions {
         AtomicReference<Happy> peekedHappy = new AtomicReference<>();
 
         Happy actualHappy = BusinessFlow.happyPath(originalHappy)
-                .ifHappy(peekedHappy::set)
+                .peek(peekedHappy::set)
                 .get();
 
         assertThat(peekedHappy.get()).isSameAs(originalHappy);
@@ -215,7 +215,7 @@ public class BusinessFlowTest implements WithAssertions {
         Exception uncaughtException = new Exception();
 
         Exception actualException = BusinessFlow.happyPath(new Happy())
-                .ifHappy(happy -> {throw uncaughtException;})
+                .peek(happy -> {throw uncaughtException;})
                 .ifTechnicalFailure().get();
 
         assertThat(actualException).isSameAs(uncaughtException);

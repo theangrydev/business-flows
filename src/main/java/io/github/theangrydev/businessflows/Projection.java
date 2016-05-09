@@ -55,4 +55,8 @@ abstract class Projection<Sad, Happy, Actual> {
     public SadPath<Sad, Happy> ifSad() {
         return new SadPath<>(sad, happy, technicalFailure);
     }
+
+    public BusinessFlow<Sad, Happy> ifHappy() {
+        return new BusinessFlow<>(sad, happy, technicalFailure);
+    }
 }
