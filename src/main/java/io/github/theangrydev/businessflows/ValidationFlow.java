@@ -28,7 +28,7 @@ public class ValidationFlow<Sad, Happy> extends BusinessFlow<List<Sad>, Happy> {
     }
 
     public static <Sad, Happy> ValidationFlow<Sad, Happy> validate(Happy happy, List<ActionThatMightFail<Sad, Happy>> validators) {
-        List<Sad> validationFailures = new ArrayList<>();
+        List<Sad> validationFailures = new ArrayList<>(validators.size());
         for (ActionThatMightFail<Sad, Happy> validator : validators) {
             try {
                 validator.attempt(happy).ifPresent(validationFailures::add);
@@ -49,10 +49,6 @@ public class ValidationFlow<Sad, Happy> extends BusinessFlow<List<Sad>, Happy> {
     }
 
     public ValidationFlow<Sad, Happy> validate(List<ActionThatMightFail<Sad, Happy>> validators) {
-        BusinessFlow<List<Sad>, Happy> then = then(happy -> {
-            ValidationFlow<Sad, Happy> validate = validate(happy, validators);
-            return new BusinessFlow<>(validate.sad, validate.happy, validate.technicalFailure);
-        });
-        return new ValidationFlow<>(then.sad, then.happy, then.technicalFailure);
+        return join(ValidationFlow::validationFailed, happy -> validate(happy, validators), ValidationFlow::technicalFailureDuringValidation);
     }
 }
