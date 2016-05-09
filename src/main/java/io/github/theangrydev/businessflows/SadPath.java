@@ -3,6 +3,7 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static io.github.theangrydev.businessflows.BusinessFlow.happyPath;
 import static java.lang.String.format;
 
 public class SadPath<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
@@ -28,7 +29,9 @@ public class SadPath<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
         }, BusinessFlow::happyPath, BusinessFlow::technicalFailure);
     }
 
-    //TODO: recovery to happy?
+    public BusinessFlow<Sad, Happy> recover(Mapping<Sad, Happy> recovery) {
+        return then(sad -> happyPath(recovery.map(sad)));
+    }
 
     public <NewSad> BusinessFlow<NewSad, Happy> map(Mapping<Sad, NewSad> mapping) {
         return then(mapping.andThen(BusinessFlow::sadPath));
