@@ -31,19 +31,17 @@ public class ValidationExampleTest {
         }
 
         public static <TypeToValidate> Validator<RegistrationForm> validator(Function<RegistrationForm, TypeToValidate> field, Validator<TypeToValidate> validator) {
-            return registrationForm -> validator.validate(field.apply(registrationForm));
+            return registrationForm -> validator.attempt(field.apply(registrationForm));
         }
     }
 
-    @FunctionalInterface
-    private interface Validator<TypeToValidate> {
-        Optional<ValidationError> validate(TypeToValidate typeToValidate);
+    private interface Validator<TypeToValidate> extends ActionThatMightFail<ValidationError, TypeToValidate> {
     }
 
     private class NotBlankValidator implements Validator<String> {
 
         @Override
-        public Optional<ValidationError> validate(String string) {
+        public Optional<ValidationError> attempt(String string) {
             if (string == null || string.trim().isEmpty()) {
                 return Optional.of(new ValidationError("Field was empty"));
             }
@@ -65,11 +63,11 @@ public class ValidationExampleTest {
     }
 
     private ActionThatMightFail<ValidationError, RegistrationForm> cheapValidators() {
-        return ageValidator()::validate;
+        return ageValidator();
     }
 
     private List<ActionThatMightFail<ValidationError, RegistrationForm>> expensiveValidators() {
-        return Arrays.asList(lastNameValidator()::validate, firstNameValidator()::validate);
+        return Arrays.asList(lastNameValidator(), firstNameValidator());
     }
 
     private void logFailure(Exception exception) {
