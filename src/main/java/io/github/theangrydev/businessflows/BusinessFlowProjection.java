@@ -26,17 +26,11 @@ abstract class BusinessFlowProjection<Sad, Happy> {
         }
     }
 
-    public TechnicalFailure<Sad, Happy> ifFailure() {
+    public TechnicalFailure<Sad, Happy> ifTechnicalFailure() {
         return new TechnicalFailure<>(sad, happy, technicalFailure);
     }
 
     public SadPath<Sad, Happy> ifSad() {
         return new SadPath<>(sad, happy, technicalFailure);
     }
-
-    @FunctionalInterface
-    interface SupplierThatMightThrowException<Result> {
-        Result supply() throws Exception;
-    }
-
 }

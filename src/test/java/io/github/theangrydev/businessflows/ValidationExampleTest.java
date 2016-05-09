@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static io.github.theangrydev.businessflows.HappyFlow.happyPath;
-
 public class ValidationExampleTest {
 
     private static class ValidationError {
@@ -51,15 +49,14 @@ public class ValidationExampleTest {
 
     @Test
     public void validateRegistrationForm() {
-        registrationForm()
-                .then(this::validate)
+        validate(registrationForm())
                 .ifHappy(this::registerUser)
-                .ifFailure().peek(this::logFailure)
+                .ifTechnicalFailure().peek(this::logFailure)
                 .join(this::renderValidationErrors, this::renderJoinedPage, this::renderFailure);
     }
 
     private ValidationFlow<ValidationError, RegistrationForm> validate(RegistrationForm registrationForm) {
-        return happyPath(registrationForm).validate(cheapValidators()).validate(expensiveValidators());
+        return ValidationFlow.validate(registrationForm, cheapValidators()).validate(expensiveValidators());
     }
 
     private ActionThatMightFail<ValidationError, RegistrationForm> cheapValidators() {
@@ -90,8 +87,8 @@ public class ValidationExampleTest {
         System.out.println("Register in database");
     }
 
-    private HappyFlow<RegistrationForm> registrationForm() {
-        return happyPath(new RegistrationForm("first", "last", "25"));
+    private RegistrationForm registrationForm() {
+        return new RegistrationForm("first", "last", "25");
     }
 
     private Validator<RegistrationForm> ageValidator() {

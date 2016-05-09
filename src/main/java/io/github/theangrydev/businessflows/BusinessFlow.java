@@ -11,6 +11,18 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
         super(sadPath, happyPath, technicalFailure);
     }
 
+    public static <Sad, Happy> BusinessFlow<Sad, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
+        return happyAttempt(happyAttempt.andThen(BusinessFlow::happyPath), BusinessFlow::technicalFailure);
+    }
+
+    public static <Result> Result happyAttempt(HappyAttempt<Result> happyAttempt, Function<Exception, Result> failureHandler) {
+        try {
+            return happyAttempt.happy();
+        } catch (Exception technicalFailure) {
+            return failureHandler.apply(technicalFailure);
+        }
+    }
+
     public static <Sad, Happy> BusinessFlow<Sad, Happy> happyPath(Happy happy) {
         return new BusinessFlow<>(null, happy, null);
     }
