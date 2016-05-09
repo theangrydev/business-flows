@@ -5,14 +5,14 @@ import java.util.function.Function;
 
 import static io.github.theangrydev.businessflows.BusinessFlow.happyPath;
 
-public class SadPath<Sad, Happy> extends BusinessFlowProjection<Sad, Happy, Sad> {
+public class SadPath<Sad, Happy> extends Projection<Sad, Happy, Sad> {
 
     SadPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
     }
 
     @Override
-    protected Optional<Sad> toOptional() {
+    public Optional<Sad> toOptional() {
         return Optional.ofNullable(sad);
     }
 

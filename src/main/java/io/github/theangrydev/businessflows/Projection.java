@@ -2,16 +2,17 @@ package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
-abstract class BusinessFlowProjection<Sad, Happy, Actual> {
+abstract class Projection<Sad, Happy, Actual> {
 
     final Sad sad;
     final Happy happy;
     final Exception technicalFailure;
 
-    BusinessFlowProjection(Sad sad, Happy happy, Exception technicalFailure) {
+    Projection(Sad sad, Happy happy, Exception technicalFailure) {
         this.sad = sad;
         this.happy = happy;
         this.technicalFailure = technicalFailure;
@@ -29,10 +30,22 @@ abstract class BusinessFlowProjection<Sad, Happy, Actual> {
         }
     }
 
-    protected abstract Optional<Actual> toOptional();
+    public abstract Optional<Actual> toOptional();
 
     public Actual get() {
         return toOptional().orElseThrow(() -> new RuntimeException(format("Not present. Happy path was '%s'. Sad path was '%s'. Exception was '%s'.", happy, sad, technicalFailure)));
+    }
+
+    public Actual orElse(Actual alternative) {
+        return toOptional().orElse(alternative);
+    }
+
+    public Actual orElseGet(Supplier<Actual> alternativeSupplier) {
+        return toOptional().orElseGet(alternativeSupplier);
+    }
+
+    public <X extends Throwable> Actual orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        return toOptional().orElseThrow(exceptionSupplier);
     }
 
     public TechnicalFailure<Sad, Happy> ifTechnicalFailure() {

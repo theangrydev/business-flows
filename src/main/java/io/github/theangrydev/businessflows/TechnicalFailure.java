@@ -4,13 +4,13 @@ import java.util.Optional;
 
 import static io.github.theangrydev.businessflows.BusinessFlow.happyPath;
 
-public class TechnicalFailure<Sad, Happy> extends BusinessFlowProjection<Sad, Happy, Exception>  {
+public class TechnicalFailure<Sad, Happy> extends Projection<Sad, Happy, Exception> {
     TechnicalFailure(Sad sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
     }
 
     @Override
-    protected Optional<Exception> toOptional() {
+    public Optional<Exception> toOptional() {
         return Optional.ofNullable(technicalFailure);
     }
 
