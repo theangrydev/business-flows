@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValidationFlow<Sad, Happy> extends BusinessFlow<List<Sad>, Happy> {
+public class ValidationFlow<Sad, Happy> extends HappyPath<List<Sad>, Happy> {
 
     private ValidationFlow(List<Sad> sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);

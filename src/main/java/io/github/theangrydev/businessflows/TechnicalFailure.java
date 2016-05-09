@@ -1,9 +1,6 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
-import java.util.function.Function;
-
-import static io.github.theangrydev.businessflows.BusinessFlow.happyPath;
 
 public class TechnicalFailure<Sad, Happy> extends Projection<Sad, Happy, Exception> {
     TechnicalFailure(Sad sadPath, Happy happyPath, Exception technicalFailure) {
@@ -37,7 +34,7 @@ public class TechnicalFailure<Sad, Happy> extends Projection<Sad, Happy, Excepti
         });
     }
 
-    public BusinessFlow<Sad, Happy> recover(Mapping<Exception, Happy> recovery) {
+    public HappyPath<Sad, Happy> recover(Mapping<Exception, Happy> recovery) {
         return then(technicalFailure -> happyPath(recovery.map(technicalFailure))).ifHappy();
     }
 

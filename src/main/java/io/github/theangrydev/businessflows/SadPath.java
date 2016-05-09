@@ -43,7 +43,7 @@ public class SadPath<Sad, Happy> extends Projection<Sad, Happy, Sad> {
         }, SadPath::happyPath, SadPath::technicalFailure);
     }
 
-    public BusinessFlow<Sad, Happy> recover(Mapping<Sad, Happy> recovery) {
+    public HappyPath<Sad, Happy> recover(Mapping<Sad, Happy> recovery) {
         return this.<Sad>then(sad -> happyPath(recovery.map(sad))).ifHappy();
     }
 
