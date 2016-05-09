@@ -1,8 +1,11 @@
 package io.github.theangrydev.businessflows;
 
+import java.util.Optional;
 import java.util.function.Function;
 
-abstract class BusinessFlowProjection<Sad, Happy> {
+import static java.lang.String.format;
+
+abstract class BusinessFlowProjection<Sad, Happy, Actual> {
 
     final Sad sad;
     final Happy happy;
@@ -24,6 +27,12 @@ abstract class BusinessFlowProjection<Sad, Happy> {
         } else {
             throw new IllegalStateException("Impossible scenario. There must always be a happy or sad or technical failure.");
         }
+    }
+
+    protected abstract Optional<Actual> toOptional();
+
+    public Actual get() {
+        return toOptional().orElseThrow(() -> new RuntimeException(format("Not present. Happy path was '%s'. Sad path was '%s'. Exception was '%s'.", happy, sad, technicalFailure)));
     }
 
     public TechnicalFailure<Sad, Happy> ifTechnicalFailure() {

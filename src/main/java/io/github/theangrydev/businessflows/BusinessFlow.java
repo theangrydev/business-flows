@@ -3,12 +3,15 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.lang.String.format;
-
-public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy> {
+public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy, Happy> {
 
     BusinessFlow(Sad sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
+    }
+
+    @Override
+    protected Optional<Happy> toOptional() {
+        return Optional.ofNullable(happy);
     }
 
     public static <Sad, Happy> BusinessFlow<Sad, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
@@ -58,13 +61,5 @@ public class BusinessFlow<Sad, Happy> extends BusinessFlowProjection<Sad, Happy>
             peek.peek(happy);
             return this;
         });
-    }
-
-    public Happy get() {
-        return happyPath().orElseThrow(() -> new RuntimeException(format("Happy path not present. Sad path was '%s'. Technical failure was '%s'", sad, technicalFailure)));
-    }
-
-    private Optional<Happy> happyPath() {
-        return Optional.ofNullable(happy);
     }
 }
