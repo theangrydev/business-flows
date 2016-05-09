@@ -23,6 +23,7 @@ public class ValidationFlow<Sad, Happy> extends BusinessFlow<List<Sad>, Happy> {
         return new ValidationFlow<>(null, null, technicalFailure);
     }
 
+    @SafeVarargs
     public static <Sad, Happy> ValidationFlow<Sad, Happy> validate(Happy happy, ActionThatMightFail<Sad, Happy>... validators) {
         return validate(happy, Arrays.asList(validators));
     }
