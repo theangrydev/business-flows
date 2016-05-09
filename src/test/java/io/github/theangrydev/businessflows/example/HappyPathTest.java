@@ -1,7 +1,7 @@
 package io.github.theangrydev.businessflows.example;
 
 import io.github.theangrydev.businessflows.HappyPath;
-import io.github.theangrydev.businessflows.ValidationFlow;
+import io.github.theangrydev.businessflows.ValidationPath;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
@@ -145,7 +145,7 @@ public class HappyPathTest implements WithAssertions {
         Sad firstSad = new Sad();
         Sad secondSad = new Sad();
 
-        List<Sad> actualSads = ValidationFlow.validate(new Happy(), happy -> Optional.of(firstSad), happy -> Optional.of(secondSad))
+        List<Sad> actualSads = ValidationPath.validate(new Happy(), happy -> Optional.of(firstSad), happy -> Optional.of(secondSad))
                 .ifSad().get();
 
         assertThat(actualSads).containsExactly(firstSad, secondSad);
@@ -155,7 +155,7 @@ public class HappyPathTest implements WithAssertions {
     public void validateWithMultiplePassesStaysHappy() {
         Happy originalHappy = new Happy();
 
-        Happy actualHappy = ValidationFlow.validate(originalHappy, happy -> Optional.empty(), happy -> Optional.empty())
+        Happy actualHappy = ValidationPath.validate(originalHappy, happy -> Optional.empty(), happy -> Optional.empty())
                 .get();
 
         assertThat(actualHappy).isSameAs(originalHappy);

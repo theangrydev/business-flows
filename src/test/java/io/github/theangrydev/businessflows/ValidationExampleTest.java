@@ -55,8 +55,8 @@ public class ValidationExampleTest {
                 .join(this::renderValidationErrors, this::renderJoinedPage, this::renderFailure);
     }
 
-    private ValidationFlow<ValidationError, RegistrationForm> validate(RegistrationForm registrationForm) {
-        return ValidationFlow.validate(registrationForm, cheapValidators()).validate(expensiveValidators());
+    private ValidationPath<ValidationError, RegistrationForm> validate(RegistrationForm registrationForm) {
+        return ValidationPath.validate(registrationForm, cheapValidators()).validate(expensiveValidators());
     }
 
     private ActionThatMightFail<ValidationError, RegistrationForm> cheapValidators() {
