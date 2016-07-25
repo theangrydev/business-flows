@@ -40,7 +40,7 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
     }
 
     public Bias get() {
-        return orElseThrow(() -> new RuntimeException(format("Not present. Business case was: '%s'.", businessCase)));
+        return orElseThrow(() -> new RuntimeException(format("Not present. Business case is: '%s'.", businessCase)));
     }
 
     public Bias orElse(Bias alternative) {
