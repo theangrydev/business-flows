@@ -65,7 +65,7 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
     }
 
     @Override
-    Function<BusinessCase<Sad, Happy>, Optional<Sad>> bias() {
+    protected Function<BusinessCase<Sad, Happy>, Optional<Sad>> bias() {
         return BusinessCase::sadOptional;
     }
 }

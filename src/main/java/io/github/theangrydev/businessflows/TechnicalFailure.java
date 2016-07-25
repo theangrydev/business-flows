@@ -68,7 +68,7 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Excep
     }
 
     @Override
-    Function<BusinessCase<Sad, Happy>, Optional<Exception>> bias() {
+    protected Function<BusinessCase<Sad, Happy>, Optional<Exception>> bias() {
         return BusinessCase::technicalFailureOptional;
     }
 }

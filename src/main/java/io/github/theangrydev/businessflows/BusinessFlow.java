@@ -67,5 +67,5 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
         return new HappyPath<>(businessCase);
     }
 
-    abstract Function<BusinessCase<Sad, Happy>, Optional<Bias>> bias();
+    protected abstract Function<BusinessCase<Sad, Happy>, Optional<Bias>> bias();
 }
