@@ -25,11 +25,11 @@ import static java.lang.String.format;
 
 public abstract class BusinessFlow<Sad, Happy, Bias> {
 
-    protected final Sad sad;
-    protected final Happy happy;
-    protected final Exception technicalFailure;
+    final Sad sad;
+    final Happy happy;
+    final Exception technicalFailure;
 
-    protected BusinessFlow(Sad sad, Happy happy, Exception technicalFailure) {
+    BusinessFlow(Sad sad, Happy happy, Exception technicalFailure) {
         this.sad = sad;
         this.happy = happy;
         this.technicalFailure = technicalFailure;
