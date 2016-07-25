@@ -17,8 +17,8 @@
  */
 package io.github.theangrydev.businessflows;
 
+@SuppressWarnings("PMD.SignatureDeclareThrowsException") // This is intentional to allow an unknown exception type to escape
 @FunctionalInterface
 public interface Peek<T> {
-    @SuppressWarnings("PMD.SignatureDeclareThrowsException") // This is intentional to allow an unknown exception type to escape
     void peek(T instance) throws Exception;
 }

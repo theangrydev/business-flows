@@ -17,11 +17,11 @@
  */
 package io.github.theangrydev.businessflows;
 
+@SuppressWarnings("PMD.SignatureDeclareThrowsException") // This is intentional to allow an unknown exception type to escape
 @FunctionalInterface
-public interface Mapping<Happy, NewHappy> {
-    @SuppressWarnings("PMD.SignatureDeclareThrowsException") // This is intentional to allow an unknown exception type to escape
-    NewHappy map(Happy happy) throws Exception;
-    default <NewNewHappy> Mapping<Happy, NewNewHappy> andThen(Mapping<NewHappy, NewNewHappy> after) {
-        return happy -> after.map(map(happy));
+public interface Mapping<Old, New> {
+    New map(Old old) throws Exception;
+    default <NewNew> Mapping<Old, NewNew> andThen(Mapping<New, NewNew> after) {
+        return old -> after.map(map(old));
     }
 }
