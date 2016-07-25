@@ -24,14 +24,6 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Excep
         super(sadPath, happyPath, technicalFailure);
     }
 
-    public static <Sad, Happy> TechnicalFailure<Sad, Happy> sadPath(Sad sad) {
-        return new TechnicalFailure<>(sad, null, null);
-    }
-
-    public static <Sad, Happy> TechnicalFailure<Sad, Happy> happyPath(Happy happy) {
-        return new TechnicalFailure<>(null, happy, null);
-    }
-
     public static <Sad, Happy> TechnicalFailure<Sad, Happy> technicalFailure(Exception technicalFailure) {
         return new TechnicalFailure<>(null, null, technicalFailure);
     }
@@ -69,5 +61,13 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Excep
             peek.peek(technicalFailure);
             return technicalFailure(technicalFailure);
         });
+    }
+
+    private static <Sad, Happy> TechnicalFailure<Sad, Happy> sadPath(Sad sad) {
+        return new TechnicalFailure<>(sad, null, null);
+    }
+
+    private static <Sad, Happy> TechnicalFailure<Sad, Happy> happyPath(Happy happy) {
+        return new TechnicalFailure<>(null, happy, null);
     }
 }

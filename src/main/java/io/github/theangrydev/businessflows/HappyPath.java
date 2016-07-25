@@ -22,7 +22,7 @@ import java.util.function.Function;
 
 public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
 
-    protected HappyPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
+    HappyPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
     }
 
@@ -47,18 +47,10 @@ public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
         return new HappyPath<>(null, happy, null);
     }
 
-    public static <Sad, Happy> HappyPath<Sad, Happy> sadPath(Sad sad) {
-        return new HappyPath<>(sad, null, null);
-    }
-
-    public static <Sad, Happy> HappyPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
-        return new HappyPath<>(null, null, technicalFailure);
-    }
-
-    public <NewHappy, Result extends HappyPath<Sad, NewHappy>> HappyPath<Sad, NewHappy> then(Mapping<Happy, Result> action) {
+    public <NewHappy> HappyPath<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy, ?>> action) {
         return join(HappyPath::sadPath, happy -> {
             try {
-                return action.map(happy);
+                return action.map(happy).ifHappy();
             } catch (Exception technicalFailure) {
                 return HappyPath.technicalFailure(technicalFailure);
             }
@@ -78,5 +70,13 @@ public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
             peek.peek(happy);
             return this;
         });
+    }
+
+    private static <Sad, Happy> HappyPath<Sad, Happy> sadPath(Sad sad) {
+        return new HappyPath<>(sad, null, null);
+    }
+
+    private static <Sad, Happy> HappyPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
+        return new HappyPath<>(null, null, technicalFailure);
     }
 }

@@ -18,24 +18,15 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
 
-    protected SadPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
+    SadPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
         super(sadPath, happyPath, technicalFailure);
     }
 
     public static <Sad, Happy> SadPath<Sad, Happy> sadPath(Sad sad) {
         return new SadPath<>(sad, null, null);
-    }
-
-    public static <Sad, Happy> SadPath<Sad, Happy> happyPath(Happy happy) {
-        return new SadPath<>(null, happy, null);
-    }
-
-    public static <Sad, Happy> SadPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
-        return new SadPath<>(null, null, technicalFailure);
     }
 
     @Override
@@ -69,7 +60,11 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
         return then(mapping.andThen(SadPath::sadPath));
     }
 
-    public TechnicalFailure<Sad, Happy> technicalFailure(Function<Sad, Exception> sadToTechnicalFailure) {
-        return join(sadToTechnicalFailure.andThen(TechnicalFailure::technicalFailure), TechnicalFailure::happyPath, TechnicalFailure::technicalFailure);
+    private static <Sad, Happy> SadPath<Sad, Happy> happyPath(Happy happy) {
+        return new SadPath<>(null, happy, null);
+    }
+
+    private static <Sad, Happy> SadPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
+        return new SadPath<>(null, null, technicalFailure);
     }
 }

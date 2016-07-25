@@ -18,6 +18,8 @@
 package io.github.theangrydev.businessflows.example;
 
 import io.github.theangrydev.businessflows.HappyPath;
+import io.github.theangrydev.businessflows.SadPath;
+import io.github.theangrydev.businessflows.TechnicalFailure;
 import io.github.theangrydev.businessflows.ValidationPath;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
@@ -85,7 +87,7 @@ public class HappyPathTest implements WithAssertions {
         Sad expectedSad = new Sad();
 
         Sad actualSad = HappyPath.<Sad,Happy>happyPath(new Happy())
-                .then(happy -> HappyPath.sadPath(expectedSad))
+                .then(happy -> SadPath.sadPath(expectedSad))
                 .ifSad().get();
 
         assertThat(actualSad).isSameAs(expectedSad);
@@ -179,23 +181,11 @@ public class HappyPathTest implements WithAssertions {
     }
 
     @Test
-    public void sadToTechnicalFailure() {
-        Sad originalSad = new Sad();
-        Exception failure = new Exception();
-
-        Exception actualFailure = HappyPath.sadPath(originalSad)
-                .ifSad().technicalFailure(sad -> failure)
-                .get();
-
-        assertThat(actualFailure).isSameAs(failure);
-    }
-
-    @Test
     public void sadPeek() {
         Sad originalSad = new Sad();
         AtomicReference<Sad> peekedSad = new AtomicReference<>();
 
-        Sad actualSad = HappyPath.sadPath(originalSad)
+        Sad actualSad = SadPath.sadPath(originalSad)
                 .ifSad().peek(peekedSad::set)
                 .get();
 
@@ -207,7 +197,7 @@ public class HappyPathTest implements WithAssertions {
     public void sadPeekWithUncaughtExceptionIsATechnicalFailure() {
         Exception uncaughtException = new Exception();
 
-        Exception actualException = HappyPath.sadPath(new Sad())
+        Exception actualException = SadPath.sadPath(new Sad())
                 .ifSad().peek(happy -> {throw uncaughtException;})
                 .ifTechnicalFailure().get();
 
@@ -252,7 +242,7 @@ public class HappyPathTest implements WithAssertions {
     public void joinSad() {
         Sad originalSad = new Sad();
 
-        String join = HappyPath.sadPath(originalSad)
+        String join = SadPath.sadPath(originalSad)
                 .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalSad.getClass().getSimpleName());
@@ -262,7 +252,7 @@ public class HappyPathTest implements WithAssertions {
     public void joinTechnicalFailure() {
         IllegalStateException failure = new IllegalStateException();
 
-        String join = HappyPath.technicalFailure(failure)
+        String join = TechnicalFailure.technicalFailure(failure)
                 .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(failure.getClass().getSimpleName());
