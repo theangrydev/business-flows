@@ -31,4 +31,8 @@ public class TechnicalFailureCase<Sad, Happy> implements BusinessCase<Sad, Happy
         return Optional.of(technicalFailure);
     }
 
+    @Override
+    public String toString() {
+        return "Technical Failure: " + technicalFailure;
+    }
 }

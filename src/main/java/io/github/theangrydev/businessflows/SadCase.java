@@ -30,4 +30,9 @@ public class SadCase<Sad, Happy> implements BusinessCase<Sad, Happy> {
     public Optional<Exception> technicalFailure() {
         return Optional.empty();
     }
+
+    @Override
+    public String toString() {
+        return "Sad: " + sad;
+    }
 }
