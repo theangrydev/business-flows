@@ -51,7 +51,7 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
         return toOptional().orElseGet(alternativeSupplier);
     }
 
-    public <X extends Throwable> Bias orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    public <X extends Exception> Bias orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         return toOptional().orElseThrow(exceptionSupplier);
     }
 
