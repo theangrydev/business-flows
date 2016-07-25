@@ -18,6 +18,7 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Exception> {
     protected TechnicalFailure(BusinessCase<Sad, Happy> businessCase) {
@@ -26,11 +27,6 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Excep
 
     public static <Sad, Happy> TechnicalFailure<Sad, Happy> technicalFailure(Exception technicalFailure) {
         return new TechnicalFailure<>(new TechnicalFailureCase<>(technicalFailure));
-    }
-
-    @Override
-    public Optional<Exception> toOptional() {
-        return businessCase.technicalFailure();
     }
 
     @SuppressWarnings("PMD.AvoidCatchingGenericException") // This is intentional to ensure that all exceptions are converted to technical failures
@@ -69,5 +65,10 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Excep
 
     private static <Sad, Happy> TechnicalFailure<Sad, Happy> happyPath(Happy happy) {
         return new TechnicalFailure<>(new HappyCase<>(happy));
+    }
+
+    @Override
+    Function<BusinessCase<Sad, Happy>, Optional<Exception>> bias() {
+        return BusinessCase::technicalFailureOptional;
     }
 }

@@ -17,17 +17,17 @@ public class SadCase<Sad, Happy> implements BusinessCase<Sad, Happy> {
     }
 
     @Override
-    public Optional<Happy> happy() {
+    public Optional<Happy> happyOptional() {
         return Optional.empty();
     }
 
     @Override
-    public Optional<Sad> sad() {
+    public Optional<Sad> sadOptional() {
         return Optional.of(sad);
     }
 
     @Override
-    public Optional<Exception> technicalFailure() {
+    public Optional<Exception> technicalFailureOptional() {
         return Optional.empty();
     }
 

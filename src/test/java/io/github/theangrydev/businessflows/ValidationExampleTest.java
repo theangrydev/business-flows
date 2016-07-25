@@ -98,7 +98,7 @@ public class ValidationExampleTest {
     }
 
     private String renderFailure(Exception e) {
-        return "There was a technical technicalFailure. Please try again.";
+        return "There was a technical failure. Please try again.";
     }
 
     private void registerUser(RegistrationForm registrationForm) {

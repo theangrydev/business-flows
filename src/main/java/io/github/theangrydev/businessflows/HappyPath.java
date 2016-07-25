@@ -26,11 +26,6 @@ public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
         super(businessCase);
     }
 
-    @Override
-    public Optional<Happy> toOptional() {
-        return businessCase.happy();
-    }
-
     public static <Sad, Happy> HappyPath<Sad, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
         return happyAttempt(happyAttempt.andThen(HappyPath::happyPath), HappyPath::technicalFailure);
     }
@@ -78,5 +73,10 @@ public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
 
     private static <Sad, Happy> HappyPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
         return new HappyPath<>(new TechnicalFailureCase<>(technicalFailure));
+    }
+
+    @Override
+    Function<BusinessCase<Sad, Happy>, Optional<Happy>> bias() {
+        return BusinessCase::happyOptional;
     }
 }

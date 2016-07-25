@@ -25,9 +25,9 @@ import static java.lang.String.format;
 
 public abstract class BusinessFlow<Sad, Happy, Bias> {
 
-    final BusinessCase<Sad, Happy> businessCase;
+    private final BusinessCase<Sad, Happy> businessCase;
 
-    protected BusinessFlow(BusinessCase<Sad, Happy> businessCase) {
+    BusinessFlow(BusinessCase<Sad, Happy> businessCase) {
         this.businessCase = businessCase;
     }
 
@@ -35,7 +35,9 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
         return businessCase.join(sadJoiner, happyJoiner, technicalFailureJoiner);
     }
 
-    public abstract Optional<Bias> toOptional();
+    public Optional<Bias> toOptional() {
+        return bias().apply(businessCase);
+    }
 
     public Bias get() {
         return orElseThrow(() -> new RuntimeException(format("Not present. Business case was: '%s'.", businessCase)));
@@ -64,4 +66,6 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
     public HappyPath<Sad, Happy> ifHappy() {
         return new HappyPath<>(businessCase);
     }
+
+    abstract Function<BusinessCase<Sad, Happy>, Optional<Bias>> bias();
 }

@@ -18,6 +18,7 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
 
@@ -27,11 +28,6 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
 
     public static <Sad, Happy> SadPath<Sad, Happy> sadPath(Sad sad) {
         return new SadPath<>(new SadCase<>(sad));
-    }
-
-    @Override
-    public Optional<Sad> toOptional() {
-        return businessCase.sad();
     }
 
     public SadPath<Sad, Happy> peek(Peek<Sad> peek) {
@@ -66,5 +62,10 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
 
     private static <Sad, Happy> SadPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
         return new SadPath<>(new TechnicalFailureCase<>(technicalFailure));
+    }
+
+    @Override
+    Function<BusinessCase<Sad, Happy>, Optional<Sad>> bias() {
+        return BusinessCase::sadOptional;
     }
 }
