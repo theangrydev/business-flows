@@ -41,6 +41,7 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Excep
         return Optional.ofNullable(technicalFailure);
     }
 
+    @SuppressWarnings("PMD.AvoidCatchingGenericException") // This is intentional to ensure that all exceptions are converted to technical failures
     public TechnicalFailure<Sad, Happy> then(Mapping<Exception, TechnicalFailure<Sad, Happy>> action) {
         return join(TechnicalFailure::sadPath, TechnicalFailure::happyPath, technicalFailure1 -> {
             try {

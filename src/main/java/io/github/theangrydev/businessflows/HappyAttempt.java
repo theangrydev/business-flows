@@ -19,6 +19,7 @@ package io.github.theangrydev.businessflows;
 
 @FunctionalInterface
 public interface HappyAttempt<Happy> {
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException") // This is intentional to allow an unknown exception type to escape
     Happy happy() throws Exception;
     default <NewHappy> HappyAttempt<NewHappy> andThen(Mapping<Happy, NewHappy> after) {
         return () -> after.map(happy());

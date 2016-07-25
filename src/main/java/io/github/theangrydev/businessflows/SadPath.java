@@ -50,6 +50,7 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
         });
     }
 
+    @SuppressWarnings("PMD.AvoidCatchingGenericException") // This is intentional to ensure that all exceptions are converted to technical failures
     public <NewSad> SadPath<NewSad, Happy> then(Mapping<Sad, SadPath<NewSad, Happy>> action) {
         return join(sad -> {
             try {

@@ -36,15 +36,27 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
     }
 
     public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner, Function<Exception, Result> technicalFailureJoiner) {
-        if (happy != null) {
+        if (isHappy()) {
             return happyJoiner.apply(happy);
-        } else if (sad != null) {
+        } else if (isSad()) {
             return sadJoiner.apply(sad);
-        } else if (technicalFailure != null) {
+        } else if (isTechnicalFailure()) {
             return technicalFailureJoiner.apply(technicalFailure);
         } else {
             throw new IllegalStateException("Impossible scenario. There must always be a happy or sad or technical failure.");
         }
+    }
+
+    private boolean isTechnicalFailure() {
+        return technicalFailure != null;
+    }
+
+    private boolean isSad() {
+        return sad != null;
+    }
+
+    private boolean isHappy() {
+        return happy != null;
     }
 
     public abstract Optional<Bias> toOptional();

@@ -21,5 +21,6 @@ import java.util.Optional;
 
 @FunctionalInterface
 public interface ActionThatMightFail<Sad, Happy> {
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException") // This is intentional to allow an unknown exception type to escape
     Optional<Sad> attempt(Happy happy) throws Exception;
 }
