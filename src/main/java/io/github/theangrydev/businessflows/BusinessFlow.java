@@ -25,44 +25,20 @@ import static java.lang.String.format;
 
 public abstract class BusinessFlow<Sad, Happy, Bias> {
 
-    final Sad sad;
-    final Happy happy;
-    final Exception technicalFailure;
+    final BusinessCase<Sad, Happy> businessCase;
 
-    BusinessFlow(Sad sad, Happy happy, Exception technicalFailure) {
-        this.sad = sad;
-        this.happy = happy;
-        this.technicalFailure = technicalFailure;
+    protected BusinessFlow(BusinessCase<Sad, Happy> businessCase) {
+        this.businessCase = businessCase;
     }
 
     public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner, Function<Exception, Result> technicalFailureJoiner) {
-        if (isHappy()) {
-            return happyJoiner.apply(happy);
-        } else if (isSad()) {
-            return sadJoiner.apply(sad);
-        } else if (isTechnicalFailure()) {
-            return technicalFailureJoiner.apply(technicalFailure);
-        } else {
-            throw new IllegalStateException("Impossible scenario. There must always be a happy or sad or technical failure.");
-        }
-    }
-
-    private boolean isTechnicalFailure() {
-        return technicalFailure != null;
-    }
-
-    private boolean isSad() {
-        return sad != null;
-    }
-
-    private boolean isHappy() {
-        return happy != null;
+        return businessCase.join(sadJoiner, happyJoiner, technicalFailureJoiner);
     }
 
     public abstract Optional<Bias> toOptional();
 
     public Bias get() {
-        return orElseThrow(() -> new RuntimeException(format("Not present. Happy path was '%s'. Sad path was '%s'. Exception was '%s'.", happy, sad, technicalFailure)));
+        return orElseThrow(() -> new RuntimeException(format("Not present. Business case was: '%s'.", businessCase)));
     }
 
     public Bias orElse(Bias alternative) {
@@ -78,14 +54,14 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
     }
 
     public TechnicalFailure<Sad, Happy> ifTechnicalFailure() {
-        return new TechnicalFailure<>(sad, happy, technicalFailure);
+        return new TechnicalFailure<>(businessCase);
     }
 
     public SadPath<Sad, Happy> ifSad() {
-        return new SadPath<>(sad, happy, technicalFailure);
+        return new SadPath<>(businessCase);
     }
 
     public HappyPath<Sad, Happy> ifHappy() {
-        return new HappyPath<>(sad, happy, technicalFailure);
+        return new HappyPath<>(businessCase);
     }
 }

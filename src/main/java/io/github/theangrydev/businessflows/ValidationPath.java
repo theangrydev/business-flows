@@ -24,20 +24,20 @@ import java.util.List;
 
 public class ValidationPath<Sad, Happy> extends HappyPath<List<Sad>, Happy> {
 
-    protected ValidationPath(List<Sad> sadPath, Happy happyPath, Exception technicalFailure) {
-        super(sadPath, happyPath, technicalFailure);
+    protected ValidationPath(BusinessCase<List<Sad>, Happy> businessCase) {
+        super(businessCase);
     }
 
     public static <Sad, Happy> ValidationPath<Sad, Happy> validationSuccess(Happy happy) {
-        return new ValidationPath<>(null, happy, null);
+        return new ValidationPath<>(new HappyCase<>(happy));
     }
 
     public static <Sad, Happy> ValidationPath<Sad, Happy> validationFailed(List<Sad> sad) {
-        return new ValidationPath<>(sad, null, null);
+        return new ValidationPath<>(new SadCase<>(sad));
     }
 
     public static <Sad, Happy> ValidationPath<Sad, Happy> technicalFailureDuringValidation(Exception technicalFailure) {
-        return new ValidationPath<>(null, null, technicalFailure);
+        return new ValidationPath<>(new TechnicalFailureCase<>(technicalFailure));
     }
 
     @SafeVarargs

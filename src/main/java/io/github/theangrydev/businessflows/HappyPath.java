@@ -22,13 +22,13 @@ import java.util.function.Function;
 
 public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
 
-    HappyPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
-        super(sadPath, happyPath, technicalFailure);
+    HappyPath(BusinessCase<Sad, Happy> businessCase) {
+        super(businessCase);
     }
 
     @Override
     public Optional<Happy> toOptional() {
-        return Optional.ofNullable(happy);
+        return businessCase.happy();
     }
 
     public static <Sad, Happy> HappyPath<Sad, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
@@ -44,7 +44,7 @@ public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
     }
 
     public static <Sad, Happy> HappyPath<Sad, Happy> happyPath(Happy happy) {
-        return new HappyPath<>(null, happy, null);
+        return new HappyPath<>(new HappyCase<>(happy));
     }
 
     public <NewHappy> HappyPath<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy, ?>> action) {
@@ -73,10 +73,10 @@ public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
     }
 
     private static <Sad, Happy> HappyPath<Sad, Happy> sadPath(Sad sad) {
-        return new HappyPath<>(sad, null, null);
+        return new HappyPath<>(new SadCase<>(sad));
     }
 
     private static <Sad, Happy> HappyPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
-        return new HappyPath<>(null, null, technicalFailure);
+        return new HappyPath<>(new TechnicalFailureCase<>(technicalFailure));
     }
 }

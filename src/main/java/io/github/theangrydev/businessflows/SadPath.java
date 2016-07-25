@@ -21,17 +21,17 @@ import java.util.Optional;
 
 public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
 
-    SadPath(Sad sadPath, Happy happyPath, Exception technicalFailure) {
-        super(sadPath, happyPath, technicalFailure);
+    SadPath(BusinessCase<Sad, Happy> businessCase) {
+        super(businessCase);
     }
 
     public static <Sad, Happy> SadPath<Sad, Happy> sadPath(Sad sad) {
-        return new SadPath<>(sad, null, null);
+        return new SadPath<>(new SadCase<>(sad));
     }
 
     @Override
     public Optional<Sad> toOptional() {
-        return Optional.ofNullable(sad);
+        return businessCase.sad();
     }
 
     public SadPath<Sad, Happy> peek(Peek<Sad> peek) {
@@ -61,10 +61,10 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
     }
 
     private static <Sad, Happy> SadPath<Sad, Happy> happyPath(Happy happy) {
-        return new SadPath<>(null, happy, null);
+        return new SadPath<>(new HappyCase<>(happy));
     }
 
     private static <Sad, Happy> SadPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
-        return new SadPath<>(null, null, technicalFailure);
+        return new SadPath<>(new TechnicalFailureCase<>(technicalFailure));
     }
 }
