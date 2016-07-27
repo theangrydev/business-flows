@@ -78,15 +78,6 @@ public class BusinessFlowsTest implements WithAssertions {
     }
 
     @Test
-    public void happyAttemptThatSucceedsWithFailureMappingResultsInHappy() {
-        Happy originalHappy = new Happy();
-
-        Happy actualHappy = HappyPath.happyAttempt(() -> originalHappy).get();
-
-        assertThat(actualHappy).isSameAs(originalHappy);
-    }
-
-    @Test
     public void happyAttemptThatSucceedsWithNoFailureMappingResultsInHappy() {
         Happy originalHappy = new Happy();
 
