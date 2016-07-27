@@ -24,20 +24,8 @@ import java.util.List;
 
 public class ValidationPath<Sad, Happy> extends HappyPath<List<Sad>, Happy> {
 
-    protected ValidationPath(BusinessCase<List<Sad>, Happy> businessCase) {
+    private ValidationPath(BusinessCase<List<Sad>, Happy> businessCase) {
         super(businessCase);
-    }
-
-    public static <Sad, Happy> ValidationPath<Sad, Happy> validationSuccess(Happy happy) {
-        return new ValidationPath<>(new HappyCase<>(happy));
-    }
-
-    public static <Sad, Happy> ValidationPath<Sad, Happy> validationFailed(List<Sad> sad) {
-        return new ValidationPath<>(new SadCase<>(sad));
-    }
-
-    public static <Sad, Happy> ValidationPath<Sad, Happy> technicalFailureDuringValidation(Exception technicalFailure) {
-        return new ValidationPath<>(new TechnicalFailureCase<>(technicalFailure));
     }
 
     @SafeVarargs
@@ -68,5 +56,17 @@ public class ValidationPath<Sad, Happy> extends HappyPath<List<Sad>, Happy> {
 
     public ValidationPath<Sad, Happy> validate(List<ActionThatMightFail<Sad, Happy>> validators) {
         return join(ValidationPath::validationFailed, happy -> validate(happy, validators), ValidationPath::technicalFailureDuringValidation);
+    }
+
+    private static <Sad, Happy> ValidationPath<Sad, Happy> validationSuccess(Happy happy) {
+        return new ValidationPath<>(new HappyCase<>(happy));
+    }
+
+    private static <Sad, Happy> ValidationPath<Sad, Happy> validationFailed(List<Sad> sad) {
+        return new ValidationPath<>(new SadCase<>(sad));
+    }
+
+    private static <Sad, Happy> ValidationPath<Sad, Happy> technicalFailureDuringValidation(Exception technicalFailure) {
+        return new ValidationPath<>(new TechnicalFailureCase<>(technicalFailure));
     }
 }
