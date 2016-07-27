@@ -51,7 +51,7 @@ public class TechnicalFailure<Sad, Happy> extends BusinessFlow<Sad, Happy, Excep
     public TechnicalFailure<Sad, Happy> peek(Peek<Exception> peek) {
         return then(technicalFailure -> {
             peek.peek(technicalFailure);
-            return technicalFailure(technicalFailure);
+            return this;
         });
     }
 

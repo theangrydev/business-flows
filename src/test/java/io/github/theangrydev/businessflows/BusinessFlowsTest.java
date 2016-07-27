@@ -32,6 +32,9 @@ public class BusinessFlowsTest implements WithAssertions {
     private class Sad {
     }
 
+    private class Sad2 {
+    }
+
     private class Happy {
 
     }
@@ -222,6 +225,97 @@ public class BusinessFlowsTest implements WithAssertions {
 
         assertThat(peekedSad.get()).isSameAs(originalSad);
         assertThat(actualSad).isSameAs(originalSad);
+    }
+
+    @Test
+    public void technicalFailurePeek() {
+        Exception originalTechnicalFailure = new Exception();
+        AtomicReference<Exception> peekedTechnicalFailure = new AtomicReference<>();
+
+        Exception actualTechnicalFailure = TechnicalFailure.technicalFailure(originalTechnicalFailure)
+                .peek(peekedTechnicalFailure::set)
+                .get();
+
+        assertThat(peekedTechnicalFailure.get()).isSameAs(originalTechnicalFailure);
+        assertThat(actualTechnicalFailure).isSameAs(originalTechnicalFailure);
+    }
+
+    @Test
+    public void technicalFailurePeekWithUncaughtExceptionIsATechnicalFailure() {
+        Exception uncaughtException = new Exception();
+
+        Exception actualException = TechnicalFailure.technicalFailure(new Exception())
+                .peek(happy -> {throw uncaughtException;})
+                .ifTechnicalFailure().get();
+
+        assertThat(actualException).isSameAs(uncaughtException);
+    }
+
+    @Test
+    public void sadRecovery() {
+        Happy expectedHappy = new Happy();
+
+        Happy actualHappy = SadPath.<Sad, Happy>sadPath(new Sad())
+                .recover(sad -> expectedHappy)
+                .get();
+
+        assertThat(actualHappy).isSameAs(expectedHappy);
+    }
+
+    @Test
+    public void technicalFailureRecovery() {
+        Happy expectedHappy = new Happy();
+
+        Happy actualHappy = TechnicalFailure.<Sad, Happy>technicalFailure(new Exception())
+                .recover(sad -> expectedHappy)
+                .get();
+
+        assertThat(actualHappy).isSameAs(expectedHappy);
+    }
+
+    @Test
+    public void technicalFailureMapToSadPath() {
+        Sad sad = new Sad();
+
+        Sad actualSad = TechnicalFailure.<Sad, Happy>technicalFailure(new Exception())
+                .mapToSadPath(exception -> sad)
+                .get();
+
+        assertThat(actualSad).isSameAs(sad);
+    }
+
+    @Test
+    public void sadMap() {
+        Sad2 mappedSad = new Sad2();
+
+        Sad2 actualSad = SadPath.<Sad, Happy>sadPath(new Sad())
+                .map(sad -> mappedSad)
+                .get();
+
+        assertThat(actualSad).isSameAs(mappedSad);
+    }
+
+    @Test
+    public void technicalFailureMap() {
+        Exception mappedTechnicalFailure = new Exception();
+
+        Exception actualTechnicalFailure = TechnicalFailure.<Sad, Happy>technicalFailure(new Exception())
+                .map(sad -> mappedTechnicalFailure)
+                .get();
+
+        assertThat(actualTechnicalFailure).isSameAs(mappedTechnicalFailure);
+    }
+
+    @Test
+    public void sadOperationWhenBusinessCaseIsActuallyHappy() {
+        Sad2 mappedSad = new Sad2();
+
+        Optional<Sad2> actualSad = HappyPath.<Sad, Happy>happyPath(new Happy())
+                .ifSad()
+                .map(sad -> mappedSad)
+                .toOptional();
+
+        assertThat(actualSad).isEmpty();
     }
 
     @Test

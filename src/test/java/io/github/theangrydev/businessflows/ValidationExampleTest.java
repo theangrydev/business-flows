@@ -19,10 +19,11 @@ package io.github.theangrydev.businessflows;
 
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValidationExampleTest {
 
@@ -70,19 +71,29 @@ public class ValidationExampleTest {
                 .peek(this::registerUser)
                 .ifTechnicalFailure().peek(this::logFailure)
                 .join(this::renderValidationErrors, this::renderJoinedPage, this::renderFailure);
-        System.out.println("result = " + result);
+        assertThat(result).isEqualTo("You joined!");
+    }
+
+    @Test
+    public void validateRegistrationFormWithTechnicalFailure() {
+        Exception expectedTechnicalFailure = new Exception();
+
+        Exception actualTechnicalFailure = validateWithTechnicalFailure(registrationForm(), expectedTechnicalFailure)
+                .ifTechnicalFailure().get();
+
+        assertThat(actualTechnicalFailure).isEqualTo(expectedTechnicalFailure);
     }
 
     private ValidationPath<ValidationError, RegistrationForm> validate(RegistrationForm registrationForm) {
-        return ValidationPath.validate(registrationForm, cheapValidators()).validate(expensiveValidators());
+        return ValidationPath.validate(registrationForm, cheapValidators()).validate(lastNameValidator(), firstNameValidator());
+    }
+
+    private ValidationPath<ValidationError, RegistrationForm> validateWithTechnicalFailure(RegistrationForm registrationForm, Exception technicalFailure) {
+        return ValidationPath.validate(registrationForm, registrationForm1 -> {throw technicalFailure;});
     }
 
     private ActionThatMightFail<ValidationError, RegistrationForm> cheapValidators() {
         return ageValidator();
-    }
-
-    private List<ActionThatMightFail<ValidationError, RegistrationForm>> expensiveValidators() {
-        return Arrays.asList(lastNameValidator(), firstNameValidator());
     }
 
     private void logFailure(Exception exception) {

@@ -30,7 +30,7 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
     public SadPath<Sad, Happy> peek(Peek<Sad> peek) {
         return then(sad -> {
             peek.peek(sad);
-            return sadPath(sad);
+            return this;
         });
     }
 
