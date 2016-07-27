@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static java.lang.String.format;
+
 
 public class BusinessFlowsTest implements WithAssertions {
 
@@ -36,6 +38,40 @@ public class BusinessFlowsTest implements WithAssertions {
 
     private class Happy2 {
 
+    }
+
+    @Test
+    public void getBiasThatIsPresentReturnsIt() {
+        Happy expectedHappy = new Happy();
+
+        Happy actualHappy = HappyPath.happyPath(expectedHappy)
+                .get();
+
+        assertThat(actualHappy).isSameAs(expectedHappy);
+    }
+
+    @Test
+    public void getBiasThatIsNotPresentThrowsIllegalStateException() {
+        Sad sad = new Sad();
+        assertThatThrownBy(() -> SadPath.sadPath(sad).ifHappy().get())
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage(format("Not present. Business case is: 'Sad: %s'.", sad));
+    }
+
+    @Test
+    public void orElseBiasThatIsNotPresentReturnsTheAlternative() {
+        Happy expectedHappy = new Happy();
+        Happy actualHappy = SadPath.<Sad, Happy>sadPath(new Sad()).ifHappy().orElse(expectedHappy);
+
+        assertThat(actualHappy).isEqualTo(expectedHappy);
+    }
+
+    @Test
+    public void orElseGetBiasThatIsNotPresentReturnsTheAlternative() {
+        Happy expectedHappy = new Happy();
+        Happy actualHappy = SadPath.<Sad, Happy>sadPath(new Sad()).ifHappy().orElseGet(() -> expectedHappy);
+
+        assertThat(actualHappy).isEqualTo(expectedHappy);
     }
 
     @Test
@@ -234,11 +270,31 @@ public class BusinessFlowsTest implements WithAssertions {
     }
 
     @Test
+    public void joinHappyThatMightBlowUp() throws Exception {
+        Happy originalHappy = new Happy();
+
+        String join = HappyPath.happyPath(originalHappy)
+                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName());
+
+        assertThat(join).isEqualTo(originalHappy.getClass().getSimpleName());
+    }
+
+    @Test
     public void joinSad() {
         Sad originalSad = new Sad();
 
         String join = SadPath.sadPath(originalSad)
                 .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
+
+        assertThat(join).isEqualTo(originalSad.getClass().getSimpleName());
+    }
+
+    @Test
+    public void joinSadThatBlowsUp() throws Exception {
+        Sad originalSad = new Sad();
+
+        String join = SadPath.sadPath(originalSad)
+                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalSad.getClass().getSimpleName());
     }
@@ -251,5 +307,17 @@ public class BusinessFlowsTest implements WithAssertions {
                 .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(failure.getClass().getSimpleName());
+    }
+
+    @Test
+    public void joinTechnicalThatBlowsUp() {
+        IllegalStateException failure = new IllegalStateException();
+
+        assertThatThrownBy(() -> technicalFailureJoinThatBlowsUpWith(failure)).isEqualTo(failure);
+    }
+
+    private String technicalFailureJoinThatBlowsUpWith(IllegalStateException failure) throws Exception {
+        return TechnicalFailure.technicalFailure(failure)
+                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName());
     }
 }
