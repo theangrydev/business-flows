@@ -17,8 +17,6 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.function.Function;
-
 public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
 
     HappyPath(BusinessCase<Happy, Sad> businessCase) {
@@ -26,14 +24,22 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     }
 
     public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(HappyAttempt<Happy> happyAttempt) {
-        return happyAttempt(happyAttempt.andThen(HappyPath::happyPath), HappyPath::technicalFailure);
+        try {
+            return happyPath(happyAttempt.happy());
+        } catch (Exception technicalFailure) {
+            return technicalFailure(technicalFailure);
+        }
     }
 
-    public static <Result> Result happyAttempt(HappyAttempt<Result> happyAttempt, Function<Exception, Result> failureHandler) {
+    public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(HappyAttempt<Happy> happyAttempt, Mapping<Exception, Sad> failureMapping) {
         try {
-            return happyAttempt.happy();
+            return happyPath(happyAttempt.happy());
         } catch (Exception technicalFailure) {
-            return failureHandler.apply(technicalFailure);
+            try {
+                return sadPath(failureMapping.map(technicalFailure));
+            } catch (Exception technicalFailureDuringFailureMapping) {
+                return technicalFailure(technicalFailureDuringFailureMapping);
+            }
         }
     }
 
