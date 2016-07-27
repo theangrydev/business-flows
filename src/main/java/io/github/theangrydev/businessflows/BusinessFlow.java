@@ -23,22 +23,22 @@ import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
-public class BusinessFlow<Sad, Happy, Bias> {
+public class BusinessFlow<Happy, Sad, Bias> {
 
-    private final Function<BusinessCase<Sad, Happy>, Optional<Bias>> bias;
-    private final BusinessCase<Sad, Happy> businessCase;
+    private final Function<BusinessCase<Happy, Sad>, Optional<Bias>> bias;
+    private final BusinessCase<Happy, Sad> businessCase;
 
-    BusinessFlow(Function<BusinessCase<Sad, Happy>, Optional<Bias>> bias, BusinessCase<Sad, Happy> businessCase) {
+    BusinessFlow(Function<BusinessCase<Happy, Sad>, Optional<Bias>> bias, BusinessCase<Happy, Sad> businessCase) {
         this.bias = bias;
         this.businessCase = businessCase;
     }
 
-    public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner, Function<Exception, Result> technicalFailureJoiner) {
-        return businessCase.join(sadJoiner, happyJoiner, technicalFailureJoiner);
+    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
+        return businessCase.join(happyJoiner, sadJoiner, technicalFailureJoiner);
     }
 
-    public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner) throws Exception {
-        return businessCase.join(sadJoiner, happyJoiner);
+    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws Exception {
+        return businessCase.join(happyJoiner, sadJoiner);
     }
 
     public Optional<Bias> toOptional() {
@@ -61,15 +61,15 @@ public class BusinessFlow<Sad, Happy, Bias> {
         return toOptional().orElseThrow(exceptionSupplier);
     }
 
-    public TechnicalFailure<Sad, Happy> ifTechnicalFailure() {
+    public TechnicalFailure<Happy, Sad> ifTechnicalFailure() {
         return new TechnicalFailure<>(businessCase);
     }
 
-    public SadPath<Sad, Happy> ifSad() {
+    public SadPath<Happy, Sad> ifSad() {
         return new SadPath<>(businessCase);
     }
 
-    public HappyPath<Sad, Happy> ifHappy() {
+    public HappyPath<Happy, Sad> ifHappy() {
         return new HappyPath<>(businessCase);
     }
 }

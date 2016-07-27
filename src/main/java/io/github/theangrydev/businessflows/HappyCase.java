@@ -20,7 +20,7 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 import java.util.function.Function;
 
-class HappyCase<Sad, Happy> implements BusinessCase<Sad, Happy> {
+class HappyCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 
     private final Happy happy;
 
@@ -29,12 +29,12 @@ class HappyCase<Sad, Happy> implements BusinessCase<Sad, Happy> {
     }
 
     @Override
-    public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner, Function<Exception, Result> technicalFailureJoiner) {
+    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
         return happyJoiner.apply(happy);
     }
 
     @Override
-    public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner) throws Exception {
+    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws Exception {
         return happyJoiner.apply(happy);
     }
 

@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HappyCaseTest {
 
     private final Happy happy = new Happy();
-    private final HappyCase<?, Happy> happyCase = new HappyCase<>(happy);
+    private final HappyCase<Happy, ?> happyCase = new HappyCase<>(happy);
 
     class Happy {
 
@@ -37,14 +37,14 @@ public class HappyCaseTest {
 
     @Test
     public void joinsHappy() {
-        String join = happyCase.join(null, Object::toString, null);
+        String join = happyCase.join(Object::toString, null, null);
 
         assertThat(join).isEqualTo(happy.toString());
     }
 
     @Test
     public void joinsHappyWithoutTechnicalFailureArgument() throws Exception {
-        String join = happyCase.join(null, Object::toString);
+        String join = happyCase.join(Object::toString, null);
 
         assertThat(join).isEqualTo(happy.toString());
     }

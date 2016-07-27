@@ -51,7 +51,7 @@ public class ValidationExampleTest {
         }
     }
 
-    private interface Validator<TypeToValidate> extends ActionThatMightFail<ValidationError, TypeToValidate> {
+    private interface Validator<TypeToValidate> extends ActionThatMightFail<TypeToValidate, ValidationError> {
     }
 
     private class NotBlankValidator implements Validator<String> {
@@ -70,7 +70,7 @@ public class ValidationExampleTest {
         String result = validate(registrationForm())
                 .peek(this::registerUser)
                 .ifTechnicalFailure().peek(this::logFailure)
-                .join(this::renderValidationErrors, this::renderJoinedPage, this::renderFailure);
+                .join(this::renderJoinedPage, this::renderValidationErrors, this::renderFailure);
         assertThat(result).isEqualTo("You joined!");
     }
 
@@ -84,15 +84,15 @@ public class ValidationExampleTest {
         assertThat(actualTechnicalFailure).isEqualTo(expectedTechnicalFailure);
     }
 
-    private ValidationPath<ValidationError, RegistrationForm> validate(RegistrationForm registrationForm) {
+    private ValidationPath<RegistrationForm, ValidationError> validate(RegistrationForm registrationForm) {
         return ValidationPath.validate(registrationForm, cheapValidators()).validate(lastNameValidator(), firstNameValidator());
     }
 
-    private ValidationPath<ValidationError, RegistrationForm> validateWithTechnicalFailure(RegistrationForm registrationForm, Exception technicalFailure) {
+    private ValidationPath<RegistrationForm, ValidationError> validateWithTechnicalFailure(RegistrationForm registrationForm, Exception technicalFailure) {
         return ValidationPath.validate(registrationForm, registrationForm1 -> {throw technicalFailure;});
     }
 
-    private ActionThatMightFail<ValidationError, RegistrationForm> cheapValidators() {
+    private ActionThatMightFail<RegistrationForm, ValidationError> cheapValidators() {
         return ageValidator();
     }
 

@@ -22,20 +22,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValidationPath<Sad, Happy> extends HappyPath<List<Sad>, Happy> {
+public class ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
 
-    private ValidationPath(BusinessCase<List<Sad>, Happy> businessCase) {
+    private ValidationPath(BusinessCase<Happy, List<Sad>> businessCase) {
         super(businessCase);
     }
 
     @SafeVarargs
-    public static <Sad, Happy> ValidationPath<Sad, Happy> validate(Happy happy, ActionThatMightFail<Sad, Happy>... validators) {
+    public static <Happy, Sad> ValidationPath<Happy, Sad> validate(Happy happy, ActionThatMightFail<Happy, Sad>... validators) {
         return validate(happy, Arrays.asList(validators));
     }
 
-    public static <Sad, Happy> ValidationPath<Sad, Happy> validate(Happy happy, List<ActionThatMightFail<Sad, Happy>> validators) {
+    public static <Happy, Sad> ValidationPath<Happy, Sad> validate(Happy happy, List<ActionThatMightFail<Happy, Sad>> validators) {
         List<Sad> validationFailures = new ArrayList<>(validators.size());
-        for (ActionThatMightFail<Sad, Happy> validator : validators) {
+        for (ActionThatMightFail<Happy, Sad> validator : validators) {
             try {
                 validator.attempt(happy).ifPresent(validationFailures::add);
             } catch (Exception technicalFailure) {
@@ -50,23 +50,23 @@ public class ValidationPath<Sad, Happy> extends HappyPath<List<Sad>, Happy> {
     }
 
     @SafeVarargs
-    public final ValidationPath<Sad, Happy> validate(ActionThatMightFail<Sad, Happy>... validators) {
+    public final ValidationPath<Happy, Sad> validate(ActionThatMightFail<Happy, Sad>... validators) {
         return validate(Arrays.asList(validators));
     }
 
-    public ValidationPath<Sad, Happy> validate(List<ActionThatMightFail<Sad, Happy>> validators) {
-        return join(ValidationPath::validationFailed, happy -> validate(happy, validators), ValidationPath::technicalFailureDuringValidation);
+    public ValidationPath<Happy, Sad> validate(List<ActionThatMightFail<Happy, Sad>> validators) {
+        return join(happy -> validate(happy, validators), ValidationPath::validationFailed, ValidationPath::technicalFailureDuringValidation);
     }
 
-    private static <Sad, Happy> ValidationPath<Sad, Happy> validationSuccess(Happy happy) {
+    private static <Happy, Sad> ValidationPath<Happy, Sad> validationSuccess(Happy happy) {
         return new ValidationPath<>(new HappyCase<>(happy));
     }
 
-    private static <Sad, Happy> ValidationPath<Sad, Happy> validationFailed(List<Sad> sad) {
+    private static <Happy, Sad> ValidationPath<Happy, Sad> validationFailed(List<Sad> sad) {
         return new ValidationPath<>(new SadCase<>(sad));
     }
 
-    private static <Sad, Happy> ValidationPath<Sad, Happy> technicalFailureDuringValidation(Exception technicalFailure) {
+    private static <Happy, Sad> ValidationPath<Happy, Sad> technicalFailureDuringValidation(Exception technicalFailure) {
         return new ValidationPath<>(new TechnicalFailureCase<>(technicalFailure));
     }
 }

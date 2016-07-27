@@ -64,7 +64,7 @@ public class BusinessFlowsTest implements WithAssertions {
     @Test
     public void orElseBiasThatIsNotPresentReturnsTheAlternative() {
         Happy expectedHappy = new Happy();
-        Happy actualHappy = SadPath.<Sad, Happy>sadPath(new Sad()).ifHappy().orElse(expectedHappy);
+        Happy actualHappy = SadPath.<Happy, Sad>sadPath(new Sad()).ifHappy().orElse(expectedHappy);
 
         assertThat(actualHappy).isEqualTo(expectedHappy);
     }
@@ -72,7 +72,7 @@ public class BusinessFlowsTest implements WithAssertions {
     @Test
     public void orElseGetBiasThatIsNotPresentReturnsTheAlternative() {
         Happy expectedHappy = new Happy();
-        Happy actualHappy = SadPath.<Sad, Happy>sadPath(new Sad()).ifHappy().orElseGet(() -> expectedHappy);
+        Happy actualHappy = SadPath.<Happy, Sad>sadPath(new Sad()).ifHappy().orElseGet(() -> expectedHappy);
 
         assertThat(actualHappy).isEqualTo(expectedHappy);
     }
@@ -111,7 +111,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void thenWithPossibleSadPathThatIsSad() {
         Sad expectedSad = new Sad();
 
-        Sad actualSad = HappyPath.<Sad,Happy>happyPath(new Happy())
+        Sad actualSad = HappyPath.<Happy, Sad>happyPath(new Happy())
                 .then(happy -> SadPath.sadPath(expectedSad))
                 .ifSad().get();
 
@@ -177,7 +177,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void attemptWithFailureTurnsSad() {
         Sad expectedSad = new Sad();
 
-        Sad actualSad = HappyPath.<Sad, Happy>happyPath(new Happy())
+        Sad actualSad = HappyPath.<Happy, Sad>happyPath(new Happy())
                 .attempt(happy -> Optional.of(expectedSad))
                 .ifSad().get();
 
@@ -246,7 +246,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void sadRecovery() {
         Happy expectedHappy = new Happy();
 
-        Happy actualHappy = SadPath.<Sad, Happy>sadPath(new Sad())
+        Happy actualHappy = SadPath.<Happy, Sad>sadPath(new Sad())
                 .recover(sad -> expectedHappy)
                 .get();
 
@@ -257,7 +257,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void technicalFailureRecovery() {
         Happy expectedHappy = new Happy();
 
-        Happy actualHappy = TechnicalFailure.<Sad, Happy>technicalFailure(new Exception())
+        Happy actualHappy = TechnicalFailure.<Happy, Sad>technicalFailure(new Exception())
                 .recover(sad -> expectedHappy)
                 .get();
 
@@ -268,7 +268,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void technicalFailureMapToSadPath() {
         Sad sad = new Sad();
 
-        Sad actualSad = TechnicalFailure.<Sad, Happy>technicalFailure(new Exception())
+        Sad actualSad = TechnicalFailure.<Happy, Sad>technicalFailure(new Exception())
                 .mapToSadPath(exception -> sad)
                 .get();
 
@@ -279,7 +279,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void sadMap() {
         Sad2 mappedSad = new Sad2();
 
-        Sad2 actualSad = SadPath.<Sad, Happy>sadPath(new Sad())
+        Sad2 actualSad = SadPath.<Happy, Sad>sadPath(new Sad())
                 .map(sad -> mappedSad)
                 .get();
 
@@ -290,7 +290,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void technicalFailureMap() {
         Exception mappedTechnicalFailure = new Exception();
 
-        Exception actualTechnicalFailure = TechnicalFailure.<Sad, Happy>technicalFailure(new Exception())
+        Exception actualTechnicalFailure = TechnicalFailure.technicalFailure(new Exception())
                 .map(sad -> mappedTechnicalFailure)
                 .get();
 
@@ -301,7 +301,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void sadOperationWhenBusinessCaseIsActuallyHappy() {
         Sad2 mappedSad = new Sad2();
 
-        Optional<Sad2> actualSad = HappyPath.<Sad, Happy>happyPath(new Happy())
+        Optional<Sad2> actualSad = HappyPath.<Happy, Sad>happyPath(new Happy())
                 .ifSad()
                 .map(sad -> mappedSad)
                 .toOptional();
@@ -349,7 +349,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Happy originalHappy = new Happy();
 
         String join = HappyPath.happyPath(originalHappy)
-                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e ->  e.getClass().getSimpleName());
+                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName(), e ->  e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalHappy.getClass().getSimpleName());
     }
@@ -359,7 +359,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Happy originalHappy = new Happy();
 
         String join = HappyPath.happyPath(originalHappy)
-                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName());
+                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalHappy.getClass().getSimpleName());
     }
@@ -369,7 +369,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Sad originalSad = new Sad();
 
         String join = SadPath.sadPath(originalSad)
-                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
+                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalSad.getClass().getSimpleName());
     }
@@ -379,7 +379,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Sad originalSad = new Sad();
 
         String join = SadPath.sadPath(originalSad)
-                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName());
+                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalSad.getClass().getSimpleName());
     }
@@ -389,7 +389,7 @@ public class BusinessFlowsTest implements WithAssertions {
         IllegalStateException failure = new IllegalStateException();
 
         String join = TechnicalFailure.technicalFailure(failure)
-                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
+                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName(), e -> e.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(failure.getClass().getSimpleName());
     }
@@ -403,6 +403,6 @@ public class BusinessFlowsTest implements WithAssertions {
 
     private String technicalFailureJoinThatBlowsUpWith(IllegalStateException failure) throws Exception {
         return TechnicalFailure.technicalFailure(failure)
-                .join(happy -> happy.getClass().getSimpleName(), sad -> sad.getClass().getSimpleName());
+                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
     }
 }

@@ -19,13 +19,13 @@ package io.github.theangrydev.businessflows;
 
 import java.util.function.Function;
 
-public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
+public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
 
-    HappyPath(BusinessCase<Sad, Happy> businessCase) {
+    HappyPath(BusinessCase<Happy, Sad> businessCase) {
         super(BusinessCase::happyOptional, businessCase);
     }
 
-    public static <Sad, Happy> HappyPath<Sad, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
+    public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(HappyAttempt<Happy> happyAttempt) {
         return happyAttempt(happyAttempt.andThen(HappyPath::happyPath), HappyPath::technicalFailure);
     }
 
@@ -37,40 +37,40 @@ public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
         }
     }
 
-    public static <Sad, Happy> HappyPath<Sad, Happy> happyPath(Happy happy) {
+    public static <Happy, Sad> HappyPath<Happy, Sad> happyPath(Happy happy) {
         return new HappyPath<>(new HappyCase<>(happy));
     }
 
-    public <NewHappy> HappyPath<Sad, NewHappy> then(Mapping<Happy, BusinessFlow<Sad, NewHappy, ?>> action) {
-        return join(HappyPath::sadPath, happy -> {
+    public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action) {
+        return join(happy -> {
             try {
                 return action.map(happy).ifHappy();
             } catch (Exception technicalFailure) {
                 return HappyPath.technicalFailure(technicalFailure);
             }
-        }, HappyPath::technicalFailure);
+        }, HappyPath::sadPath, HappyPath::technicalFailure);
     }
 
-    public <NewHappy> HappyPath<Sad, NewHappy> map(Mapping<Happy, NewHappy> mapping) {
+    public <NewHappy> HappyPath<NewHappy, Sad> map(Mapping<Happy, NewHappy> mapping) {
         return then(mapping.andThen(HappyPath::happyPath));
     }
 
-    public HappyPath<Sad, Happy> attempt(ActionThatMightFail<Sad, Happy> actionThatMightFail) {
-        return then(happy -> actionThatMightFail.attempt(happy).map(HappyPath::<Sad, Happy>sadPath).orElse(HappyPath.happyPath(happy)));
+    public HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail) {
+        return then(happy -> actionThatMightFail.attempt(happy).map(HappyPath::<Happy, Sad>sadPath).orElse(HappyPath.happyPath(happy)));
     }
 
-    public HappyPath<Sad, Happy> peek(Peek<Happy> peek) {
+    public HappyPath<Happy, Sad> peek(Peek<Happy> peek) {
         return then(happy -> {
             peek.peek(happy);
             return this;
         });
     }
 
-    private static <Sad, Happy> HappyPath<Sad, Happy> sadPath(Sad sad) {
+    private static <Happy, Sad> HappyPath<Happy, Sad> sadPath(Sad sad) {
         return new HappyPath<>(new SadCase<>(sad));
     }
 
-    private static <Sad, Happy> HappyPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
+    private static <Happy, Sad> HappyPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
         return new HappyPath<>(new TechnicalFailureCase<>(technicalFailure));
     }
 }

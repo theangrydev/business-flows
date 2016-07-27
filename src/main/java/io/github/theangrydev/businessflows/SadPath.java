@@ -17,46 +17,46 @@
  */
 package io.github.theangrydev.businessflows;
 
-public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
+public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
 
-    SadPath(BusinessCase<Sad, Happy> businessCase) {
+    SadPath(BusinessCase<Happy, Sad> businessCase) {
         super(BusinessCase::sadOptional, businessCase);
     }
 
-    public static <Sad, Happy> SadPath<Sad, Happy> sadPath(Sad sad) {
+    public static <Happy, Sad> SadPath<Happy, Sad> sadPath(Sad sad) {
         return new SadPath<>(new SadCase<>(sad));
     }
 
-    public SadPath<Sad, Happy> peek(Peek<Sad> peek) {
+    public SadPath<Happy, Sad> peek(Peek<Sad> peek) {
         return then(sad -> {
             peek.peek(sad);
             return this;
         });
     }
 
-    public <NewSad> SadPath<NewSad, Happy> then(Mapping<Sad, SadPath<NewSad, Happy>> action) {
-        return join(sad -> {
+    public <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, SadPath<Happy, NewSad>> action) {
+        return join(SadPath::happyPath, sad -> {
             try {
                 return action.map(sad);
             } catch (Exception technicalFailure) {
                 return technicalFailure(technicalFailure);
             }
-        }, SadPath::happyPath, SadPath::technicalFailure);
+        }, SadPath::technicalFailure);
     }
 
-    public HappyPath<Sad, Happy> recover(Mapping<Sad, Happy> recovery) {
+    public HappyPath<Happy, Sad> recover(Mapping<Sad, Happy> recovery) {
         return this.<Sad>then(sad -> happyPath(recovery.map(sad))).ifHappy();
     }
 
-    public <NewSad> SadPath<NewSad, Happy> map(Mapping<Sad, NewSad> mapping) {
+    public <NewSad> SadPath<Happy, NewSad> map(Mapping<Sad, NewSad> mapping) {
         return then(mapping.andThen(SadPath::sadPath));
     }
 
-    private static <Sad, Happy> SadPath<Sad, Happy> happyPath(Happy happy) {
+    private static <Happy, Sad> SadPath<Happy, Sad> happyPath(Happy happy) {
         return new SadPath<>(new HappyCase<>(happy));
     }
 
-    private static <Sad, Happy> SadPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
+    private static <Happy, Sad> SadPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
         return new SadPath<>(new TechnicalFailureCase<>(technicalFailure));
     }
 }

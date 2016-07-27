@@ -20,6 +20,6 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 
 @FunctionalInterface
-public interface ActionThatMightFail<Sad, Happy> {
+public interface ActionThatMightFail<Happy, Sad> {
     Optional<Sad> attempt(Happy happy) throws Exception;
 }
