@@ -23,11 +23,13 @@ import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
-public abstract class BusinessFlow<Sad, Happy, Bias> {
+public class BusinessFlow<Sad, Happy, Bias> {
 
+    private final Function<BusinessCase<Sad, Happy>, Optional<Bias>> bias;
     private final BusinessCase<Sad, Happy> businessCase;
 
-    BusinessFlow(BusinessCase<Sad, Happy> businessCase) {
+    BusinessFlow(Function<BusinessCase<Sad, Happy>, Optional<Bias>> bias, BusinessCase<Sad, Happy> businessCase) {
+        this.bias = bias;
         this.businessCase = businessCase;
     }
 
@@ -35,8 +37,12 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
         return businessCase.join(sadJoiner, happyJoiner, technicalFailureJoiner);
     }
 
+    public <Result> Result join(Function<Sad, Result> sadJoiner, Function<Happy, Result> happyJoiner) throws Exception {
+        return businessCase.join(sadJoiner, happyJoiner);
+    }
+
     public Optional<Bias> toOptional() {
-        return bias().apply(businessCase);
+        return bias.apply(businessCase);
     }
 
     public Bias get() {
@@ -66,6 +72,4 @@ public abstract class BusinessFlow<Sad, Happy, Bias> {
     public HappyPath<Sad, Happy> ifHappy() {
         return new HappyPath<>(businessCase);
     }
-
-    protected abstract Function<BusinessCase<Sad, Happy>, Optional<Bias>> bias();
 }

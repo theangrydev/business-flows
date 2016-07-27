@@ -19,7 +19,6 @@ package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
 
-@SuppressWarnings("PMD.SignatureDeclareThrowsException") // This is intentional to allow an unknown exception type to escape
 @FunctionalInterface
 public interface ActionThatMightFail<Sad, Happy> {
     Optional<Sad> attempt(Happy happy) throws Exception;

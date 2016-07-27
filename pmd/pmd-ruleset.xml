@@ -26,7 +26,9 @@
 
     <description>PMD rules to check for</description>
 
-    <rule ref="rulesets/java/basic.xml"/>
+    <rule ref="rulesets/java/basic.xml">
+        <exclude name="SignatureDeclareThrowsException"/><!-- This is part of the API design choices -->
+    </rule>
     <rule ref="rulesets/java/braces.xml"/>
     <rule ref="rulesets/java/clone.xml"/>
     <rule ref="rulesets/java/codesize.xml"/>
@@ -48,14 +50,16 @@
     <rule ref="rulesets/java/naming.xml">
         <exclude name="LongVariable"/><!-- There is nothing wrong with long descriptive variable names! -->
         <exclude name="GenericsNaming"/><!-- Single letter generic names are not descriptive enough, especially if there are several of them -->
-        <exclude name="AbstractNaming"/><!-- Abstract classes should be called something descriptive, not just AbstractXXX -->        <exclude name="ShortClassName"/><!-- It is useful to name e.g. iadd as a short name so that there is a 1-1 mapping to the JVM spec-->
+        <exclude name="AbstractNaming"/><!-- Abstract classes should be called something descriptive, not just AbstractXXX -->
         <exclude name="ShortClassName"/><!-- It is useful to name e.g. When as a short name -->
     </rule>
     <rule ref="rulesets/java/optimizations.xml">
         <exclude name="MethodArgumentCouldBeFinal"/><!-- Final method arguments are not a way to improve performance since the final keyword does not end up in the class file -->
         <exclude name="LocalVariableCouldBeFinal"/><!-- Final variables are not a way to improve performance since the final keyword does not end up in the class file -->
     </rule>
-    <rule ref="rulesets/java/strictexception.xml"/>
+    <rule ref="rulesets/java/strictexception.xml">
+        <exclude name="AvoidCatchingGenericException"/><!-- This is part of the API design choices -->
+    </rule>
     <rule ref="rulesets/java/strings.xml"/>
     <rule ref="rulesets/java/sunsecure.xml"/>
     <rule ref="rulesets/java/typeresolution.xml"/>

@@ -17,13 +17,12 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
 
     HappyPath(BusinessCase<Sad, Happy> businessCase) {
-        super(businessCase);
+        super(BusinessCase::happyOptional, businessCase);
     }
 
     public static <Sad, Happy> HappyPath<Sad, Happy> happyAttempt(HappyAttempt<Happy> happyAttempt) {
@@ -73,10 +72,5 @@ public class HappyPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Happy> {
 
     private static <Sad, Happy> HappyPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
         return new HappyPath<>(new TechnicalFailureCase<>(technicalFailure));
-    }
-
-    @Override
-    protected Function<BusinessCase<Sad, Happy>, Optional<Happy>> bias() {
-        return BusinessCase::happyOptional;
     }
 }

@@ -17,13 +17,10 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.Optional;
-import java.util.function.Function;
-
 public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
 
     SadPath(BusinessCase<Sad, Happy> businessCase) {
-        super(businessCase);
+        super(BusinessCase::sadOptional, businessCase);
     }
 
     public static <Sad, Happy> SadPath<Sad, Happy> sadPath(Sad sad) {
@@ -37,7 +34,6 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
         });
     }
 
-    @SuppressWarnings("PMD.AvoidCatchingGenericException") // This is intentional to ensure that all exceptions are converted to technical failures
     public <NewSad> SadPath<NewSad, Happy> then(Mapping<Sad, SadPath<NewSad, Happy>> action) {
         return join(sad -> {
             try {
@@ -62,10 +58,5 @@ public class SadPath<Sad, Happy> extends BusinessFlow<Sad, Happy, Sad> {
 
     private static <Sad, Happy> SadPath<Sad, Happy> technicalFailure(Exception technicalFailure) {
         return new SadPath<>(new TechnicalFailureCase<>(technicalFailure));
-    }
-
-    @Override
-    protected Function<BusinessCase<Sad, Happy>, Optional<Sad>> bias() {
-        return BusinessCase::sadOptional;
     }
 }

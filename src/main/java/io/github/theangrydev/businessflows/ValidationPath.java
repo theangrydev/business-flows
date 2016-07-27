@@ -45,7 +45,6 @@ public class ValidationPath<Sad, Happy> extends HappyPath<List<Sad>, Happy> {
         return validate(happy, Arrays.asList(validators));
     }
 
-    @SuppressWarnings("PMD.AvoidCatchingGenericException") // This is intentional to ensure that all exceptions are converted to technical failures
     public static <Sad, Happy> ValidationPath<Sad, Happy> validate(Happy happy, List<ActionThatMightFail<Sad, Happy>> validators) {
         List<Sad> validationFailures = new ArrayList<>(validators.size());
         for (ActionThatMightFail<Sad, Happy> validator : validators) {

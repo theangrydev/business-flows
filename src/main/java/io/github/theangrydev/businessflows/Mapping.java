@@ -17,7 +17,6 @@
  */
 package io.github.theangrydev.businessflows;
 
-@SuppressWarnings("PMD.SignatureDeclareThrowsException") // This is intentional to allow an unknown exception type to escape
 @FunctionalInterface
 public interface Mapping<Old, New> {
     New map(Old old) throws Exception;
