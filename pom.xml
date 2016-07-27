@@ -188,8 +188,7 @@
                 <artifactId>pitest-maven</artifactId>
                 <version>1.1.10</version>
                 <configuration>
-                    <skip>true</skip><!-- TODO: remove when the build is green -->
-                    <!--<skip>${skipTests}</skip>-->
+                    <skip>${skipTests}</skip>
                     <threads>1</threads>
                     <maxSurviving>1</maxSurviving>
                     <withHistory>false</withHistory>

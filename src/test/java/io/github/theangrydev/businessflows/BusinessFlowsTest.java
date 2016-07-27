@@ -15,12 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.theangrydev.businessflows.example;
+package io.github.theangrydev.businessflows;
 
-import io.github.theangrydev.businessflows.HappyPath;
-import io.github.theangrydev.businessflows.SadPath;
-import io.github.theangrydev.businessflows.TechnicalFailure;
-import io.github.theangrydev.businessflows.ValidationPath;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
@@ -29,8 +25,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-
-public class HappyPathTest implements WithAssertions {
+public class BusinessFlowsTest implements WithAssertions {
 
     private class Sad {
     }
