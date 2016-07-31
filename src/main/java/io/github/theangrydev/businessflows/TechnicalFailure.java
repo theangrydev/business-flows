@@ -17,6 +17,9 @@
  */
 package io.github.theangrydev.businessflows;
 
+/**
+ * {@inheritDoc}
+ */
 public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Exception> {
     TechnicalFailure(BusinessCase<Happy, Sad> businessCase) {
         super(BusinessCase::technicalFailureOptional, businessCase);

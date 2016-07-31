@@ -23,6 +23,14 @@ import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
+/**
+ * A {@link BusinessFlow} is a biased view of a {@link BusinessCase}.
+ * This is the base {@link BusinessFlow} that contains operations that are common to all the biased views.
+ *
+ * @param <Happy> The type of happy object this {@link BusinessFlow} may represent
+ * @param <Sad> The type of sad object this {@link BusinessFlow} may represent
+ * @param <Bias> The type of bias (happy, sad or technical failure) this {@link BusinessFlow} has
+ */
 public class BusinessFlow<Happy, Sad, Bias> {
 
     private final Function<BusinessCase<Happy, Sad>, Optional<Bias>> bias;
@@ -33,42 +41,91 @@ public class BusinessFlow<Happy, Sad, Bias> {
         this.businessCase = businessCase;
     }
 
+    /**
+     * Join to a common result type. No matter what the underlying business case actually is, the result type is the same.
+     *
+     * @param happyJoiner What to do if the underlying business case is a happy case
+     * @param sadJoiner What to do if the underlying business case is a sad case
+     * @param technicalFailureJoiner What to do if the underlying business case is a technical failure
+     * @param <Result> The type of the result
+     * @return The result after applying the joiner that corresponds to the underlying business case
+     */
     public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
         return businessCase.join(happyJoiner, sadJoiner, technicalFailureJoiner);
     }
 
+    /**
+     * Same as {@link #join(Function, Function, Function)} but if the business case is a technical failure, then the
+     * underlying exception will be thrown instead of joined.
+     *
+     * @param happyJoiner What to do if the underlying business case is a happy case
+     * @param sadJoiner What to do if the underlying business case is a sad case
+     * @param <Result> The type of the result
+     * @return The result after applying the joiner that corresponds to the underlying business case
+     * @throws Exception If this is a {@link TechnicalFailureCase}.
+     */
     public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws Exception {
         return businessCase.join(happyJoiner, sadJoiner);
     }
 
+    /**
+     * @return A view of the underlying business case an {@link Optional} in terms of the {@link Bias}
+     */
     public Optional<Bias> toOptional() {
         return bias.apply(businessCase);
     }
 
+    /**
+     * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else an {@link IllegalStateException}
+     * @throws IllegalStateException If the underlying business case is not the {@link Bias}
+     */
     public Bias get() {
         return orElseThrow(() -> new IllegalStateException(format("Not present. Business case is: '%s'.", businessCase)));
     }
 
+    /**
+     * @param alternative The result if the underlying business case is not the {@link Bias}
+     * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else the given alternative
+     */
     public Bias orElse(Bias alternative) {
         return toOptional().orElse(alternative);
     }
 
+    /**
+     * @param alternativeSupplier The supplier of the alternative result if the underlying business case is not the {@link Bias}
+     * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else the given alternative
+     */
     public Bias orElseGet(Supplier<Bias> alternativeSupplier) {
         return toOptional().orElseGet(alternativeSupplier);
     }
 
+    /**
+     * @param exceptionSupplier The supplier of the exception to be thrown if the underlying business case is not the {@link Bias}
+     * @param <X> The type of {@link Exception} that will be thrown if the underlying business case is not the {@link Bias}
+     * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else the given alternative
+     * @throws X If the underlying business case is not the {@link Bias}
+     */
     public <X extends Exception> Bias orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         return toOptional().orElseThrow(exceptionSupplier);
     }
 
+    /**
+     * @return A view of the underlying business case as a {@link TechnicalFailure}
+     */
     public TechnicalFailure<Happy, Sad> ifTechnicalFailure() {
         return new TechnicalFailure<>(businessCase);
     }
 
+    /**
+     * @return A view of the underlying business case as a {@link SadPath}
+     */
     public SadPath<Happy, Sad> ifSad() {
         return new SadPath<>(businessCase);
     }
 
+    /**
+     * @return A view of the underlying business case as a {@link HappyPath}
+     */
     public HappyPath<Happy, Sad> ifHappy() {
         return new HappyPath<>(businessCase);
     }

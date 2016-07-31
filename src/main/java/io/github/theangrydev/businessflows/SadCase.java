@@ -20,6 +20,11 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * A {@link SadCase} is a {@link BusinessCase} that is in an expected sad state.
+ *
+ * {@inheritDoc}
+ */
 class SadCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 
     private final Sad sad;

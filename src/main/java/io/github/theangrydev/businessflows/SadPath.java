@@ -17,6 +17,9 @@
  */
 package io.github.theangrydev.businessflows;
 
+/**
+ * {@inheritDoc}
+ */
 public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
 
     SadPath(BusinessCase<Happy, Sad> businessCase) {

@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * {@inheritDoc}
+ */
 public class ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
 
     private ValidationPath(BusinessCase<Happy, List<Sad>> businessCase) {

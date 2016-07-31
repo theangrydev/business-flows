@@ -17,12 +17,23 @@
  */
 package io.github.theangrydev.businessflows;
 
+/**
+ * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.
+ *
+ * {@inheritDoc}
+ */
 public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
 
     HappyPath(BusinessCase<Happy, Sad> businessCase) {
         super(BusinessCase::happyOptional, businessCase);
     }
 
+    /**
+     * @param happyAttempt The {@link HappyAttempt} to execute
+     * @param <Happy> The type of happy object this {@link HappyPath} may represent
+     * @param <Sad> The type of sad object this {@link HappyPath} may represent
+     * @return A {@link HappyPath} that is either happy on the inside or a technical failure
+     */
     public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(HappyAttempt<Happy> happyAttempt) {
         try {
             return happyPath(happyAttempt.happy());
@@ -31,6 +42,13 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
         }
     }
 
+    /**
+     * @param happyAttempt The {@link HappyAttempt} to execute
+     * @param failureMapping What to do if there is a technical failure during the {@link HappyAttempt}
+     * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
+     * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
+     * @return
+     */
     public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(HappyAttempt<Happy> happyAttempt, Mapping<Exception, Sad> failureMapping) {
         try {
             return happyPath(happyAttempt.happy());
@@ -43,10 +61,23 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
         }
     }
 
+    /**
+     * @param happy The happy object to initiate the flow with
+     * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
+     * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
+     * @return
+     */
     public static <Happy, Sad> HappyPath<Happy, Sad> happyPath(Happy happy) {
         return new HappyPath<>(new HappyCase<>(happy));
     }
 
+    /**
+     * If the underlying business case is happy, then apply the given action, otherwise do nothing to the underlying case.
+     *
+     * @param action The action to apply to an existing happy case
+     * @param <NewHappy> The type of happy object that will be present after the action is applied to an existing happy object
+     * @return The result of either applying the action to the existing happy path, if applicable
+     */
     public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action) {
         return join(happy -> {
             try {
@@ -57,14 +88,31 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
         }, HappyPath::sadPath, HappyPath::technicalFailure);
     }
 
+    /**
+     * If the underlying business case is happy, then apply the given mapping, otherwise do nothing to the underlying case.
+     *
+     * @param mapping The action to apply to an existing happy case
+     * @param <NewHappy> The type of happy object that will be present after the mapping is applied to an existing happy object
+     * @return The result of either applying the mapping to the existing happy path, if applicable
+     */
     public <NewHappy> HappyPath<NewHappy, Sad> map(Mapping<Happy, NewHappy> mapping) {
         return then(mapping.andThen(HappyPath::happyPath));
     }
 
+    /**
+     * @param actionThatMightFail The {@link ActionThatMightFail} to apply if the underlying business case is happy
+     * @return The same {@link HappyPath} if the action did not fail; if the action failed then a {@link HappyPath} that is now sad inside
+     */
     public HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail) {
-        return then(happy -> actionThatMightFail.attempt(happy).map(HappyPath::<Happy, Sad>sadPath).orElse(HappyPath.happyPath(happy)));
+        return then(happy -> actionThatMightFail.attempt(happy).map(HappyPath::<Happy, Sad>sadPath).orElse(this));
     }
 
+    /**
+     * Take a look at the happy case (if there really is one).
+     *
+     * @param peek What to do if the underlying business case is happy
+     * @return The same {@link HappyPath}.
+     */
     public HappyPath<Happy, Sad> peek(Peek<Happy> peek) {
         return then(happy -> {
             peek.peek(happy);

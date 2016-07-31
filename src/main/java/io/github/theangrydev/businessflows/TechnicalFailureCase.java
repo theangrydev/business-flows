@@ -20,6 +20,11 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * A {@link TechnicalFailureCase} is a {@link BusinessCase} that is in an unexpected exceptional state.
+ *
+ * {@inheritDoc}
+ */
 class TechnicalFailureCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 
     private final Exception technicalFailure;

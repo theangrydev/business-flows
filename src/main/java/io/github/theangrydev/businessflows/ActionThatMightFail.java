@@ -19,6 +19,17 @@ package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
 
+/**
+ * Attempt to perform an action on a happy business case that will either:
+ * <ul>
+ *     <li>Succeed and return {@link Optional#empty()}</li>
+ *     <li>Fail in a known way as a sad path {@link Optional#of(Object) Optional.of(Sad)}</li>
+ *     <li>Result in a technical failure and throw any kind of {@link Exception}</li>
+ * </ul>
+ *
+ * @param <Happy> The type of happy object the action will be performed on
+ * @param <Sad> The type of sad object that will be returned if the action fails in a known way
+ */
 @FunctionalInterface
 public interface ActionThatMightFail<Happy, Sad> {
     Optional<Sad> attempt(Happy happy) throws Exception;

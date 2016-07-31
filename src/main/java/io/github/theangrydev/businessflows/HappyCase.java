@@ -20,6 +20,11 @@ package io.github.theangrydev.businessflows;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * A {@link HappyCase} is a {@link BusinessCase} that is in an expected happy state.
+ *
+ * {@inheritDoc}
+ */
 class HappyCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 
     private final Happy happy;
