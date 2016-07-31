@@ -47,7 +47,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param failureMapping What to do if there is a technical failure during the {@link HappyAttempt}
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
-     * @return
+     * @return A {@link HappyPath} that is either happy on the inside, sad on the inside or a technical failure
      */
     public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(HappyAttempt<Happy> happyAttempt, Mapping<Exception, Sad> failureMapping) {
         try {
@@ -65,7 +65,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param happy The happy object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
-     * @return
+     * @return A {@link HappyPath} that is happy on the inside
      */
     public static <Happy, Sad> HappyPath<Happy, Sad> happyPath(Happy happy) {
         return new HappyPath<>(new HappyCase<>(happy));
@@ -76,7 +76,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      *
      * @param action The action to apply to an existing happy case
      * @param <NewHappy> The type of happy object that will be present after the action is applied to an existing happy object
-     * @return The result of either applying the action to the existing happy path, if applicable
+     * @return The result of applying the action to the existing happy path, if applicable
      */
     public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action) {
         return join(happy -> {
@@ -93,7 +93,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      *
      * @param mapping The action to apply to an existing happy case
      * @param <NewHappy> The type of happy object that will be present after the mapping is applied to an existing happy object
-     * @return The result of either applying the mapping to the existing happy path, if applicable
+     * @return The result of applying the mapping to the existing happy path, if applicable
      */
     public <NewHappy> HappyPath<NewHappy, Sad> map(Mapping<Happy, NewHappy> mapping) {
         return then(mapping.andThen(HappyPath::happyPath));
