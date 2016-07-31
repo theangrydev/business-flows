@@ -32,5 +32,11 @@ import java.util.Optional;
  */
 @FunctionalInterface
 public interface ActionThatMightFail<Happy, Sad> {
+
+    /**
+     * @param happy The happy object to attempt an action on
+     * @return {@link Optional#empty()} if the action succeeded, else a sad path {@link Optional#of(Object) Optional.of(Sad)}
+     * @throws Exception If there was a technical failure when attempting
+     */
     Optional<Sad> attempt(Happy happy) throws Exception;
 }

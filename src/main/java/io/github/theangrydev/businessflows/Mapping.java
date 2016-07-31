@@ -17,9 +17,29 @@
  */
 package io.github.theangrydev.businessflows;
 
+/**
+ * Similar to a {@link java.util.function.Function} but is allowed to throw an {@link Exception}.
+ *
+ * @param <Old> The old type (before mapping)
+ * @param <New> The new type (after mapping)
+ */
 @FunctionalInterface
 public interface Mapping<Old, New> {
+
+    /**
+     * @param old The old argument
+     * @return The new result
+     * @throws Exception If there is a technical failure during the mapping
+     */
     New map(Old old) throws Exception;
+
+    /**
+     * Helper method to extend an existing {@link Mapping} by mapping the result in the successful case to a new type.
+     *
+     * @param after The {@link Mapping} to apply after {@link #map(Object) map(Old)} is called
+     * @param <NewNew> The new type of object that will be produced in the successful case
+     * @return A {@link Mapping} that will apply this and then the given mapping
+     */
     default <NewNew> Mapping<Old, NewNew> andThen(Mapping<New, NewNew> after) {
         return old -> after.map(map(old));
     }
