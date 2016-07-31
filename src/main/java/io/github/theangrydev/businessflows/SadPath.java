@@ -30,7 +30,7 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
 
     /**
      * @param sad The sad object to initiate the flow with
-     * @param <Happy> The type of happy  object the resulting {@link SadPath} may represent
+     * @param <Happy> The type of happy object the resulting {@link SadPath} may represent
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
      * @return A {@link SadPath} that is sad on the inside
      */
