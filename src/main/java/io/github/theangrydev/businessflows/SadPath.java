@@ -30,9 +30,9 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
 
     /**
      * @param sad The sad object to initiate the flow with
-     * @param <Happy> The type of sad object the resulting {@link SadPath} may represent
+     * @param <Happy> The type of happy  object the resulting {@link SadPath} may represent
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
-     * @return A {@link HappyPath} that is happy on the inside
+     * @return A {@link SadPath} that is sad on the inside
      */
     public static <Happy, Sad> SadPath<Happy, Sad> sadPath(Sad sad) {
         return new SadPath<>(new SadCase<>(sad));
@@ -80,7 +80,7 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * Take a look at the sad case (if there really is one).
      *
      * @param peek What to do if the underlying business case is sad
-     * @return The same {@link SadPath}.
+     * @return The same {@link SadPath}
      */
     public SadPath<Happy, Sad> peek(Peek<Sad> peek) {
         return then(sad -> {

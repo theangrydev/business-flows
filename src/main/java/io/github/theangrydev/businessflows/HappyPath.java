@@ -111,7 +111,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * Take a look at the happy case (if there really is one).
      *
      * @param peek What to do if the underlying business case is happy
-     * @return The same {@link HappyPath}.
+     * @return The same {@link HappyPath}
      */
     public HappyPath<Happy, Sad> peek(Peek<Happy> peek) {
         return then(happy -> {

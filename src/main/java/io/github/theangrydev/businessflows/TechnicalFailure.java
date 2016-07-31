@@ -18,6 +18,8 @@
 package io.github.theangrydev.businessflows;
 
 /**
+ * A {@link TechnicalFailure} is a {@link BusinessFlow} that is biased towards the result being an {@link Exception}.
+ *
  * {@inheritDoc}
  */
 public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Exception> {
@@ -25,10 +27,23 @@ public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Excep
         super(BusinessCase::technicalFailureOptional, businessCase);
     }
 
+    /**
+     * @param technicalFailure The technical failure to initiate the flow with
+     * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
+     * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
+     * @return A {@link TechnicalFailure} that is a technical failure on the inside
+     */
     public static <Happy, Sad> TechnicalFailure<Happy, Sad> technicalFailure(Exception technicalFailure) {
         return new TechnicalFailure<>(new TechnicalFailureCase<>(technicalFailure));
     }
 
+    /**
+     * If the underlying business case is a technical failure, then apply the given action, otherwise do nothing to the
+     * underlying case.
+     *
+     * @param action The action to apply to an existing technical failure
+     * @return The result of applying the action to the existing technical failure, if applicable
+     */
     public TechnicalFailure<Happy, Sad> then(Mapping<Exception, TechnicalFailure<Happy, Sad>> action) {
         return join(TechnicalFailure::happyPath, TechnicalFailure::sadPath, technicalFailure1 -> {
             try {
@@ -39,18 +54,43 @@ public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Excep
         });
     }
 
-    public HappyPath<Happy, Sad> recover(Mapping<Exception, Happy> recovery) {
-        return then(technicalFailure -> happyPath(recovery.map(technicalFailure))).ifHappy();
-    }
-
-    public SadPath<Happy, Sad> mapToSadPath(Mapping<Exception, Sad> mapping) {
-        return then(mapping.andThen(TechnicalFailure::sadPath)).ifSad();
-    }
-
+    /**
+     * If the underlying business case is a technical failure, then apply the given mapping, otherwise do nothing to the
+     * underlying case.
+     *
+     * @param mapping The mapping to apply to an existing technical failure
+     * @return The result of applying the mapping to the existing technical failure, if applicable
+     */
     public TechnicalFailure<Happy, Sad> map(Mapping<Exception, Exception> mapping) {
         return then(mapping.andThen(TechnicalFailure::technicalFailure));
     }
 
+    /**
+     * If the underlying business case is a technical failure, recover to a {@link Happy} path using the given recovery mapping.
+     *
+     * @param recovery The recovery to apply to an existing technical failure
+     * @return The result of applying the recovery to the existing technical failure, if applicable
+     */
+    public HappyPath<Happy, Sad> recover(Mapping<Exception, Happy> recovery) {
+        return then(technicalFailure -> happyPath(recovery.map(technicalFailure))).ifHappy();
+    }
+
+    /**
+     * If the underlying business case is a technical failure, map to a {@link Sad} path using the given recovery mapping.
+     *
+     * @param mapping The mapping to apply to an existing technical failure
+     * @return The result of applying the mapping to the existing technical failure, if applicable
+     */
+    public SadPath<Happy, Sad> mapToSadPath(Mapping<Exception, Sad> mapping) {
+        return then(mapping.andThen(TechnicalFailure::sadPath)).ifSad();
+    }
+
+    /**
+     * Take a look at the technical failure (if there really is one).
+     *
+     * @param peek What to do if the underlying business case is a technical failure
+     * @return The same {@link TechnicalFailure}
+     */
     public TechnicalFailure<Happy, Sad> peek(Peek<Exception> peek) {
         return then(technicalFailure -> {
             peek.peek(technicalFailure);
