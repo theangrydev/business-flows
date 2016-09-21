@@ -44,6 +44,54 @@ public class BusinessFlowsTest implements WithAssertions {
     }
 
     @Test
+    public void sadHappyPath() {
+        Sad expectedSad = new Sad();
+        Sad actualSad = HappyPath.sadPath(expectedSad).ifSad().get();
+
+        assertThat(actualSad).isEqualTo(expectedSad);
+    }
+
+    @Test
+    public void technicalFailureHappyPath() {
+        Exception expectedTechnicalFailure = new Exception();
+        Exception actualTechnicalFailure = HappyPath.technicalFailure(expectedTechnicalFailure).ifTechnicalFailure().get();
+
+        assertThat(actualTechnicalFailure).isEqualTo(expectedTechnicalFailure);
+    }
+
+    @Test
+    public void happySadPath() {
+        Happy expectedHappy = new Happy();
+        Happy actualHappy = SadPath.happyPath(expectedHappy).ifHappy().get();
+
+        assertThat(actualHappy).isEqualTo(expectedHappy);
+    }
+
+    @Test
+    public void technicalFailureSadPath() {
+        Exception expectedTechnicalFailure = new Exception();
+        Exception actualTechnicalFailure = SadPath.technicalFailure(expectedTechnicalFailure).ifTechnicalFailure().get();
+
+        assertThat(actualTechnicalFailure).isEqualTo(expectedTechnicalFailure);
+    }
+
+    @Test
+    public void happyTechnicalFailure() {
+        Happy expectedHappy = new Happy();
+        Happy actualHappy = TechnicalFailure.happyPath(expectedHappy).ifHappy().get();
+
+        assertThat(actualHappy).isEqualTo(expectedHappy);
+    }
+
+    @Test
+    public void sadTechnicalFailure() {
+        Sad expectedSad = new Sad();
+        Sad actualSad = TechnicalFailure.sadPath(expectedSad).ifSad().get();
+
+        assertThat(actualSad).isEqualTo(expectedSad);
+    }
+
+    @Test
     public void getBiasThatIsPresentReturnsIt() {
         Happy expectedHappy = new Happy();
 

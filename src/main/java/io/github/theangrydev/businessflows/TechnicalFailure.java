@@ -38,6 +38,26 @@ public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Excep
     }
 
     /**
+     * @param sad The sad object to initiate the flow with
+     * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
+     * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
+     * @return A {@link TechnicalFailure} that is sad on the inside
+     */
+    public static <Happy, Sad> TechnicalFailure<Happy, Sad> sadPath(Sad sad) {
+        return new TechnicalFailure<>(new SadCase<>(sad));
+    }
+
+    /**
+     * @param happy The happy object to initiate the flow with
+     * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
+     * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
+     * @return A {@link TechnicalFailure} that is happy on the inside
+     */
+    public static <Happy, Sad> TechnicalFailure<Happy, Sad> happyPath(Happy happy) {
+        return new TechnicalFailure<>(new HappyCase<>(happy));
+    }
+
+    /**
      * If the underlying business case is a technical failure, then apply the given action, otherwise do nothing to the
      * underlying case.
      *
@@ -96,13 +116,5 @@ public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Excep
             peek.peek(technicalFailure);
             return this;
         });
-    }
-
-    private static <Happy, Sad> TechnicalFailure<Happy, Sad> sadPath(Sad sad) {
-        return new TechnicalFailure<>(new SadCase<>(sad));
-    }
-
-    private static <Happy, Sad> TechnicalFailure<Happy, Sad> happyPath(Happy happy) {
-        return new TechnicalFailure<>(new HappyCase<>(happy));
     }
 }
