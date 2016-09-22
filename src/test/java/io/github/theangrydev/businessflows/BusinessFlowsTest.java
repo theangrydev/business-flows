@@ -349,11 +349,34 @@ public class BusinessFlowsTest implements WithAssertions {
     }
 
     @Test
+    public void sadRecoveryWithAttempt() {
+        Happy expectedHappy = new Happy();
+
+        Happy actualHappy = SadPath.<Happy, Sad>sadPath(new Sad())
+                .recover(() -> expectedHappy)
+                .get();
+
+        assertThat(actualHappy).isSameAs(expectedHappy);
+    }
+
+    @Test
     public void technicalFailureRecovery() {
         Happy expectedHappy = new Happy();
 
         Happy actualHappy = TechnicalFailure.<Happy, Sad>technicalFailure(new Exception())
                 .recover(sad -> expectedHappy)
+                .get();
+
+        assertThat(actualHappy).isSameAs(expectedHappy);
+    }
+
+
+    @Test
+    public void technicalFailureRecoveryWithAttempt() {
+        Happy expectedHappy = new Happy();
+
+        Happy actualHappy = TechnicalFailure.<Happy, Sad>technicalFailure(new Exception())
+                .recover(() -> expectedHappy)
                 .get();
 
         assertThat(actualHappy).isSameAs(expectedHappy);
@@ -365,6 +388,17 @@ public class BusinessFlowsTest implements WithAssertions {
 
         Sad actualSad = TechnicalFailure.<Happy, Sad>technicalFailure(new Exception())
                 .mapToSadPath(exception -> sad)
+                .get();
+
+        assertThat(actualSad).isSameAs(sad);
+    }
+
+    @Test
+    public void technicalFailureMapToSadPathWithAttempt() {
+        Sad sad = new Sad();
+
+        Sad actualSad = TechnicalFailure.<Happy, Sad>technicalFailure(new Exception())
+                .mapToSadPath(() -> sad)
                 .get();
 
         assertThat(actualSad).isSameAs(sad);

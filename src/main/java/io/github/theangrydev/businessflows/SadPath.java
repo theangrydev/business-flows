@@ -97,6 +97,16 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
     }
 
     /**
+     * If the underlying business case is sad, recover to a happy path using the {@link Attempt}.
+     *
+     * @param recovery The recovery to apply to an existing sad case
+     * @return The result of applying {@link Attempt}, if applicable
+     */
+    public HappyPath<Happy, Sad> recover(Attempt<Happy> recovery) {
+        return recover(sad -> recovery.attempt());
+    }
+
+    /**
      * Take a look at the sad case (if there really is one).
      *
      * @param peek What to do if the underlying business case is sad

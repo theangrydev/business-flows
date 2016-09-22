@@ -96,6 +96,16 @@ public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Excep
     }
 
     /**
+     * If the underlying business case is a technical failure, recover to a {@link Happy} path using the given {@link Attempt}.
+     *
+     * @param recovery The recovery to apply to an existing technical failure
+     * @return The result of applying {@link Attempt}, if applicable
+     */
+    public HappyPath<Happy, Sad> recover(Attempt<Happy> recovery) {
+        return recover(technicalFailure -> recovery.attempt());
+    }
+
+    /**
      * If the underlying business case is a technical failure, map to a {@link Sad} path using the given recovery mapping.
      *
      * @param mapping The mapping to apply to an existing technical failure
@@ -103,6 +113,16 @@ public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Excep
      */
     public SadPath<Happy, Sad> mapToSadPath(Mapping<Exception, Sad> mapping) {
         return then(mapping.andThen(TechnicalFailure::sadPath)).ifSad();
+    }
+
+    /**
+     * If the underlying business case is a technical failure, map to a {@link Sad} path using the given {@link Attempt}
+     *
+     * @param mapping The mapping to apply to an existing technical failure
+     * @return The result of applying {@link Attempt}, if applicable
+     */
+    public SadPath<Happy, Sad> mapToSadPath(Attempt<Sad> mapping) {
+        return mapToSadPath(technicalFailure -> mapping.attempt());
     }
 
     /**

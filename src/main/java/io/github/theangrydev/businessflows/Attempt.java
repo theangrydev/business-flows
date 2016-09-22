@@ -20,29 +20,29 @@ package io.github.theangrydev.businessflows;
 /**
  * Attempt to perform an action that will either:
  * <ul>
- *     <li>Succeed and return a {@link Happy}</li>
+ *     <li>Succeed and return a {@link Result}</li>
  *     <li>Result in a technical failure and throw any kind of {@link Exception}</li>
  * </ul>
  *
- * @param <Happy> The type of happy object that will be produced in the successful case
+ * @param <Result> The type of happy object that will be produced in the successful case
  */
 @FunctionalInterface
-public interface HappyAttempt<Happy> {
+public interface Attempt<Result> {
 
     /**
      * @return The happy object that the method attempts to produce
      * @throws Exception If there was a technical failure in producing
      */
-    Happy happy() throws Exception;
+    Result attempt() throws Exception;
 
     /**
-     * Helper method to extend an existing {@link HappyAttempt} by mapping the result in the successful case to a new type.
+     * Helper method to extend an existing {@link Attempt} by mapping the result in the successful case to a new type.
      *
-     * @param after The {@link Mapping} to apply after {@link #happy()} is called
-     * @param <NewHappy> The new type of happy object that will be produced in the successful case
-     * @return A {@link HappyAttempt} that will apply this and then the given mapping
+     * @param after The {@link Mapping} to apply after {@link #attempt()} is called
+     * @param <NewResult> The new type of happy object that will be produced in the successful case
+     * @return A {@link Attempt} that will apply this and then the given mapping
      */
-    default <NewHappy> HappyAttempt<NewHappy> andThen(Mapping<Happy, NewHappy> after) {
-        return () -> after.map(happy());
+    default <NewResult> Attempt<NewResult> andThen(Mapping<Result, NewResult> after) {
+        return () -> after.map(attempt());
     }
 }

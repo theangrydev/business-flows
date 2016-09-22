@@ -21,13 +21,13 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HappyAttemptTest {
+public class AttemptTest {
 
     @Test
     public void andThenTest() throws Exception {
-        HappyAttempt<String> attempt = () -> "Hello";
-        HappyAttempt<String> andThen = attempt.andThen(String::toUpperCase);
+        Attempt<String> attempt = () -> "Hello";
+        Attempt<String> andThen = attempt.andThen(String::toUpperCase);
 
-        assertThat(andThen.happy()).isEqualTo("HELLO");
+        assertThat(andThen.attempt()).isEqualTo("HELLO");
     }
 }

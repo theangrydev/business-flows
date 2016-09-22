@@ -29,43 +29,43 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     }
 
     /**
-     * @param happyPathAttempt The {@link HappyPathAttempt} to execute
+     * @param happyPathAttempt The {@link Attempt} to execute
      * @param <Happy> The type of happy object this {@link HappyPath} may represent
      * @param <Sad> The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is happy or sad or a technical failure on the inside
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> happyPathAttempt(HappyPathAttempt<Happy, Sad> happyPathAttempt) {
+    public static <Happy, Sad> HappyPath<Happy, Sad> happyPathAttempt(Attempt<HappyPath<Happy, Sad>> happyPathAttempt) {
         try {
-            return happyPathAttempt.happyPath();
+            return happyPathAttempt.attempt();
         } catch (Exception technicalFailure) {
             return technicalFailure(technicalFailure);
         }
     }
 
     /**
-     * @param happyAttempt The {@link HappyAttempt} to execute
+     * @param attempt The {@link Attempt} to execute
      * @param <Happy> The type of happy object this {@link HappyPath} may represent
      * @param <Sad> The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside or a technical failure
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(HappyAttempt<Happy> happyAttempt) {
+    public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt) {
         try {
-            return happyPath(happyAttempt.happy());
+            return happyPath(attempt.attempt());
         } catch (Exception technicalFailure) {
             return technicalFailure(technicalFailure);
         }
     }
 
     /**
-     * @param happyAttempt The {@link HappyAttempt} to execute
-     * @param failureMapping What to do if there is a technical failure during the {@link HappyAttempt}
+     * @param attempt The {@link Attempt} to execute
+     * @param failureMapping What to do if there is a technical failure during the {@link Attempt}
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside, sad on the inside or a technical failure
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(HappyAttempt<Happy> happyAttempt, Mapping<Exception, Sad> failureMapping) {
+    public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt, Mapping<Exception, Sad> failureMapping) {
         try {
-            return happyPath(happyAttempt.happy());
+            return happyPath(attempt.attempt());
         } catch (Exception technicalFailure) {
             try {
                 return sadPath(failureMapping.map(technicalFailure));
