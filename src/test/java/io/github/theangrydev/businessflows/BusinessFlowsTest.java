@@ -488,7 +488,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Happy originalHappy = new Happy();
 
         String join = HappyPath.happyPath(originalHappy)
-                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
+                .joinOrThrow(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalHappy.getClass().getSimpleName());
     }
@@ -508,7 +508,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Sad originalSad = new Sad();
 
         String join = SadPath.sadPath(originalSad)
-                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
+                .joinOrThrow(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
 
         assertThat(join).isEqualTo(originalSad.getClass().getSimpleName());
     }
@@ -524,14 +524,28 @@ public class BusinessFlowsTest implements WithAssertions {
     }
 
     @Test
-    public void joinTechnicalThatBlowsUp() {
-        IllegalStateException failure = new IllegalStateException();
+    public void joinTechnicalFailureWrapsFailureAndThrows() {
+        Exception failure = new Exception("message");
+
+        assertThatThrownBy(() -> technicalFailureJoinThatWrapsAndThrows(failure))
+                .hasCause(failure)
+                .hasMessage("Exception caught when joining. Business case is: 'Technical Failure: java.lang.Exception: message'.");
+    }
+
+    @Test
+    public void joinOrThrowTechnicalFailureThrowsFailure() {
+        Exception failure = new Exception();
 
         assertThatThrownBy(() -> technicalFailureJoinThatBlowsUpWith(failure)).isEqualTo(failure);
     }
 
-    private String technicalFailureJoinThatBlowsUpWith(IllegalStateException failure) throws Exception {
+    private String technicalFailureJoinThatWrapsAndThrows(Exception failure) throws Exception {
         return TechnicalFailure.technicalFailure(failure)
                 .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
+    }
+
+    private String technicalFailureJoinThatBlowsUpWith(Exception failure) throws Exception {
+        return TechnicalFailure.technicalFailure(failure)
+                .joinOrThrow(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
     }
 }

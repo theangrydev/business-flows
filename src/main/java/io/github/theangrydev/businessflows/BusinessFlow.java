@@ -49,9 +49,28 @@ public class BusinessFlow<Happy, Sad, Bias> {
      * @param technicalFailureJoiner What to do if the underlying business case is a technical failure
      * @param <Result> The type of the result
      * @return The result after applying the joiner that corresponds to the underlying business case
+     * @throws RuntimeException If there is a failure when joining
      */
     public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
         return businessCase.join(happyJoiner, sadJoiner, technicalFailureJoiner);
+    }
+
+    /**
+     * Same as {@link #join(Function, Function, Function)} but if the business case is a technical failure, then the
+     * underlying exception will be thrown as the cause of a {@link RuntimeException} instead of joined.
+     *
+     * @param happyJoiner What to do if the underlying business case is a happy case
+     * @param sadJoiner What to do if the underlying business case is a sad case
+     * @param <Result> The type of the result
+     * @return The result after applying the joiner that corresponds to the underlying business case
+     * @throws RuntimeException If this is a {@link TechnicalFailureCase} or there is a failure when joining.
+     */
+    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws RuntimeException {
+        try {
+            return businessCase.join(happyJoiner, sadJoiner);
+        } catch (Exception e) {
+            throw new RuntimeException(format("Exception caught when joining. Business case is: '%s'.", businessCase), e);
+        }
     }
 
     /**
@@ -63,8 +82,9 @@ public class BusinessFlow<Happy, Sad, Bias> {
      * @param <Result> The type of the result
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws Exception If this is a {@link TechnicalFailureCase}.
+     * @throws RuntimeException If there is a failure when joining
      */
-    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws Exception {
+    public <Result> Result joinOrThrow(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws Exception {
         return businessCase.join(happyJoiner, sadJoiner);
     }
 
