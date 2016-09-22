@@ -29,6 +29,20 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     }
 
     /**
+     * @param happyPathAttempt The {@link HappyPathAttempt} to execute
+     * @param <Happy> The type of happy object this {@link HappyPath} may represent
+     * @param <Sad> The type of sad object this {@link HappyPath} may represent
+     * @return A {@link HappyPath} that is happy or sad or a technical failure on the inside
+     */
+    public static <Happy, Sad> HappyPath<Happy, Sad> happyPathAttempt(HappyPathAttempt<Happy, Sad> happyPathAttempt) {
+        try {
+            return happyPathAttempt.happyPath();
+        } catch (Exception technicalFailure) {
+            return technicalFailure(technicalFailure);
+        }
+    }
+
+    /**
      * @param happyAttempt The {@link HappyAttempt} to execute
      * @param <Happy> The type of happy object this {@link HappyPath} may represent
      * @param <Sad> The type of sad object this {@link HappyPath} may represent
