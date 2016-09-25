@@ -37,7 +37,7 @@ public class PotentialFailure<Sad> {
         return new PotentialFailure<>(Optional.empty());
     }
 
-    public <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy) {
+    <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy) {
         return result.map(HappyPath::<Happy, Sad>sadPath).orElse(happyPath(happy));
     }
 }
