@@ -7,5 +7,5 @@ addons:
 cache:
   directories:
     - $HOME/.m2
-install: mvn dependency:resolve
+install: mvn dependency:resolve dependency:resolve-plugins
 script: mvn verify
