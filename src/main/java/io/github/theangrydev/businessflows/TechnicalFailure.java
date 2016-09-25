@@ -65,9 +65,9 @@ public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Excep
      * @return The result of applying the action to the existing technical failure, if applicable
      */
     public TechnicalFailure<Happy, Sad> then(Mapping<Exception, TechnicalFailure<Happy, Sad>> action) {
-        return join(TechnicalFailure::happyPath, TechnicalFailure::sadPath, technicalFailure1 -> {
+        return join(TechnicalFailure::happyPath, TechnicalFailure::sadPath, technicalFailure -> {
             try {
-                return action.map(technicalFailure1);
+                return action.map(technicalFailure);
             } catch (Exception technicalFailureDuringAction) {
                 return TechnicalFailure.technicalFailure(technicalFailureDuringAction);
             }

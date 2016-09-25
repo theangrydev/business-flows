@@ -113,13 +113,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @return The result of applying the action to the existing happy path, if applicable
      */
     public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action) {
-        return join(happy -> {
-            try {
-                return action.map(happy).ifHappy();
-            } catch (Exception technicalFailure) {
-                return HappyPath.technicalFailure(technicalFailure);
-            }
-        }, HappyPath::sadPath, HappyPath::technicalFailure);
+        return join(happy -> action.map(happy).ifHappy(), HappyPath::sadPath, HappyPath::technicalFailure);
     }
 
     /**

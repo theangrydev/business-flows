@@ -130,6 +130,10 @@ public class BusinessFlow<Happy, Sad, Bias> {
     }
 
     /**
+     * NOTE: The technical failure will only be present if the failure occurred inside of a {@link BusinessFlow}.
+     * To ensure failures are caught inside a flow, use e.g. {@link HappyPath#happyPathAttempt(Attempt)} at the top of
+     * the scope, before this method is called.
+     *
      * @return A view of the underlying business case as a {@link TechnicalFailure}
      */
     public TechnicalFailure<Happy, Sad> ifTechnicalFailure() {

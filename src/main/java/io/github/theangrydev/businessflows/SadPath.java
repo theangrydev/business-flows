@@ -66,13 +66,7 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @return The result of applying the action to the existing sad path, if applicable
      */
     public <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, SadPath<Happy, NewSad>> action) {
-        return join(SadPath::happyPath, sad -> {
-            try {
-                return action.map(sad);
-            } catch (Exception technicalFailure) {
-                return technicalFailure(technicalFailure);
-            }
-        }, SadPath::technicalFailure);
+        return join(SadPath::happyPath, action, SadPath::technicalFailure);
     }
 
     /**
