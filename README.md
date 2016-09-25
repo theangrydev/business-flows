@@ -1,3 +1,5 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.theangrydev/business-flows/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/io.github.theangrydev/business-flows)
+
 # business-flows
 A combination of the Try monad and the Either monad, to help tame complex business flows
 
@@ -16,6 +18,6 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>2.7.1</version>
+    <version>3.0.1</version>
 </dependency>
 ```
