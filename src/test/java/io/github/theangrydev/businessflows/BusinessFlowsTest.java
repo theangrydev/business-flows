@@ -476,6 +476,16 @@ public class BusinessFlowsTest implements WithAssertions {
     }
 
     @Test
+    public void joinHappyWithNoTechnicalFailureJoin() {
+        Happy originalHappy = new Happy();
+
+        String join = HappyPath.happyPath(originalHappy)
+                .join(sad -> sad.getClass().getSimpleName(), happy -> happy.getClass().getSimpleName());
+
+        assertThat(join).isEqualTo(originalHappy.getClass().getSimpleName());
+    }
+
+    @Test
     public void joinHappy() {
         Happy originalHappy = new Happy();
 
