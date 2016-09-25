@@ -4,5 +4,6 @@ addons:
   apt:
     packages:
       - oracle-java8-installer
-install: # skip install
+install:
+  - # skip install
 script: mvn verify
