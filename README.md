@@ -21,3 +21,12 @@ There is no point in using this if your flows are "all or nothing". If there are
     <version>3.0.1</version>
 </dependency>
 ```
+
+## Releases
+
+### 3.0.1
+
+* 803e9e777bedb282f916ee88baa0e0afcaf06c55 License headers updated
+
+### 3.0.0
+* Using a new class PotentialFailure to represent the result of an ActionThatMightFail instead of an Optional. This change is not backwards compatible 
