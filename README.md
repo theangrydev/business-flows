@@ -24,6 +24,8 @@ There is no point in using this if your flows are "all or nothing". If there are
 ```
 
 ## Releases
+### 3.0.2
+* Made `PotentialFailure.toHappyPath` package private since it is only supposed to be used internally
 
 ### 3.0.1
 * License headers updated
