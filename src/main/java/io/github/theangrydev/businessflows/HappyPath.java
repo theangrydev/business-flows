@@ -129,10 +129,10 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
 
     /**
      * @param actionThatMightFail The {@link ActionThatMightFail} to apply if the underlying business case is happy
-     * @return The same {@link HappyPath} if the action did not fail; if the action failed then a {@link HappyPath} that is now sad inside
+     * @return The same {@link HappyPath} if the action did not fail; if the action failure then a {@link HappyPath} that is now sad inside
      */
     public HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail) {
-        return then(happy -> actionThatMightFail.attempt(happy).map(HappyPath::<Happy, Sad>sadPath).orElse(this));
+        return then(actionThatMightFail::attemptHappyPath);
     }
 
     /**

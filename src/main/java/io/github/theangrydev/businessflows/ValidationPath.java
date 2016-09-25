@@ -57,7 +57,7 @@ public class ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
         List<Sad> validationFailures = new ArrayList<>(validators.size());
         for (ActionThatMightFail<Happy, Sad> validator : validators) {
             try {
-                validator.attempt(happy).ifPresent(validationFailures::add);
+                validator.attemptHappyPath(happy).ifSad().peek(validationFailures::add);
             } catch (Exception technicalFailure) {
                 return technicalFailureDuringValidation(technicalFailure);
             }

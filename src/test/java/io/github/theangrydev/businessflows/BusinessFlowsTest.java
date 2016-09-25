@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.github.theangrydev.businessflows.PotentialFailure.failure;
+import static io.github.theangrydev.businessflows.PotentialFailure.success;
 import static java.lang.String.format;
 
 
@@ -251,7 +253,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Happy originalHappy = new Happy();
 
         Happy actualHappy = HappyPath.happyPath(originalHappy)
-                .attempt(happy -> Optional.empty())
+                .attempt(happy -> success())
                 .get();
 
         assertThat(actualHappy).isSameAs(originalHappy);
@@ -273,7 +275,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Sad expectedSad = new Sad();
 
         Sad actualSad = HappyPath.<Happy, Sad>happyPath(new Happy())
-                .attempt(happy -> Optional.of(expectedSad))
+                .attempt(happy -> failure(expectedSad))
                 .ifSad().get();
 
         assertThat(actualSad).isSameAs(expectedSad);
@@ -284,7 +286,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Sad firstSad = new Sad();
         Sad secondSad = new Sad();
 
-        List<Sad> actualSads = ValidationPath.validate(new Happy(), happy -> Optional.of(firstSad), happy -> Optional.of(secondSad))
+        List<Sad> actualSads = ValidationPath.validate(new Happy(), happy -> failure(firstSad), happy -> failure(secondSad))
                 .ifSad().get();
 
         assertThat(actualSads).containsExactly(firstSad, secondSad);
@@ -294,7 +296,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void validateWithMultiplePassesStaysHappy() {
         Happy originalHappy = new Happy();
 
-        Happy actualHappy = ValidationPath.validate(originalHappy, happy -> Optional.empty(), happy -> Optional.empty())
+        Happy actualHappy = ValidationPath.validate(originalHappy, happy -> success(), happy -> success())
                 .get();
 
         assertThat(actualHappy).isSameAs(originalHappy);

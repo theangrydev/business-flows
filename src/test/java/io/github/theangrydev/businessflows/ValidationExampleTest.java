@@ -20,9 +20,9 @@ package io.github.theangrydev.businessflows;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
+import static io.github.theangrydev.businessflows.PotentialFailure.success;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValidationExampleTest {
@@ -57,11 +57,11 @@ public class ValidationExampleTest {
     private class NotBlankValidator implements Validator<String> {
 
         @Override
-        public Optional<ValidationError> attempt(String string) {
+        public PotentialFailure<ValidationError> attempt(String string) {
             if (string == null || string.trim().isEmpty()) {
-                return Optional.of(new ValidationError("Field was empty"));
+                return PotentialFailure.failure(new ValidationError("Field was empty"));
             }
-            return Optional.empty();
+            return success();
         }
     }
 

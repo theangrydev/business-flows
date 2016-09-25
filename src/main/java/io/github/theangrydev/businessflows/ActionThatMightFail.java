@@ -17,13 +17,11 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.Optional;
-
 /**
  * Attempt to perform an action on a happy business case that will either:
  * <ul>
- *     <li>Succeed and return {@link Optional#empty()}</li>
- *     <li>Fail in a known way as a sad path {@link Optional#of(Object) Optional.of(Sad)}</li>
+ *     <li>Succeed and return {@link PotentialFailure#success()}</li>
+ *     <li>Fail in a known way as a {@link PotentialFailure#failure(Object) PotentialFailure.failure(sad)}
  *     <li>Result in a technical failure and throw any kind of {@link Exception}</li>
  * </ul>
  *
@@ -35,8 +33,18 @@ public interface ActionThatMightFail<Happy, Sad> {
 
     /**
      * @param happy The happy object to attempt an action on
-     * @return {@link Optional#empty()} if the action succeeded, else a sad path {@link Optional#of(Object) Optional.of(Sad)}
+     * @return {@link PotentialFailure#success()} if the action succeeded, else a {@link PotentialFailure#failure(Object) PotentialFailure.failure(sad)}
      * @throws Exception If there was a technical failure when attempting
      */
-    Optional<Sad> attempt(Happy happy) throws Exception;
+    PotentialFailure<Sad> attempt(Happy happy) throws Exception;
+
+    /**
+     * @param happy The happy object to attempt an action on
+     * @return a {@link HappyPath} that will be happy on the inside if the action was {@link PotentialFailure#success()} or
+     * sad on the inside if it was {@link PotentialFailure#failure(Object) PotentialFailure.failure(sad)}
+     * @throws Exception If there was a technical failure when attempting
+     */
+    default HappyPath<Happy, Sad> attemptHappyPath(Happy happy) throws Exception {
+        return attempt(happy).toHappyPath(happy);
+    }
 }
