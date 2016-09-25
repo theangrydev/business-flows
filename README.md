@@ -25,8 +25,45 @@ There is no point in using this if your flows are "all or nothing". If there are
 ## Releases
 
 ### 3.0.1
-
-* 803e9e777bedb282f916ee88baa0e0afcaf06c55 License headers updated
+* License headers updated
 
 ### 3.0.0
-* Using a new class PotentialFailure to represent the result of an ActionThatMightFail instead of an Optional. This change is not backwards compatible 
+* Using a new class `PotentialFailure` to represent the result of an `ActionThatMightFail` instead of an `Optional`. This change is not backwards compatible 
+
+### 2.7.1
+* Updated javadoc
+
+### 2.7.0
+* If a technical failure occurs while joining to happy or sad, it is joined to a technical failure instead
+
+### 2.6.0
+* Unchecked version of `join` with only happy and sad joiners has taken the `join` name. The checked version is called `joinOrThrow` now
+
+### 2.5.0
+* Recovery methods no longer need to be e.g. `exception -> sad`, they can choose to ignore the parameter and just supply a value, e.g. `() -> sad`
+
+### 2.4.0
+* Added `HappyPath.happyPathAttempt` to cover the case where the entry point to a flow is a method that could e.g. return either `HappyPath.happyPath` or `SadPath.sadPath` and may also throw an uncaught exception
+
+### 2.3.0
+* Made all the static factory methods for `HappyPath`, `SadPath` and `TechnicalFailure` public so that it is possible to do e.g. `HappyPath.sadPath(sad)` to get a happy biased view of a sad path without having to do `SadPath.sadPath(sad).ifHappy()`
+
+### 2.2.0
+* Updated javadoc
+
+### 2.1.0
+* `HappyAttempt` now has an exception to technical failure factory method and an exception to sad path factory method
+
+### 2.0.0
+* Switched order from `<Sad, Happy>` to `<Happy, Sad>` because it is more intuitive to users
+
+### 1.1.0
+* Added another `join` method in which you can omit the technical failure mapping and allow it to be thrown as an `Exception`
+* Reduced visibility of methods that should have been `private`
+
+### 1.0.1
+* Changed `orElseThrow` so that it throws `X extends Exception` rather than `X extends Throwable`
+* Changed `get` failure message wording
+
+### 1.0.0
+* Initial stab at business-flows
