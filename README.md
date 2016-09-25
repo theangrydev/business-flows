@@ -55,7 +55,7 @@ There is no point in using this if your flows are "all or nothing". If there are
 * `HappyAttempt` now has an exception to technical failure factory method and an exception to sad path factory method
 
 ### 2.0.0
-* Switched order from `<Sad, Happy>` to `<Happy, Sad>` because it is more intuitive to users
+* Switched order from `<Sad, Happy>` to `<Happy, Sad>` because it is more intuitive to users. This change is not backwards compatible
 
 ### 1.1.0
 * Added another `join` method in which you can omit the technical failure mapping and allow it to be thrown as an `Exception`
