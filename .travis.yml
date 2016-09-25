@@ -7,6 +7,5 @@ addons:
 cache:
   directories:
   - $HOME/.m2
-install:
-  - # skip install
+install: mvn dependency:resolve
 script: mvn verify
