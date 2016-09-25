@@ -51,12 +51,12 @@ public class BusinessFlow<Happy, Sad, Bias> {
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws RuntimeException If there is a failure when joining
      */
-    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
+    public <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
         return businessCase.join(happyJoiner, sadJoiner, technicalFailureJoiner);
     }
 
     /**
-     * Same as {@link #join(Function, Function, Function)} but if the business case is a technical failure, then the
+     * Same as {@link #join(Mapping, Mapping, Function)} but if the business case is a technical failure, then the
      * underlying exception will be thrown as the cause of a {@link RuntimeException} instead of joined.
      *
      * @param happyJoiner What to do if the underlying business case is a happy case
@@ -65,7 +65,7 @@ public class BusinessFlow<Happy, Sad, Bias> {
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws RuntimeException If this is a {@link TechnicalFailureCase} or there is a failure when joining.
      */
-    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws RuntimeException {
+    public <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws RuntimeException {
         try {
             return businessCase.join(happyJoiner, sadJoiner);
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class BusinessFlow<Happy, Sad, Bias> {
     }
 
     /**
-     * Same as {@link #join(Function, Function, Function)} but if the business case is a technical failure, then the
+     * Same as {@link #join(Mapping, Mapping, Function)} but if the business case is a technical failure, then the
      * underlying exception will be thrown instead of joined.
      *
      * @param happyJoiner What to do if the underlying business case is a happy case
@@ -84,7 +84,7 @@ public class BusinessFlow<Happy, Sad, Bias> {
      * @throws Exception If this is a {@link TechnicalFailureCase}.
      * @throws RuntimeException If there is a failure when joining
      */
-    public <Result> Result joinOrThrow(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws Exception {
+    public <Result> Result joinOrThrow(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception {
         return businessCase.join(happyJoiner, sadJoiner);
     }
 

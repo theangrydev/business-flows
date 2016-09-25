@@ -37,10 +37,10 @@ interface BusinessCase<Happy, Sad> {
      * @param <Result> The type of the result
      * @return The result after applying the joiner that corresponds to the underlying business case
      */
-    <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner);
+    <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner);
 
     /**
-     * Same as {@link #join(Function, Function, Function)} but if the {@link BusinessCase} is a
+     * Same as {@link #join(Mapping, Mapping, Function)} but if the {@link BusinessCase} is a
      * {@link TechnicalFailureCase}, then the underlying exception will be thrown instead of joined.
      *
      * @param happyJoiner What to do if this is a {@link HappyCase}
@@ -49,7 +49,7 @@ interface BusinessCase<Happy, Sad> {
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws Exception If this is a {@link TechnicalFailureCase}.
      */
-    <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws Exception;
+    <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception;
 
     /**
      * @return {@link Optional#of(Object) Optional.of(Happy)} if this is a {@link HappyCase}, otherwise {@link Optional#empty()}

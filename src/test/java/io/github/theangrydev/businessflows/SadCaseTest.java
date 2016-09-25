@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SadCaseTest {
 
+    private final Exception technicalFailure = new Exception("technical failure");
     private final Sad sad = new Sad();
     private final SadCase<?, Sad> sadCase = new SadCase<>(sad);
 
@@ -40,6 +41,13 @@ public class SadCaseTest {
         String join = sadCase.join(null, Object::toString, null);
 
         assertThat(join).isEqualTo(sad.toString());
+    }
+
+    @Test
+    public void technicalFailureWhileJoiningSadJoinsToTechnicalFailure() {
+        String join = sadCase.join(null, sad -> {throw technicalFailure;}, Object::toString);
+
+        assertThat(join).isEqualTo(technicalFailure.toString());
     }
 
     @Test

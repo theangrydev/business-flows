@@ -34,13 +34,17 @@ class HappyCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
     }
 
     @Override
-    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
-        return happyJoiner.apply(happy);
+    public <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
+        try {
+            return happyJoiner.map(happy);
+        } catch (Exception technicalFailure) {
+            return technicalFailureJoiner.apply(technicalFailure);
+        }
     }
 
     @Override
-    public <Result> Result join(Function<Happy, Result> happyJoiner, Function<Sad, Result> sadJoiner) throws Exception {
-        return happyJoiner.apply(happy);
+    public <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception {
+        return happyJoiner.map(happy);
     }
 
     @Override
