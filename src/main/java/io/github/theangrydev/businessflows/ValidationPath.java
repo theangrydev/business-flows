@@ -53,7 +53,7 @@ public class ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
      * @return The result of applying all the validators
      */
-    public static <Happy, Sad> ValidationPath<Happy, Sad> validate(Happy happy, List<ActionThatMightFail<Happy, Sad>> validators) {
+    public static <Happy, Sad> ValidationPath<Happy, Sad> validate(Happy happy, List<? extends ActionThatMightFail<Happy, Sad>> validators) {
         List<Sad> validationFailures = new ArrayList<>(validators.size());
         for (ActionThatMightFail<Happy, Sad> validator : validators) {
             try {
@@ -84,7 +84,7 @@ public class ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
      * @return The result of applying all the validators
      */
-    public ValidationPath<Happy, Sad> validate(List<ActionThatMightFail<Happy, Sad>> validators) {
+    public ValidationPath<Happy, Sad> validate(List<? extends ActionThatMightFail<Happy, Sad>> validators) {
         return join(happy -> validate(happy, validators), ValidationPath::validationFailed, ValidationPath::technicalFailureDuringValidation);
     }
 
