@@ -19,11 +19,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>3.0.2</version>
+    <version>3.1.0</version>
 </dependency>
 ```
 
 ## Releases
+### 3.1.0
+* Allow `? extends ActionThatMightFail<Happy, Sad>` in the `ValidationPath`
+
 ### 3.0.2
 * Made `PotentialFailure.toHappyPath` package private since it is only supposed to be used internally
 
