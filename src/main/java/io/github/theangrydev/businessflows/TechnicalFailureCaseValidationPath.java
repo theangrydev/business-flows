@@ -17,17 +17,16 @@
  */
 package io.github.theangrydev.businessflows;
 
-import org.junit.Test;
+import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+class TechnicalFailureCaseValidationPath<Happy, Sad> extends TechnicalFailureCaseHappyPath<Happy, List<Sad>> implements ValidationPath<Happy, Sad> {
 
-public class AttemptTest {
+    TechnicalFailureCaseValidationPath(Exception technicalFailure) {
+        super(technicalFailure);
+    }
 
-    @Test
-    public void andThenTest() throws Exception {
-        Attempt<String> attempt = () -> "Hello";
-        Attempt<String> andThen = attempt.andThen(String::toUpperCase);
-
-        assertThat(andThen.attempt()).isEqualTo("HELLO");
+    @Override
+    public ValidationPath<Happy, Sad> validate(List<? extends ActionThatMightFail<Happy, Sad>> validators) {
+        return this;
     }
 }

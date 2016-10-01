@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.function.Function;
 
 import static io.github.theangrydev.businessflows.PotentialFailure.success;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValidationExampleTest {
@@ -85,15 +87,13 @@ public class ValidationExampleTest {
     }
 
     private ValidationPath<RegistrationForm, ValidationError> validate(RegistrationForm registrationForm) {
-        return ValidationPath.validate(registrationForm, cheapValidators()).validate(lastNameValidator(), firstNameValidator());
+        return ValidationPath
+                .validate(registrationForm, singletonList(ageValidator()))
+                .validate(asList(lastNameValidator(), firstNameValidator()));
     }
 
     private ValidationPath<RegistrationForm, ValidationError> validateWithTechnicalFailure(RegistrationForm registrationForm, Exception technicalFailure) {
-        return ValidationPath.validate(registrationForm, registrationForm1 -> {throw technicalFailure;});
-    }
-
-    private ActionThatMightFail<RegistrationForm, ValidationError> cheapValidators() {
-        return ageValidator();
+        return ValidationPath.validate(registrationForm, singletonList(registrationForm1 -> {throw technicalFailure;}));
     }
 
     private void logFailure(Exception exception) {

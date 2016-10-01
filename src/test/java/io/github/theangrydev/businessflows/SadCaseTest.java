@@ -52,23 +52,8 @@ public class SadCaseTest {
 
     @Test
     public void joinsHappyWithoutTechnicalFailureArgument() throws Exception {
-        String join = sadCase.join(null, Object::toString);
+        String join = sadCase.joinOrThrow(null, Object::toString);
 
         assertThat(join).isEqualTo(sad.toString());
-    }
-
-    @Test
-    public void happyOptionalIsEmpty() {
-        assertThat(sadCase.happyOptional()).isEmpty();
-    }
-
-    @Test
-    public void sadOptionalIsPresent() {
-        assertThat(sadCase.sadOptional()).contains(sad);
-    }
-
-    @Test
-    public void technicalFailureOptionalIsEmpty() {
-        assertThat(sadCase.technicalFailureOptional()).isEmpty();
     }
 }

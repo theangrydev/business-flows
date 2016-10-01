@@ -19,7 +19,6 @@ package io.github.theangrydev.businessflows;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,19 +27,7 @@ import java.util.List;
  *
  * {@inheritDoc}
  */
-public class ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
-
-    private ValidationPath(BusinessCase<Happy, List<Sad>> businessCase) {
-        super(businessCase);
-    }
-
-    /**
-     * Helper method. Alias for {@link #validate(Object, List)}.
-     */
-    @SafeVarargs
-    public static <Happy, Sad> ValidationPath<Happy, Sad> validate(Happy happy, ActionThatMightFail<Happy, Sad>... validators) {
-        return validate(happy, Arrays.asList(validators));
-    }
+public interface ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
 
     /**
      * Validate the given {@link Happy} object by running the given list of validators over it.
@@ -49,32 +36,24 @@ public class ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
      *
      * @param happy The {@link Happy} object to validate
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
-     * @param <Happy> The type of happy  object the resulting {@link SadPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
+     * @param <Happy> The type of happy  object the resulting {@link ValidationPath} may represent
+     * @param <Sad> The type of sad object the resulting {@link ValidationPath} may represent
      * @return The result of applying all the validators
      */
-    public static <Happy, Sad> ValidationPath<Happy, Sad> validate(Happy happy, List<? extends ActionThatMightFail<Happy, Sad>> validators) {
+    static <Happy, Sad> ValidationPath<Happy, Sad> validate(Happy happy, List<? extends ActionThatMightFail<Happy, Sad>> validators) {
         List<Sad> validationFailures = new ArrayList<>(validators.size());
         for (ActionThatMightFail<Happy, Sad> validator : validators) {
             try {
                 validator.attemptHappyPath(happy).ifSad().peek(validationFailures::add);
             } catch (Exception technicalFailure) {
-                return technicalFailureDuringValidation(technicalFailure);
+                return new TechnicalFailureCaseValidationPath<>(technicalFailure);
             }
         }
         if (validationFailures.isEmpty()) {
-            return validationSuccess(happy);
+            return new HappyCaseValidationPath<>(happy);
         } else {
-            return validationFailed(validationFailures);
+            return new SadCaseValidationPath<>(validationFailures);
         }
-    }
-
-    /**
-     * Helper method. Alias for {@link #validate(List)}.
-     */
-    @SafeVarargs
-    public final ValidationPath<Happy, Sad> validate(ActionThatMightFail<Happy, Sad>... validators) {
-        return validate(Arrays.asList(validators));
     }
 
     /**
@@ -84,19 +63,6 @@ public class ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> {
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
      * @return The result of applying all the validators
      */
-    public ValidationPath<Happy, Sad> validate(List<? extends ActionThatMightFail<Happy, Sad>> validators) {
-        return join(happy -> validate(happy, validators), ValidationPath::validationFailed, ValidationPath::technicalFailureDuringValidation);
-    }
+    ValidationPath<Happy, Sad> validate(List<? extends ActionThatMightFail<Happy, Sad>> validators);
 
-    private static <Happy, Sad> ValidationPath<Happy, Sad> validationSuccess(Happy happy) {
-        return new ValidationPath<>(new HappyCase<>(happy));
-    }
-
-    private static <Happy, Sad> ValidationPath<Happy, Sad> validationFailed(List<Sad> sad) {
-        return new ValidationPath<>(new SadCase<>(sad));
-    }
-
-    private static <Happy, Sad> ValidationPath<Happy, Sad> technicalFailureDuringValidation(Exception technicalFailure) {
-        return new ValidationPath<>(new TechnicalFailureCase<>(technicalFailure));
-    }
 }

@@ -22,11 +22,7 @@ package io.github.theangrydev.businessflows;
  *
  * {@inheritDoc}
  */
-public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
-
-    HappyPath(BusinessCase<Happy, Sad> businessCase) {
-        super(BusinessCase::happyOptional, businessCase);
-    }
+public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
 
     /**
      * @param happyPathAttempt The {@link Attempt} to execute
@@ -34,7 +30,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <Sad> The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is happy or sad or a technical failure on the inside
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> happyPathAttempt(Attempt<HappyPath<Happy, Sad>> happyPathAttempt) {
+    static <Happy, Sad> HappyPath<Happy, Sad> happyPathAttempt(Attempt<HappyPath<Happy, Sad>> happyPathAttempt) {
         try {
             return happyPathAttempt.attempt();
         } catch (Exception technicalFailure) {
@@ -48,7 +44,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <Sad> The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside or a technical failure
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt) {
+    static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt) {
         try {
             return happyPath(attempt.attempt());
         } catch (Exception technicalFailure) {
@@ -63,7 +59,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside, sad on the inside or a technical failure
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt, Mapping<Exception, Sad> failureMapping) {
+    static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt, Mapping<Exception, Sad> failureMapping) {
         try {
             return happyPath(attempt.attempt());
         } catch (Exception technicalFailure) {
@@ -81,8 +77,8 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is happy on the inside
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> happyPath(Happy happy) {
-        return new HappyPath<>(new HappyCase<>(happy));
+    static <Happy, Sad> HappyPath<Happy, Sad> happyPath(Happy happy) {
+        return new HappyCaseHappyPath<>(happy);
     }
 
     /**
@@ -91,8 +87,8 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is sad on the inside
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> sadPath(Sad sad) {
-        return new HappyPath<>(new SadCase<>(sad));
+    static <Happy, Sad> HappyPath<Happy, Sad> sadPath(Sad sad) {
+        return new SadCaseHappyPath<>(sad);
     }
 
     /**
@@ -101,8 +97,8 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is a technical failure on the inside
      */
-    public static <Happy, Sad> HappyPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
-        return new HappyPath<>(new TechnicalFailureCase<>(technicalFailure));
+    static <Happy, Sad> HappyPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
+        return new TechnicalFailureCaseHappyPath<>(technicalFailure);
     }
 
     /**
@@ -112,9 +108,7 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <NewHappy> The type of happy object that will be present after the action is applied to an existing happy object
      * @return The result of applying the action to the existing happy path, if applicable
      */
-    public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action) {
-        return join(happy -> action.map(happy).ifHappy(), HappyPath::sadPath, HappyPath::technicalFailure);
-    }
+    <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action);
 
     /**
      * If the underlying business case is happy, then apply the given mapping, otherwise do nothing to the underlying case.
@@ -123,17 +117,13 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <NewHappy> The type of happy object that will be present after the mapping is applied to an existing happy object
      * @return The result of applying the mapping to the existing happy path, if applicable
      */
-    public <NewHappy> HappyPath<NewHappy, Sad> map(Mapping<Happy, NewHappy> mapping) {
-        return then(mapping.andThen(HappyPath::happyPath));
-    }
+    <NewHappy> HappyPath<NewHappy, Sad> map(Mapping<Happy, NewHappy> mapping);
 
     /**
      * @param actionThatMightFail The {@link ActionThatMightFail} to apply if the underlying business case is happy
      * @return The same {@link HappyPath} if the action did not fail; if the action failure then a {@link HappyPath} that is now sad inside
      */
-    public HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail) {
-        return then(actionThatMightFail::attemptHappyPath);
-    }
+    HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail);
 
     /**
      * Take a look at the happy case (if there really is one).
@@ -141,18 +131,13 @@ public class HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param peek What to do if the underlying business case is happy
      * @return The same {@link HappyPath}
      */
-    public HappyPath<Happy, Sad> peek(Peek<Happy> peek) {
-        return then(happy -> {
-            peek.peek(happy);
-            return this;
-        });
-    }
+    HappyPath<Happy, Sad> peek(Peek<Happy> peek);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public HappyPath<Happy, Sad> ifHappy() {
+    default HappyPath<Happy, Sad> ifHappy() {
         return this;
     }
 }

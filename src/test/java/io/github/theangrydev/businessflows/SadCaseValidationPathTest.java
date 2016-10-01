@@ -17,19 +17,22 @@
  */
 package io.github.theangrydev.businessflows;
 
-/**
- * Similar to a {@link java.util.function.Function} but is allowed to throw an {@link Exception}.
- *
- * @param <Old> The old type (before mapping)
- * @param <New> The new type (after mapping)
- */
-@FunctionalInterface
-public interface Mapping<Old, New> {
+import org.junit.Test;
 
-    /**
-     * @param old The old argument
-     * @return The new result
-     * @throws Exception If there is a technical failure during the mapping
-     */
-    New map(Old old) throws Exception;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SadCaseValidationPathTest {
+
+    private SadCaseValidationPath<Object, Object> sadCaseValidationPath = new SadCaseValidationPath<>(singletonList(new Object()));
+
+    @Test
+    public void validateReturnsThis() {
+        assertThat(sadCaseValidationPath.validate(null)).isSameAs(sadCaseValidationPath);
+    }
+
+    @Test
+    public void isASadCaseHappyPath() {
+        assertThat(sadCaseValidationPath).isInstanceOf(SadCaseHappyPath.class);
+    }
 }

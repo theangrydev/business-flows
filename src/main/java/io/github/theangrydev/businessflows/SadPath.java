@@ -22,11 +22,7 @@ package io.github.theangrydev.businessflows;
  *
  * {@inheritDoc}
  */
-public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
-
-    SadPath(BusinessCase<Happy, Sad> businessCase) {
-        super(BusinessCase::sadOptional, businessCase);
-    }
+public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
 
     /**
      * @param sad The sad object to initiate the flow with
@@ -34,8 +30,8 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
      * @return A {@link SadPath} that is sad on the inside
      */
-    public static <Happy, Sad> SadPath<Happy, Sad> sadPath(Sad sad) {
-        return new SadPath<>(new SadCase<>(sad));
+    static <Happy, Sad> SadPath<Happy, Sad> sadPath(Sad sad) {
+        return new SadCaseSadPath<>(sad);
     }
 
     /**
@@ -44,8 +40,8 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
      * @return A {@link SadPath} that is happy on the inside
      */
-    public static <Happy, Sad> SadPath<Happy, Sad> happyPath(Happy happy) {
-        return new SadPath<>(new HappyCase<>(happy));
+    static <Happy, Sad> SadPath<Happy, Sad> happyPath(Happy happy) {
+        return new HappyCaseSadPath<>(happy);
     }
 
     /**
@@ -54,8 +50,8 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
      * @return A {@link SadPath} that is a technical failure on the inside
      */
-    public static <Happy, Sad> SadPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
-        return new SadPath<>(new TechnicalFailureCase<>(technicalFailure));
+    static <Happy, Sad> SadPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
+        return new TechnicalFailureCaseSadPath<>(technicalFailure);
     }
 
     /**
@@ -65,9 +61,7 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param <NewSad> The type of sad object that will be present after the action is applied to an existing sad object
      * @return The result of applying the action to the existing sad path, if applicable
      */
-    public <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, SadPath<Happy, NewSad>> action) {
-        return join(SadPath::happyPath, action, SadPath::technicalFailure);
-    }
+    <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, SadPath<Happy, NewSad>> action);
 
     /**
      * If the underlying business case is sad, then apply the given mapping, otherwise do nothing to the underlying case.
@@ -76,9 +70,7 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param <NewSad> The type of sad object that will be present after the mapping is applied to an existing sad object
      * @return The result of applying the mapping to the existing sad path, if applicable
      */
-    public <NewSad> SadPath<Happy, NewSad> map(Mapping<Sad, NewSad> mapping) {
-        return then(mapping.andThen(SadPath::sadPath));
-    }
+    <NewSad> SadPath<Happy, NewSad> map(Mapping<Sad, NewSad> mapping);
 
     /**
      * If the underlying business case is sad, recover to a happy path using the given recovery mapping.
@@ -86,9 +78,7 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param recovery The recovery to apply to an existing sad case
      * @return The result of applying the recovery to the existing sad path, if applicable
      */
-    public HappyPath<Happy, Sad> recover(Mapping<Sad, Happy> recovery) {
-        return this.<Sad>then(sad -> happyPath(recovery.map(sad))).ifHappy();
-    }
+    HappyPath<Happy, Sad> recover(Mapping<Sad, Happy> recovery);
 
     /**
      * If the underlying business case is sad, recover to a happy path using the {@link Attempt}.
@@ -96,9 +86,7 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param recovery The recovery to apply to an existing sad case
      * @return The result of applying {@link Attempt}, if applicable
      */
-    public HappyPath<Happy, Sad> recover(Attempt<Happy> recovery) {
-        return recover(sad -> recovery.attempt());
-    }
+    HappyPath<Happy, Sad> recover(Attempt<Happy> recovery);
 
     /**
      * Take a look at the sad case (if there really is one).
@@ -106,18 +94,13 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param peek What to do if the underlying business case is sad
      * @return The same {@link SadPath}
      */
-    public SadPath<Happy, Sad> peek(Peek<Sad> peek) {
-        return then(sad -> {
-            peek.peek(sad);
-            return this;
-        });
-    }
+    SadPath<Happy, Sad> peek(Peek<Sad> peek);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public SadPath<Happy, Sad> ifSad() {
+    default SadPath<Happy, Sad> ifSad() {
         return this;
     }
 }

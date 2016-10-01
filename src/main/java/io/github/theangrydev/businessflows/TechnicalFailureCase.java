@@ -17,7 +17,6 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -27,7 +26,7 @@ import java.util.function.Function;
  */
 class TechnicalFailureCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 
-    private final Exception technicalFailure;
+    final Exception technicalFailure;
 
     TechnicalFailureCase(Exception technicalFailure) {
         this.technicalFailure = technicalFailure;
@@ -39,23 +38,8 @@ class TechnicalFailureCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
     }
 
     @Override
-    public <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception {
+    public <Result> Result joinOrThrow(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception {
         throw technicalFailure;
-    }
-
-    @Override
-    public Optional<Happy> happyOptional() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Sad> sadOptional() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Exception> technicalFailureOptional() {
-        return Optional.of(technicalFailure);
     }
 
     @Override

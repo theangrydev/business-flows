@@ -17,19 +17,16 @@
  */
 package io.github.theangrydev.businessflows;
 
-/**
- * Similar to a {@link java.util.function.Function} but is allowed to throw an {@link Exception}.
- *
- * @param <Old> The old type (before mapping)
- * @param <New> The new type (after mapping)
- */
-@FunctionalInterface
-public interface Mapping<Old, New> {
+import java.util.List;
 
-    /**
-     * @param old The old argument
-     * @return The new result
-     * @throws Exception If there is a technical failure during the mapping
-     */
-    New map(Old old) throws Exception;
+class HappyCaseValidationPath<Happy, Sad> extends HappyCaseHappyPath<Happy, List<Sad>> implements ValidationPath<Happy, Sad> {
+
+    HappyCaseValidationPath(Happy happy) {
+        super(happy);
+    }
+
+    @Override
+    public ValidationPath<Happy, Sad> validate(List<? extends ActionThatMightFail<Happy, Sad>> validators) {
+        return ValidationPath.validate(happy, validators);
+    }
 }

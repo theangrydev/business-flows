@@ -34,15 +34,4 @@ public interface Attempt<Result> {
      * @throws Exception If there was a technical failure in producing
      */
     Result attempt() throws Exception;
-
-    /**
-     * Helper method to extend an existing {@link Attempt} by mapping the result in the successful case to a new type.
-     *
-     * @param after The {@link Mapping} to apply after {@link #attempt()} is called
-     * @param <NewResult> The new type of happy object that will be produced in the successful case
-     * @return A {@link Attempt} that will apply this and then the given mapping
-     */
-    default <NewResult> Attempt<NewResult> andThen(Mapping<Result, NewResult> after) {
-        return () -> after.map(attempt());
-    }
 }

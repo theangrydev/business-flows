@@ -41,21 +41,6 @@ public class TechnicalFailureCaseTest {
 
     @Test
     public void joinsHappyWithoutTechnicalFailureArgument() throws Exception {
-        assertThatThrownBy(() -> technicalFailureCase.join(null, null)).isEqualTo(technicalFailure);
-    }
-
-    @Test
-    public void happyOptionalIsEmpty() {
-        assertThat(technicalFailureCase.happyOptional()).isEmpty();
-    }
-
-    @Test
-    public void sadOptionalIsEmpty() {
-        assertThat(technicalFailureCase.sadOptional()).isEmpty();
-    }
-
-    @Test
-    public void technicalFailureOptionalIsPresent() {
-        assertThat(technicalFailureCase.technicalFailureOptional()).contains(technicalFailure);
+        assertThatThrownBy(() -> technicalFailureCase.joinOrThrow(null, null)).isEqualTo(technicalFailure);
     }
 }
