@@ -21,8 +21,8 @@ import java.util.List;
 
 class SadCaseValidationPath<Happy, Sad> extends SadCaseHappyPath<Happy, List<Sad>> implements ValidationPath<Happy, Sad> {
 
-    SadCaseValidationPath(List<Sad> sads) {
-        super(sads);
+    SadCaseValidationPath(List<Sad> sadList) {
+        super(sadList);
     }
 
     @Override

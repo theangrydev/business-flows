@@ -57,7 +57,7 @@ public interface ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> 
     }
 
     /**
-     * Perform a subsequent round of validation, which will take place if the previous one suceeded.
+     * Perform a subsequent round of validation, which will take place if the previous one succeeded.
      * This can be useful when you want e.g. expensive validators to run after cheap ones, or if you want to group validators together.
      *
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
