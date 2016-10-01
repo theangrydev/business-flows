@@ -52,8 +52,7 @@ class HappyCaseHappyPath<Happy, Sad> extends HappyCase<Happy, Sad> implements Ha
     @Override
     public <NewHappy> HappyPath<NewHappy, Sad> map(Mapping<Happy, NewHappy> mapping) {
         try {
-            NewHappy newHappy = mapping.map(happy);
-            return new HappyCaseHappyPath<>(newHappy);
+            return HappyPath.happyPath(mapping.map(happy));
         } catch (Exception e) {
             return HappyPath.technicalFailure(e);
         }

@@ -52,7 +52,7 @@ class SadCaseSadPath<Happy, Sad> extends SadCase<Happy, Sad> implements SadPath<
     @Override
     public <NewSad> SadPath<Happy, NewSad> map(Mapping<Sad, NewSad> mapping) {
         try {
-            return new SadCaseSadPath<>(mapping.map(sad));
+            return SadPath.sadPath(mapping.map(sad));
         } catch (Exception e) {
             return SadPath.technicalFailure(e);
         }
@@ -61,7 +61,7 @@ class SadCaseSadPath<Happy, Sad> extends SadCase<Happy, Sad> implements SadPath<
     @Override
     public HappyPath<Happy, Sad> recover(Mapping<Sad, Happy> recovery) {
         try {
-            return new HappyCaseHappyPath<>(recovery.map(sad));
+            return HappyPath.happyPath(recovery.map(sad));
         } catch (Exception e) {
             return HappyPath.technicalFailure(e);
         }
@@ -70,7 +70,7 @@ class SadCaseSadPath<Happy, Sad> extends SadCase<Happy, Sad> implements SadPath<
     @Override
     public HappyPath<Happy, Sad> recover(Attempt<Happy> recovery) {
         try {
-            return new HappyCaseHappyPath<>(recovery.attempt());
+            return HappyPath.happyPath(recovery.attempt());
         } catch (Exception e) {
             return HappyPath.technicalFailure(e);
         }

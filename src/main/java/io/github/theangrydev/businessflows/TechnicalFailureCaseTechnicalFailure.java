@@ -47,7 +47,7 @@ class TechnicalFailureCaseTechnicalFailure<Happy, Sad> extends TechnicalFailureC
     @Override
     public TechnicalFailure<Happy, Sad> map(Mapping<Exception, Exception> mapping) {
         try {
-            return new TechnicalFailureCaseTechnicalFailure<>(mapping.map(technicalFailure));
+            return TechnicalFailure.technicalFailure(mapping.map(technicalFailure));
         } catch (Exception e) {
             return TechnicalFailure.technicalFailure(e);
         }
