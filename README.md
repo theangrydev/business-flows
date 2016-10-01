@@ -25,7 +25,7 @@ There is no point in using this if your flows are "all or nothing". If there are
 
 ## Releases
 ### 3.1.1
-* Optimized overrides for ifHappy etc (closes #2)
+* Optimized overrides for ifHappy etc (closes [#2](https://github.com/theangrydev/business-flows/issues/2))
 
 ### 3.1.0
 * Allow `? extends ActionThatMightFail<Happy, Sad>` in the `ValidationPath`
