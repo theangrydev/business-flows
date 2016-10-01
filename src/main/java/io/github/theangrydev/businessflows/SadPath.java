@@ -112,4 +112,12 @@ public class SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
             return this;
         });
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SadPath<Happy, Sad> ifSad() {
+        return this;
+    }
 }

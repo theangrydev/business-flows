@@ -137,4 +137,12 @@ public class TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Excep
             return this;
         });
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TechnicalFailure<Happy, Sad> ifTechnicalFailure() {
+        return this;
+    }
 }
