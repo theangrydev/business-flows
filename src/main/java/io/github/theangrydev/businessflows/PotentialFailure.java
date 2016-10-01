@@ -17,27 +17,15 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.Optional;
-
-import static io.github.theangrydev.businessflows.HappyPath.happyPath;
-
-public class PotentialFailure<Sad> {
-
-    private final Optional<Sad> result;
-
-    private PotentialFailure(Optional<Sad> result) {
-        this.result = result;
-    }
+public abstract class PotentialFailure<Sad> {
 
     public static <Sad> PotentialFailure<Sad> failure(Sad sad) {
-        return new PotentialFailure<>(Optional.of(sad));
+        return new PotentialFailureFailure<>(sad);
     }
 
     public static <Sad> PotentialFailure<Sad> success() {
-        return new PotentialFailure<>(Optional.empty());
+        return new PotentialFailureSuccess<>();
     }
 
-    <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy) {
-        return result.map(HappyPath::<Happy, Sad>sadPath).orElse(happyPath(happy));
-    }
+    abstract <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy);
 }
