@@ -19,11 +19,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
 </dependency>
 ```
 
 ## Releases
+### 3.1.1
+* Optimized overrides for ifHappy etc (closes #2)
+
 ### 3.1.0
 * Allow `? extends ActionThatMightFail<Happy, Sad>` in the `ValidationPath`
 
