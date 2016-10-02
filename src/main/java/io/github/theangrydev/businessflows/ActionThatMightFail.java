@@ -21,7 +21,7 @@ package io.github.theangrydev.businessflows;
  * Attempt to perform an action on a happy business case that will either:
  * <ul>
  *     <li>Succeed and return {@link PotentialFailure#success()}</li>
- *     <li>Fail in a known way as a {@link PotentialFailure#failure(Sad)}
+ *     <li>Fail in a known way as a {@link PotentialFailure#failure(Object) PotentialFailure#failure(Sad)}
  *     <li>Result in a technical failure and throw any kind of {@link Exception}</li>
  * </ul>
  *
