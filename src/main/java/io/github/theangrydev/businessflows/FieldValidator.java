@@ -21,10 +21,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.github.theangrydev.businessflows.ValidationPath.validate;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 /**
  * A {@link Validator} for a {@link Field} of a {@link Happy} object.
@@ -68,10 +71,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      */
     @SafeVarargs
     public static <Happy, Sad, Field> FieldValidator<Happy, Sad, Field> fieldValidator(Mapping<Happy, Field> fieldExtractor, Validator<Field, Sad> fieldValidator, Validator<Field, Sad>... fieldValidators) {
-        List<Validator<Field, Sad>> validators = new ArrayList<>(fieldValidators.length + 1);
-        validators.add(fieldValidator);
-        stream(fieldValidators).forEach(validators::add);
-        return fieldValidator(fieldExtractor, validators);
+        return fieldValidator(fieldExtractor, varargsToList(fieldValidator, fieldValidators));
     }
 
     /**
@@ -107,10 +107,12 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      */
     @SafeVarargs
     public static <Happy, Sad, Field, FieldName> FieldValidator<Happy, Sad, Field> fieldValidator(Mapping<Happy, Field> fieldExtractor, FieldName fieldName, Function<FieldName, ? extends Validator<Field, Sad>> fieldValidatorFactory, Function<FieldName, ? extends Validator<Field, Sad>>... fieldValidatorFactories) {
-        List<Function<FieldName, ? extends Validator<Field, Sad>>> factories = new ArrayList<>(fieldValidatorFactories.length + 1);
-        factories.add(fieldValidatorFactory);
-        Arrays.stream(fieldValidatorFactories).forEach(factories::add);
-        return fieldValidator(fieldExtractor, fieldName, factories);
+        return fieldValidator(fieldExtractor, fieldName, varargsToList(fieldValidatorFactory, fieldValidatorFactories));
+    }
+
+    @SafeVarargs
+    private static <T> List<T> varargsToList(T first, T... rest) {
+        return concat(Stream.of(first), Stream.of(rest)).collect(Collectors.toList());
     }
 
     @Override
