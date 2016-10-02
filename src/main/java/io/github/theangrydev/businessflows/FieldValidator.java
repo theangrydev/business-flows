@@ -84,6 +84,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      * @param <Happy> The type that contains the {@link Field}
      * @param <Sad> The type of validation failure
      * @param <Field> The type of the field to validate
+     * @param <FieldName> Type for the name of the field to validate
      * @return The validator
      */
     public static <Happy, Sad, Field, FieldName> FieldValidator<Happy, Sad, Field> fieldValidator(Mapping<Happy, Field> fieldExtractor, FieldName fieldName, List<Function<FieldName, ? extends Validator<Field, Sad>>> fieldValidatorFactories) {
@@ -103,6 +104,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      * @param <Happy> The type that contains the {@link Field}
      * @param <Sad> The type of validation failure
      * @param <Field> The type of the field to validate
+     * @param <FieldName> Type for the name of the field to validate
      * @return The validator
      */
     @SafeVarargs

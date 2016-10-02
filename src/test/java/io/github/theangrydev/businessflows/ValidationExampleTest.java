@@ -46,12 +46,22 @@ public class ValidationExampleTest {
         static AggregateErrors errorsWithMessage2(List<ValidationError> validationErrors) {
             return new AggregateErrors(validationErrors);
         }
+
+        @Override
+        public String toString() {
+            return validationErrors.toString();
+        }
     }
     private static class ValidationError {
         private final String error;
 
         private ValidationError(String error) {
             this.error = error;
+        }
+
+        @Override
+        public String toString() {
+            return error;
         }
     }
 
@@ -92,6 +102,15 @@ public class ValidationExampleTest {
                 .ifTechnicalFailure().peek(this::logFailure)
                 .join(this::renderJoinedPage, this::renderValidationErrors, this::renderFailure);
         assertThat(result).isEqualTo("You joined!");
+    }
+
+    @Test
+    public void validateRegistrationFormBlankFirstName() {
+        String result = validate(registrationFormWithBlankAge())
+                .peek(this::registerUser)
+                .ifTechnicalFailure().peek(this::logFailure)
+                .join(this::renderJoinedPage, this::renderValidationErrors, this::renderFailure);
+        assertThat(result).isEqualTo("Please fix the errors: [Field 'Age' was empty]");
     }
 
     @Test
@@ -148,6 +167,10 @@ public class ValidationExampleTest {
 
     private RegistrationForm registrationForm() {
         return new RegistrationForm("first", "last", "25");
+    }
+
+    private RegistrationForm registrationFormWithBlankAge() {
+        return new RegistrationForm("first", "last", "");
     }
 
     private Validator<RegistrationForm, ValidationError> ageValidator() {
