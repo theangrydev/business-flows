@@ -35,7 +35,7 @@ public interface ActionThatMightFail<Happy, Sad> {
      * Attempt an action that might fail and map to a {@link Sad} object.
      *
      * @param happy The happy object to attempt an action on
-     * @return {@link PotentialFailure#success()} if the action succeeded, else a {@link PotentialFailure#failure(Sad)}
+     * @return {@link PotentialFailure#success()} if the action succeeded, else a {@link PotentialFailure#failure(Object) PotentialFailure#failure(Sad)}
      * @throws Exception If there was a technical failure when attempting
      */
     PotentialFailure<Sad> attempt(Happy happy) throws Exception;
