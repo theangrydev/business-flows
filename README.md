@@ -19,11 +19,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>5.0.0</version>
+    <version>5.1.1</version>
 </dependency>
 ```
 
 ## Releases
+### 5.1.1
+* Helper methods for `FieldValidator` to cope with the case that a common field name should be passed to validators so they can use the name in the validation message
+
 ### 5.0.0
 * Validation revamp. Helper `FieldValidator` for field validation, a new `Validator` type, `PotentialFailure.failures` helper method and `ValidationPath` helper methods. This change is not backwards compatible
 
