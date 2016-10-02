@@ -77,8 +77,8 @@ public interface ValidationPath<Happy, Sad> extends HappyPath<Happy, List<Sad>> 
      * @return The result of applying all the validators
      */
      static <Happy, Sad> ValidationPath<Happy, Sad> validate(Happy happy, List<? extends Validator<Happy, Sad>> validators) {
-         ValidationPath<Happy, Sad> happyObjectValidationPath = ValidationPath.validationPath(happy);
-         return happyObjectValidationPath.validate(validators);
+         ValidationPath<Happy, Sad> happyPath = ValidationPath.validationPath(happy);
+         return happyPath.validate(validators);
     }
 
     /**
