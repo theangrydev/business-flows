@@ -21,7 +21,7 @@ package io.github.theangrydev.businessflows;
  * Attempt to perform an action on a happy business case that will either:
  * <ul>
  *     <li>Succeed and return {@link PotentialFailure#success()}</li>
- *     <li>Fail in a known way as a {@link PotentialFailure#failure(Object) PotentialFailure.failure(sad)}
+ *     <li>Fail in a known way as a {@link PotentialFailure#failure(Sad)}
  *     <li>Result in a technical failure and throw any kind of {@link Exception}</li>
  * </ul>
  *
@@ -35,18 +35,8 @@ public interface ActionThatMightFail<Happy, Sad> {
      * Attempt an action that might fail and map to a {@link Sad} object.
      *
      * @param happy The happy object to attempt an action on
-     * @return {@link PotentialFailure#success()} if the action succeeded, else a {@link PotentialFailure#failure(Object) PotentialFailure.failure(sad)}
+     * @return {@link PotentialFailure#success()} if the action succeeded, else a {@link PotentialFailure#failure(Sad)}
      * @throws Exception If there was a technical failure when attempting
      */
     PotentialFailure<Sad> attempt(Happy happy) throws Exception;
-
-    /**
-     * @param happy The happy object to attempt an action on
-     * @return a {@link HappyPath} that will be happy on the inside if the action was {@link PotentialFailure#success()} or
-     * sad on the inside if it was {@link PotentialFailure#failure(Object) PotentialFailure.failure(sad)}
-     * @throws Exception If there was a technical failure when attempting
-     */
-    default HappyPath<Happy, Sad> attemptHappyPath(Happy happy) throws Exception {
-        return attempt(happy).toHappyPath(happy);
-    }
 }

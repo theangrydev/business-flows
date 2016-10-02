@@ -25,6 +25,8 @@ package io.github.theangrydev.businessflows;
 public abstract class PotentialFailure<Sad> {
 
     /**
+     * Construct a known failure that is mapped to a {@link Sad} object.
+     *
      * @param sad The sad object that represents a failure
      * @param <Sad> The type of sad object that represents a failure
      * @return A {@link PotentialFailure} that represents a failure
@@ -34,6 +36,8 @@ public abstract class PotentialFailure<Sad> {
     }
 
     /**
+     * Construct a known success.
+     *
      * @param <Sad> The type of sad object that represents a failure
      * @return A {@link PotentialFailure} that represents a success
      */
@@ -42,6 +46,8 @@ public abstract class PotentialFailure<Sad> {
     }
 
     /**
+     * Convert the {@link PotentialFailure} to a {@link HappyPath}.
+     *
      * @param happy The happy object the {@link PotentialFailure} is about
      * @param <Happy> The type of the happy object the {@link PotentialFailure} is about
      * @return A {@link HappyPath} that is happy if the {@link PotentialFailure} is a {@link PotentialFailure#success()}

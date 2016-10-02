@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static io.github.theangrydev.businessflows.PotentialFailure.success;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,10 +59,16 @@ public class ValidationExampleTest {
 
     private class NotBlankValidator implements Validator<String> {
 
+        private final String fieldName;
+
+        private NotBlankValidator(String fieldName) {
+            this.fieldName = fieldName;
+        }
+
         @Override
-        public PotentialFailure<ValidationError> attempt(String string) {
-            if (string == null || string.trim().isEmpty()) {
-                return PotentialFailure.failure(new ValidationError("Field was empty"));
+        public PotentialFailure<ValidationError> attempt(String fieldValue) {
+            if (fieldValue == null || fieldValue.trim().isEmpty()) {
+                return PotentialFailure.failure(new ValidationError(format("Field '%s' was empty", fieldName)));
             }
             return success();
         }
@@ -121,14 +128,14 @@ public class ValidationExampleTest {
     }
 
     private Validator<RegistrationForm> ageValidator() {
-        return RegistrationForm.validator(form -> form.age, new NotBlankValidator());
+        return RegistrationForm.validator(form -> form.age, new NotBlankValidator("Age"));
     }
 
     private Validator<RegistrationForm> lastNameValidator() {
-        return RegistrationForm.validator(form -> form.lastName, new NotBlankValidator());
+        return RegistrationForm.validator(form -> form.lastName, new NotBlankValidator("Last Name"));
     }
 
     private Validator<RegistrationForm> firstNameValidator() {
-        return RegistrationForm.validator(form -> form.firstName, new NotBlankValidator());
+        return RegistrationForm.validator(form -> form.firstName, new NotBlankValidator("First Name"));
     }
 }

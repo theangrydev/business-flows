@@ -76,7 +76,7 @@ class HappyCaseHappyPath<Happy, Sad> extends HappyCase<Happy, Sad> implements Ha
     @Override
     public HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail) {
         try {
-            return actionThatMightFail.attemptHappyPath(happy);
+            return actionThatMightFail.attempt(happy).toHappyPath(happy);
         } catch (Exception e) {
             return HappyPath.technicalFailure(e);
         }
