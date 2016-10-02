@@ -29,6 +29,7 @@ import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+//TODO: tests need improving. coverage is fine but they aren't very descriptive
 public class ValidationExampleTest {
 
     private static class AggregateErrors {
@@ -154,10 +155,10 @@ public class ValidationExampleTest {
     }
 
     private Validator<RegistrationForm, ValidationError> lastNameValidator() {
-        return fieldValidator(form -> form.firstName, new NotBlankValidator("First Name"));
+        return fieldValidator(form -> form.firstName, new NotBlankValidator("Last Name"), new NotBlankValidator("Last Name"));
     }
 
     private Validator<RegistrationForm, ValidationError> firstNameValidator() {
-        return fieldValidator(form -> form.lastName, new NotBlankValidator("Last Name"));
+        return fieldValidator(form -> form.lastName, new NotBlankValidator("First Name"));
     }
 }
