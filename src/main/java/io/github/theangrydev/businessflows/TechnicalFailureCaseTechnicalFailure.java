@@ -19,6 +19,11 @@ package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
 
+/**
+ * A {@link TechnicalFailureCaseTechnicalFailure} is a {@link TechnicalFailure} that is actually a {@link TechnicalFailureCase}.
+ *
+ * {@inheritDoc}
+ */
 class TechnicalFailureCaseTechnicalFailure<Happy, Sad> extends TechnicalFailureCase<Happy, Sad> implements TechnicalFailure<Happy, Sad> {
 
     TechnicalFailureCaseTechnicalFailure(Exception technicalFailure) {

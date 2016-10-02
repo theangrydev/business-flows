@@ -20,7 +20,7 @@ package io.github.theangrydev.businessflows;
 import java.util.function.Function;
 
 /**
- * A {@link TechnicalFailureCase} is a {@link BusinessCase} that is in an unexpected exceptional state.
+ * A {@link TechnicalFailureCase} is a {@link BusinessCase} that is actually in an unexpected exceptional state.
  *
  * {@inheritDoc}
  */

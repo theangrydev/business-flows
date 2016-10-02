@@ -20,7 +20,7 @@ package io.github.theangrydev.businessflows;
 import java.util.function.Function;
 
 /**
- * A {@link HappyCase} is a {@link BusinessCase} that is in an expected happy state.
+ * A {@link HappyCase} is a {@link BusinessCase} that is actually in a happy state.
  *
  * {@inheritDoc}
  */

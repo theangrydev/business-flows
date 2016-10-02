@@ -19,6 +19,11 @@ package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
 
+/**
+ * A {@link HappyCaseHappyPath} is a {@link HappyPath} that is actually a {@link HappyCase}.
+ *
+ * {@inheritDoc}
+ */
 class HappyCaseHappyPath<Happy, Sad> extends HappyCase<Happy, Sad> implements HappyPath<Happy, Sad> {
 
     HappyCaseHappyPath(Happy happy) {

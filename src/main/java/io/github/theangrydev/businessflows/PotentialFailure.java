@@ -17,15 +17,35 @@
  */
 package io.github.theangrydev.businessflows;
 
+/**
+ * This type represents a failure that may occur in e.g. {@link HappyPath#attempt(ActionThatMightFail)}.
+ *
+ * @param <Sad> The type of sad object that represents a failure
+ */
 public abstract class PotentialFailure<Sad> {
 
+    /**
+     * @param sad The sad object that represents a failure
+     * @param <Sad> The type of sad object that represents a failure
+     * @return A {@link PotentialFailure} that represents a failure
+     */
     public static <Sad> PotentialFailure<Sad> failure(Sad sad) {
         return new PotentialFailureFailure<>(sad);
     }
 
+    /**
+     * @param <Sad> The type of sad object that represents a failure
+     * @return A {@link PotentialFailure} that represents a success
+     */
     public static <Sad> PotentialFailure<Sad> success() {
         return new PotentialFailureSuccess<>();
     }
 
+    /**
+     * @param happy The happy object the {@link PotentialFailure} is about
+     * @param <Happy> The type of the happy object the {@link PotentialFailure} is about
+     * @return A {@link HappyPath} that is happy if the {@link PotentialFailure} is a {@link PotentialFailure#success()}
+     * or sad inside if the {@link PotentialFailure} is a {@link PotentialFailure#failure(Object)}
+     */
     abstract <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy);
 }

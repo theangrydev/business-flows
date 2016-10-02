@@ -19,6 +19,11 @@ package io.github.theangrydev.businessflows;
 
 import java.util.List;
 
+/**
+ * A {@link SadCaseValidationPath} is a {@link ValidationPath} that is actually a {@link SadCase}.
+ *
+ * {@inheritDoc}
+ */
 class SadCaseValidationPath<Happy, Sad> extends SadCaseHappyPath<Happy, List<Sad>> implements ValidationPath<Happy, Sad> {
 
     SadCaseValidationPath(List<Sad> sadList) {

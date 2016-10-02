@@ -19,6 +19,11 @@ package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
 
+/**
+ * A {@link TechnicalFailureCaseHappyPath} is a {@link HappyPath} that is actually a {@link TechnicalFailureCase}.
+ *
+ * {@inheritDoc}
+ */
 class TechnicalFailureCaseHappyPath<Happy, Sad> extends TechnicalFailureCase<Happy, Sad> implements HappyPath<Happy, Sad> {
 
     TechnicalFailureCaseHappyPath(Exception technicalFailure) {

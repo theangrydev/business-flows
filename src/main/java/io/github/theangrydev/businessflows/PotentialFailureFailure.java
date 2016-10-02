@@ -1,5 +1,10 @@
 package io.github.theangrydev.businessflows;
 
+/**
+ * A {@link PotentialFailureFailure} is a {@link PotentialFailure} that is actually a failure.
+ *
+ * {@inheritDoc}
+ */
 class PotentialFailureFailure<Sad> extends PotentialFailure<Sad> {
 
     private final Sad sad;

@@ -19,6 +19,11 @@ package io.github.theangrydev.businessflows;
 
 import java.util.List;
 
+/**
+ * A {@link TechnicalFailureCaseValidationPath} is a {@link ValidationPath} that is actually a {@link TechnicalFailureCase}.
+ *
+ * {@inheritDoc}
+ */
 class TechnicalFailureCaseValidationPath<Happy, Sad> extends TechnicalFailureCaseHappyPath<Happy, List<Sad>> implements ValidationPath<Happy, Sad> {
 
     TechnicalFailureCaseValidationPath(Exception technicalFailure) {
