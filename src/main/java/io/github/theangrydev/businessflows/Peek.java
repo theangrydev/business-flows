@@ -25,6 +25,8 @@ package io.github.theangrydev.businessflows;
 public interface Peek<T> {
 
     /**
+     * Take a look at the instance if it is present.
+     *
      * @param instance The instance to look at (if it is present)
      * @throws Exception If there is a technical failure during the peek
      */

@@ -27,6 +27,8 @@ package io.github.theangrydev.businessflows;
 public interface Mapping<Old, New> {
 
     /**
+     * Map the {@link Old} object to a {@link New} object.
+     *
      * @param old The old argument
      * @return The new result
      * @throws Exception If there is a technical failure during the mapping

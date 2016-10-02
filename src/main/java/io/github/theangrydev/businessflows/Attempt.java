@@ -30,6 +30,8 @@ package io.github.theangrydev.businessflows;
 public interface Attempt<Result> {
 
     /**
+     * Attempt the action.
+     *
      * @return The happy object that the method attempts to produce
      * @throws Exception If there was a technical failure in producing
      */
