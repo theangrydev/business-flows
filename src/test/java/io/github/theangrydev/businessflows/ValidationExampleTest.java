@@ -151,11 +151,11 @@ public class ValidationExampleTest {
     }
 
     private Validator<RegistrationForm, ValidationError> ageValidator() {
-        return fieldValidator(form -> form.age, "Age", NotBlankValidator::new, NotBlankValidator::new);
+        return fieldValidator(form -> form.age, "Age", NotBlankValidator::new);
     }
 
     private Validator<RegistrationForm, ValidationError> lastNameValidator() {
-        return fieldValidator(form -> form.firstName, new NotBlankValidator("Last Name"), new NotBlankValidator("Last Name"));
+        return fieldValidator(form -> form.firstName, new NotBlankValidator("Last Name"));
     }
 
     private Validator<RegistrationForm, ValidationError> firstNameValidator() {
