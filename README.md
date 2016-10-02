@@ -19,11 +19,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>4.0.3</version>
+    <version>5.0.0</version>
 </dependency>
 ```
 
 ## Releases
+### 5.0.0
+* Validation revamp. Helper `FieldValidator` for field validation, a new `Validator` type, `PotentialFailure.failures` helper method and `ValidationPath` helper methods
+
 ### 4.0.3
 * Updated javadoc and license headers
 
