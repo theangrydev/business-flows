@@ -68,7 +68,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      */
     @SafeVarargs
     public static <Happy, Sad, Field> FieldValidator<Happy, Sad, Field> fieldValidator(Mapping<Happy, Field> fieldExtractor, Validator<Field, Sad> fieldValidator, Validator<Field, Sad>... fieldValidators) {
-        List<Validator<Field, Sad>> validators = new ArrayList<>();
+        List<Validator<Field, Sad>> validators = new ArrayList<>(fieldValidators.length + 1);
         validators.add(fieldValidator);
         stream(fieldValidators).forEach(validators::add);
         return fieldValidator(fieldExtractor, validators);
@@ -107,7 +107,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      */
     @SafeVarargs
     public static <Happy, Sad, Field, FieldName> FieldValidator<Happy, Sad, Field> fieldValidator(Mapping<Happy, Field> fieldExtractor, FieldName fieldName, Function<FieldName, ? extends Validator<Field, Sad>> fieldValidatorFactory, Function<FieldName, ? extends Validator<Field, Sad>>... fieldValidatorFactories) {
-        List<Function<FieldName, ? extends Validator<Field, Sad>>> factories = new ArrayList<>();
+        List<Function<FieldName, ? extends Validator<Field, Sad>>> factories = new ArrayList<>(fieldValidatorFactories.length + 1);
         factories.add(fieldValidatorFactory);
         Arrays.stream(fieldValidatorFactories).forEach(factories::add);
         return fieldValidator(fieldExtractor, fieldName, factories);
