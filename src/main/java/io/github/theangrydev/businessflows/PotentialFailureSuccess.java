@@ -28,4 +28,9 @@ class PotentialFailureSuccess<Sad> extends PotentialFailure<Sad> {
     <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy) {
         return HappyPath.happyPath(happy);
     }
+
+    @Override
+    void ifSad(Peek<Sad> peek) throws Exception {
+        // Nothing to do
+    }
 }

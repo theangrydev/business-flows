@@ -69,4 +69,12 @@ public abstract class PotentialFailure<Sad> {
      * or sad inside if the {@link PotentialFailure} is a {@link PotentialFailure#failure(Object)}
      */
     abstract <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy);
+
+    /**
+     * Take a look at the sad case (if there really is one).
+     *
+     * @param peek What to do if the underlying business case is sad
+     * @throws Exception If the {@link Peek} throws one
+     */
+    abstract void ifSad(Peek<Sad> peek) throws Exception;
 }
