@@ -25,7 +25,7 @@ There is no point in using this if your flows are "all or nothing". If there are
 
 ## Releases
 ### 5.0.0
-* Validation revamp. Helper `FieldValidator` for field validation, a new `Validator` type, `PotentialFailure.failures` helper method and `ValidationPath` helper methods
+* Validation revamp. Helper `FieldValidator` for field validation, a new `Validator` type, `PotentialFailure.failures` helper method and `ValidationPath` helper methods. This change is not backwards compatible
 
 ### 4.0.3
 * Updated javadoc and license headers
