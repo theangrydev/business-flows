@@ -19,11 +19,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>4.0.1</version>
+    <version>4.0.3</version>
 </dependency>
 ```
 
 ## Releases
+### 4.0.3
+* Updated javadoc and license headers
+
 ### 4.0.1
 * Inline methods to make debugging easier (closes [#1](https://github.com/theangrydev/business-flows/issues/2))
 * Removed varargs methods from `ValidationPath`. This change is not backwards compatible
