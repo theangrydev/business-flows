@@ -63,6 +63,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      * Produces a {@link FieldValidator} that will validate the extracted field using the given validators.
      *
      * @param fieldExtractor Extracts the {@link Field} from the {@link Happy}
+     * @param fieldValidator The first of the validators
      * @param fieldValidators Each {@link Validator} will validate the {@link Field}, possibly producing {@link Sad} failures
      * @param <Happy> The type that contains the {@link Field}
      * @param <Sad> The type of validation failure
@@ -79,6 +80,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      * The validators are produced by constructing a {@link FieldValidator} given a {@link FieldName}.
      *
      * @param fieldExtractor Extracts the {@link Field} from the {@link Happy}
+     * @param fieldName The name of the {@link Field}
      * @param fieldValidatorFactories Each produces a {@link Validator} given the {@link FieldName} that will validate
      * the {@link Field}, possibly producing {@link Sad} failures
      * @param <Happy> The type that contains the {@link Field}
@@ -99,6 +101,8 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      * The validators are produced by constructing a {@link FieldValidator} given a {@link FieldName}.
      *
      * @param fieldExtractor Extracts the {@link Field} from the {@link Happy}
+     * @param fieldName The name of the {@link Field}
+     * @param fieldValidatorFactory The first of the factories
      * @param fieldValidatorFactories Each produces a {@link Validator} given the {@link FieldName} that will validate
      * the {@link Field}, possibly producing {@link Sad} failures
      * @param <Happy> The type that contains the {@link Field}
