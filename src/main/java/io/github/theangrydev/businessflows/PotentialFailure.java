@@ -17,6 +17,9 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This type represents a failure that may occur in e.g. {@link HappyPath#attempt(ActionThatMightFail)}.
  *
@@ -33,6 +36,18 @@ public abstract class PotentialFailure<Sad> {
      */
     public static <Sad> PotentialFailure<Sad> failure(Sad sad) {
         return new PotentialFailureFailure<>(sad);
+    }
+
+    /**
+     * Construct a known failure that is mapped to a list of {@link Sad} objects.
+     *
+     * @param sad The sad object that represents a failure
+     * @param <Sad> The type of sad objects that represents a failure
+     * @return A {@link PotentialFailure} that represents a failure
+     */
+    @SafeVarargs
+    public static <Sad> PotentialFailure<List<Sad>> failures(Sad... sad) {
+        return new PotentialFailureFailure<>(Arrays.asList(sad));
     }
 
     /**

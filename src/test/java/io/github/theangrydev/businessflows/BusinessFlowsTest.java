@@ -22,10 +22,9 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static io.github.theangrydev.businessflows.PotentialFailure.failure;
+import static io.github.theangrydev.businessflows.PotentialFailure.failures;
 import static io.github.theangrydev.businessflows.PotentialFailure.success;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 
 
 public class BusinessFlowsTest implements WithAssertions {
@@ -76,9 +75,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Sad firstSad = new Sad();
         Sad secondSad = new Sad();
 
-        List<? extends ActionThatMightFail<Happy, Sad>> validators = asList(happy -> failure(firstSad), happy -> failure(secondSad));
-
-        List<Sad> actualSads = ValidationPath.validate(new Happy(), validators)
+        List<Sad> actualSads = ValidationPath.validate(new Happy(), happy -> failures(firstSad), happy -> failures(secondSad))
                 .ifSad().get();
 
         assertThat(actualSads).containsExactly(firstSad, secondSad);
@@ -88,9 +85,7 @@ public class BusinessFlowsTest implements WithAssertions {
     public void validateWithMultiplePassesStaysHappy() {
         Happy originalHappy = new Happy();
 
-        List<? extends ActionThatMightFail<Happy, Sad>> validators = asList(happy -> success(), happy -> success());
-
-        Happy actualHappy = ValidationPath.validate(originalHappy, validators)
+        Happy actualHappy = ValidationPath.validate(originalHappy, happy -> success(), happy -> success())
                 .get();
 
         assertThat(actualHappy).isSameAs(originalHappy);

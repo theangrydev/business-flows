@@ -17,6 +17,7 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +32,19 @@ class HappyCaseValidationPath<Happy, Sad> extends HappyCaseHappyPath<Happy, List
     }
 
     @Override
-    public ValidationPath<Happy, Sad> validate(List<? extends ActionThatMightFail<Happy, Sad>> validators) {
-        return ValidationPath.validate(happy, validators);
+    public ValidationPath<Happy, Sad> validate(List<? extends Validator<Happy, Sad>> validators) {
+        List<Sad> validationFailures = new ArrayList<>(validators.size());
+        for (ActionThatMightFail<Happy, List<Sad>> validator : validators) {
+            try {
+                validator.attempt(happy).toHappyPath(happy).ifSad().peek(validationFailures::addAll);
+            } catch (Exception technicalFailure) {
+                return ValidationPath.technicalFailure(technicalFailure);
+            }
+        }
+        if (validationFailures.isEmpty()) {
+            return ValidationPath.validationPath(happy);
+        } else {
+            return ValidationPath.validationFailure(validationFailures);
+        }
     }
 }

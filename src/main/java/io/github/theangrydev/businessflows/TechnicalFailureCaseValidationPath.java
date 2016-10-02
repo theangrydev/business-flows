@@ -31,7 +31,7 @@ class TechnicalFailureCaseValidationPath<Happy, Sad> extends TechnicalFailureCas
     }
 
     @Override
-    public ValidationPath<Happy, Sad> validate(List<? extends ActionThatMightFail<Happy, Sad>> validators) {
+    public ValidationPath<Happy, Sad> validate(List<? extends Validator<Happy, Sad>> validators) {
         return this;
     }
 }

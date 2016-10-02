@@ -20,18 +20,11 @@ package io.github.theangrydev.businessflows;
 import java.util.List;
 
 /**
- * A {@link SadCaseValidationPath} is a {@link ValidationPath} that is actually a {@link SadCase}.
+ * A type of {@link ActionThatMightFail} that represents a list of validation failures.
  *
- * {@inheritDoc}
+ * @param <Happy> The type to validate
+ * @param <Sad> The type of validation failure
  */
-class SadCaseValidationPath<Happy, Sad> extends SadCaseHappyPath<Happy, List<Sad>> implements ValidationPath<Happy, Sad> {
+public interface Validator<Happy, Sad> extends ActionThatMightFail<Happy, List<Sad>> {
 
-    SadCaseValidationPath(List<Sad> sadList) {
-        super(sadList);
-    }
-
-    @Override
-    public ValidationPath<Happy, Sad> validate(List<? extends Validator<Happy, Sad>> validators) {
-        return this;
-    }
 }
