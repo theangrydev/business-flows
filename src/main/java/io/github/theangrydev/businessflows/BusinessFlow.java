@@ -72,20 +72,26 @@ public interface BusinessFlow<Happy, Sad, Bias> extends BusinessCase<Happy, Sad>
     }
 
     /**
+     * A {@link TechnicalFailure} view of the {@link BusinessFlow}.
+     * <p>
      * NOTE: The technical failure will only be present if the failure occurred inside of a {@link BusinessFlow}.
      * To ensure failures are caught inside a flow, use e.g. {@link HappyPath#happyPathAttempt(Attempt)} at the top of
      * the scope, before this method is called.
-     *
+     * </p>
      * @return A view of the underlying business case as a {@link TechnicalFailure}
      */
     TechnicalFailure<Happy, Sad> ifTechnicalFailure();
 
     /**
+     * A {@link SadPath} view of the {@link BusinessFlow}.
+     *
      * @return A view of the underlying business case as a {@link SadPath}
      */
     SadPath<Happy, Sad> ifSad();
 
     /**
+     * A {@link HappyPath} view of the {@link BusinessFlow}.
+     *
      * @return A view of the underlying business case as a {@link HappyPath}
      */
     HappyPath<Happy, Sad> ifHappy();

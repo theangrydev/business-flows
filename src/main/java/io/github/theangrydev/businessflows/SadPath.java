@@ -25,6 +25,8 @@ package io.github.theangrydev.businessflows;
 public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
 
     /**
+     * Provides a {@link SadPath} view over a known {@link Sad} object.
+     *
      * @param sad The sad object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link SadPath} may represent
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
@@ -35,6 +37,8 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
     }
 
     /**
+     * Provides a {@link SadPath} view over a known {@link Happy} object.
+     *
      * @param happy The happy object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link SadPath} may represent
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
@@ -45,6 +49,8 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
     }
 
     /**
+     * Provides a {@link SadPath} view over a known {@link Exception} object.
+     *
      * @param technicalFailure The technical failure object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link SadPath} may represent
      * @param <Sad> The type of sad object the resulting {@link SadPath} may represent

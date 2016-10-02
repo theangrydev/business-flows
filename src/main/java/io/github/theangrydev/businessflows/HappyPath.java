@@ -25,6 +25,8 @@ package io.github.theangrydev.businessflows;
 public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
 
     /**
+     * Attempt an action that produces a {@link HappyPath}.
+     *
      * @param happyPathAttempt The {@link Attempt} to execute
      * @param <Happy> The type of happy object this {@link HappyPath} may represent
      * @param <Sad> The type of sad object this {@link HappyPath} may represent
@@ -39,6 +41,8 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     }
 
     /**
+     * Attempt an action that produces a {@link Happy}.
+     *
      * @param attempt The {@link Attempt} to execute
      * @param <Happy> The type of happy object this {@link HappyPath} may represent
      * @param <Sad> The type of sad object this {@link HappyPath} may represent
@@ -53,6 +57,8 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     }
 
     /**
+     * Attempt an action that produces a {@link Happy}, mapping any technical failure to a {@link Sad}.
+     *
      * @param attempt The {@link Attempt} to execute
      * @param failureMapping What to do if there is a technical failure during the {@link Attempt}
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
@@ -72,6 +78,8 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     }
 
     /**
+     * Provides a {@link HappyPath} view over a known {@link Happy} object.
+     *
      * @param happy The happy object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
@@ -82,6 +90,8 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     }
 
     /**
+     * Provides a {@link HappyPath} view over a known {@link Sad} object.
+     *
      * @param sad The sad object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
@@ -92,6 +102,8 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     }
 
     /**
+     * Provides a {@link HappyPath} view over a known {@link Exception} object.
+     *
      * @param technicalFailure The technical failure object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
      * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
@@ -120,6 +132,8 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     <NewHappy> HappyPath<NewHappy, Sad> map(Mapping<Happy, NewHappy> mapping);
 
     /**
+     * Attempt an action that might fail and be mapped to a {@link Sad} object.
+     *
      * @param actionThatMightFail The {@link ActionThatMightFail} to apply if the underlying business case is happy
      * @return The same {@link HappyPath} if the action did not fail; if the action failure then a {@link HappyPath} that is now sad inside
      */

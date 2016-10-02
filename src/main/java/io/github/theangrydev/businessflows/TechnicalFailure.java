@@ -25,6 +25,8 @@ package io.github.theangrydev.businessflows;
 public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Exception> {
 
     /**
+     * Provides a {@link TechnicalFailure} view over a known {@link Exception} object.
+     *
      * @param technicalFailure The technical failure to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
      * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
@@ -35,6 +37,8 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, E
     }
 
     /**
+     * Provides a {@link TechnicalFailure} view over a known {@link Sad} object.
+     *
      * @param sad The sad object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
      * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
@@ -45,6 +49,8 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, E
     }
 
     /**
+     * Provides a {@link TechnicalFailure} view over a known {@link Happy} object.
+     *
      * @param happy The happy object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
      * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
