@@ -1,5 +1,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.theangrydev/business-flows/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/io.github.theangrydev/business-flows)
 [![Build Status](https://travis-ci.org/theangrydev/business-flows.svg?branch=master)](https://travis-ci.org/theangrydev/business-flows)
+[![Javadoc](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows.svg?label=javadoc)](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows)
 
 # business-flows
 A combination of the Try monad and the Either monad, to help tame complex business flows
