@@ -24,6 +24,9 @@ There is no point in using this if your flows are "all or nothing". If there are
 ```
 
 ## Releases
+### 6.0.0
+* `ValidationPath` now has a `SadAggregate` type parameter that defaults to `List<Sad>` and can be used to map validation errors into an aggregate. ValidationPath now has a SadAggregate type parameter that defaults to List<Sad> and can be used to map validation errors into an aggregate. There are corresponding `validateInto` methods in `ValidationPath` that allow specifying a `Mapping` to a `SadAggregate` and `validate` methods that default to `List<Sad>`. This change is not backwards compatible
+
 ### 5.1.2
 * Helper methods for `FieldValidator` to cope with the case that a common field name should be passed to validators so they can use the name in the validation message
 

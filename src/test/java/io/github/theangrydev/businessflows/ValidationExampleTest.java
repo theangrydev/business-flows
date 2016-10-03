@@ -75,6 +75,13 @@ public class ValidationExampleTest {
             this.lastName = lastName;
             this.age = age;
         }
+
+        @Override
+        public String toString() {
+            return "First Name: " + firstName + System.lineSeparator() +
+                    "Last Name: " + lastName + System.lineSeparator() +
+                    "Age:" + age + System.lineSeparator();
+        }
     }
 
 
@@ -123,26 +130,31 @@ public class ValidationExampleTest {
         assertThat(actualTechnicalFailure).isEqualTo(expectedTechnicalFailure);
     }
 
+    @Test
+    public void validateRegistrationFormWithTechnicalFailureDuringAggregateMapping() {
+        Exception expectedTechnicalFailure = new Exception();
+
+        Exception actualTechnicalFailure = validateWithTechnicalFailureDuringAggregateMapping(registrationForm(), expectedTechnicalFailure)
+                .ifTechnicalFailure().get();
+
+        assertThat(actualTechnicalFailure).isEqualTo(expectedTechnicalFailure);
+    }
+
     private HappyPath<RegistrationForm, AggregateErrors> validate(RegistrationForm registrationForm) {
-        return message1Validation(registrationForm).then(this::message2Validation);
-    }
-
-    private HappyPath<RegistrationForm, AggregateErrors> message1Validation(RegistrationForm registrationForm) {
         return ValidationPath
-                .validate(registrationForm, firstNameValidator(), lastNameValidator())
+                .validateInto(registrationForm, AggregateErrors::errorsWithMessage1, firstNameValidator(), lastNameValidator())
                 .validate(validators(ageValidator()))
-                .ifSad().map(AggregateErrors::errorsWithMessage1)
-                .ifHappy();
-    }
-
-    private HappyPath<RegistrationForm, AggregateErrors> message2Validation(RegistrationForm registrationForm1) {
-        return ValidationPath.validate(registrationForm1, validators(firstNameValidator(), lastNameValidator(), ageValidator()))
-                .ifSad().map(AggregateErrors::errorsWithMessage2)
-                .ifHappy();
+                .validateInto(AggregateErrors::errorsWithMessage2, validators(firstNameValidator(), lastNameValidator(), ageValidator()));
     }
 
     private HappyPath<RegistrationForm, List<ValidationError>> validateWithTechnicalFailure(RegistrationForm registrationForm, Exception technicalFailure) {
-        return ValidationPath.validate(registrationForm, singletonList(registrationForm1 -> {throw technicalFailure;}));
+        return ValidationPath.<RegistrationForm, ValidationError>validationPath(registrationForm)
+                .validate(singletonList(registrationForm1 -> {throw technicalFailure;}));
+    }
+
+    private HappyPath<RegistrationForm, List<ValidationError>> validateWithTechnicalFailureDuringAggregateMapping(RegistrationForm registrationForm, Exception technicalFailure) {
+        return ValidationPath.<RegistrationForm, ValidationError>validationPath(registrationForm)
+                .validateInto(sads -> {throw technicalFailure;}, singletonList(registrationForm1 -> failures(new ValidationError(""))));
     }
 
     private void logFailure(Exception exception) {

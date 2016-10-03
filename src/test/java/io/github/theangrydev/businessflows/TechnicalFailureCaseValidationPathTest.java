@@ -23,11 +23,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TechnicalFailureCaseValidationPathTest {
 
-    private TechnicalFailureCaseValidationPath<Object, Object> sadCaseValidationPath = new TechnicalFailureCaseValidationPath<>(new Exception());
+    private TechnicalFailureCaseValidationPath<Object, Object, Object> sadCaseValidationPath = new TechnicalFailureCaseValidationPath<>(new Exception());
 
     @Test
     public void validateReturnsThis() {
         assertThat(sadCaseValidationPath.validate(null)).isSameAs(sadCaseValidationPath);
+    }
+
+    @Test
+    public void validateIntoReturnsThis() {
+        assertThat(sadCaseValidationPath.validateInto(null, null)).isSameAs(sadCaseValidationPath);
     }
 
     @Test

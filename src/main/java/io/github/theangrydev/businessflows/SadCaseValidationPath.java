@@ -24,14 +24,19 @@ import java.util.List;
  *
  * {@inheritDoc}
  */
-class SadCaseValidationPath<Happy, Sad> extends SadCaseHappyPath<Happy, List<Sad>> implements ValidationPath<Happy, Sad> {
+class SadCaseValidationPath<Happy, Sad, SadAggregate> extends SadCaseHappyPath<Happy, SadAggregate> implements ValidationPath<Happy, Sad, SadAggregate> {
 
-    SadCaseValidationPath(List<Sad> sadList) {
+    SadCaseValidationPath(SadAggregate sadList) {
         super(sadList);
     }
 
     @Override
-    public ValidationPath<Happy, Sad> validate(List<? extends Validator<Happy, Sad>> validators) {
+    public ValidationPath<Happy, Sad, SadAggregate> validate(List<? extends Validator<Happy, Sad>> validators) {
+        return this;
+    }
+
+    @Override
+    public ValidationPath<Happy, Sad, SadAggregate> validateInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
         return this;
     }
 }

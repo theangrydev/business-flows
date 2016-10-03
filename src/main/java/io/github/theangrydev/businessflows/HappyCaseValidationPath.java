@@ -25,14 +25,22 @@ import java.util.List;
  *
  * {@inheritDoc}
  */
-class HappyCaseValidationPath<Happy, Sad> extends HappyCaseHappyPath<Happy, List<Sad>> implements ValidationPath<Happy, Sad> {
+class HappyCaseValidationPath<Happy, Sad, SadAggregate> extends HappyCaseHappyPath<Happy, SadAggregate> implements ValidationPath<Happy, Sad, SadAggregate> {
 
-    HappyCaseValidationPath(Happy happy) {
+    private final Mapping<List<Sad>, SadAggregate> sadAggregateMapping;
+
+    HappyCaseValidationPath(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping) {
         super(happy);
+        this.sadAggregateMapping = sadAggregateMapping;
     }
 
     @Override
-    public ValidationPath<Happy, Sad> validate(List<? extends Validator<Happy, Sad>> validators) {
+    public ValidationPath<Happy, Sad, SadAggregate> validate(List<? extends Validator<Happy, Sad>> validators) {
+        return validateInto(sadAggregateMapping, validators);
+    }
+
+    @Override
+    public ValidationPath<Happy, Sad, SadAggregate> validateInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
         List<Sad> validationFailures = new ArrayList<>(validators.size());
         for (Validator<Happy, Sad> validator : validators) {
             try {
@@ -42,9 +50,13 @@ class HappyCaseValidationPath<Happy, Sad> extends HappyCaseHappyPath<Happy, List
             }
         }
         if (validationFailures.isEmpty()) {
-            return ValidationPath.validationPath(happy);
-        } else {
-            return ValidationPath.validationFailure(validationFailures);
+            return ValidationPath.validationPathInto(happy, sadAggregateMapping);
+        }
+        try {
+            SadAggregate sadAggregate = sadAggregateMapping.map(validationFailures);
+            return ValidationPath.validationFailure(sadAggregate);
+        } catch (Exception e) {
+            return ValidationPath.technicalFailure(e);
         }
     }
 }

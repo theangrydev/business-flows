@@ -34,4 +34,14 @@ public interface Mapping<Old, New> {
      * @throws Exception If there is a technical failure during the mapping
      */
     New map(Old old) throws Exception;
+
+    /**
+     * Map the old type to itself unchanged
+     *
+     * @param <Old> The old type
+     * @return The identity mapping
+     */
+    static <Old> Mapping<Old, Old> identity() {
+        return old -> old;
+    }
 }

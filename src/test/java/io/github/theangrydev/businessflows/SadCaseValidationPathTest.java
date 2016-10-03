@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SadCaseValidationPathTest {
 
-    private SadCaseValidationPath<Object, Object> sadCaseValidationPath = new SadCaseValidationPath<>(singletonList(new Object()));
+    private SadCaseValidationPath<Object, Object, Object> sadCaseValidationPath = new SadCaseValidationPath<>(singletonList(new Object()));
 
     @Test
     public void validateReturnsThis() {

@@ -98,6 +98,20 @@ public class TechnicalFailureCaseTechnicalFailureTest {
     }
 
     @Test
+    public void recoverAttemptMapsSadToHappyPath() {
+        Happy expectedHappy = new Happy();
+        assertThat(technicalFailureCaseTechnicalFailure.recover(() -> expectedHappy)).isInstanceOf(HappyCaseHappyPath.class);
+        assertThat(technicalFailureCaseTechnicalFailure.recover(() -> expectedHappy).ifHappy().get()).isSameAs(expectedHappy);
+    }
+
+    @Test
+    public void recoverAttemptTechnicalFailure() {
+        Exception expectedTechnicalFailure = new Exception();
+        assertThat(technicalFailureCaseTechnicalFailure.recover(() -> {throw expectedTechnicalFailure;})).isInstanceOf(TechnicalFailureCaseHappyPath.class);
+        assertThat(technicalFailureCaseTechnicalFailure.recover(() -> {throw expectedTechnicalFailure;}).ifTechnicalFailure().get()).isSameAs(expectedTechnicalFailure);
+    }
+
+    @Test
     public void mapToSadPathMapsTechnicalFailureToSadTo() {
         Sad expectedSad = new Sad();
         assertThat(technicalFailureCaseTechnicalFailure.mapToSadPath(sad -> expectedSad)).isInstanceOf(SadCaseSadPath.class);
