@@ -186,20 +186,6 @@
                 </executions>
             </plugin>
 
-            <!-- Code coverage (used to integrate with https://codecov.io/) -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.7.201606060606</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Mutation testing -->
             <plugin>
                 <groupId>org.pitest</groupId>
