@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/theangrydev/business-flows.svg?branch=master)](https://travis-ci.org/theangrydev/business-flows)
 [![codecov](https://codecov.io/gh/theangrydev/business-flows/branch/master/graph/badge.svg)](https://codecov.io/gh/theangrydev/business-flows)
 [![Javadoc](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows.svg?label=javadoc)](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows)
+[![Gitter](https://badges.gitter.im/business-flows/Lobby.svg)](https://gitter.im/business-flows/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # business-flows
 A combination of the Try monad and the Either monad, to help tame complex business flows
