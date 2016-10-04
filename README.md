@@ -4,6 +4,8 @@
 [![Javadoc](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows.svg?label=javadoc)](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows)
 
 # business-flows
+
+[![Join the chat at https://gitter.im/business-flows/Lobby](https://badges.gitter.im/business-flows/Lobby.svg)](https://gitter.im/business-flows/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A combination of the Try monad and the Either monad, to help tame complex business flows
 
 ## Frequently asked questions
