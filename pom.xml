@@ -297,6 +297,7 @@
                         <exclude>LICENSE.txt</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
+                        <exclude>.*yml</exclude>
                     </excludes>
                 </configuration>
                 <executions>
