@@ -19,7 +19,6 @@ package io.github.theangrydev.businessflows;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.github.theangrydev.businessflows.ValidationPath.validate;
@@ -115,7 +114,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
 
     @SafeVarargs
     private static <T> List<T> varargsToList(T first, T... rest) {
-        return concat(Stream.of(first), Stream.of(rest)).collect(Collectors.toList());
+        return concat(Stream.of(first), Stream.of(rest)).collect(toList());
     }
 
     @Override

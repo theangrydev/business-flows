@@ -60,13 +60,13 @@ interface BusinessCase<Happy, Sad> {
      * @param sadJoiner What to do if the underlying business case is a sad case
      * @param <Result> The type of the result
      * @return The result after applying the joiner that corresponds to the underlying business case
-     * @throws RuntimeException If this is a {@link TechnicalFailureCase} or there is a failure when joining.
+     * @throws IllegalStateException If this is a {@link TechnicalFailureCase} or there is a failure when joining.
      */
-    default <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws RuntimeException {
+    default <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws IllegalStateException {
         try {
             return joinOrThrow(happyJoiner, sadJoiner);
         } catch (Exception e) {
-            throw new RuntimeException(format("Exception caught when joining. Business case is: '%s'.", this), e);
+            throw new IllegalStateException(format("Exception caught when joining. Business case is: '%s'.", this), e);
         }
     }
 }
