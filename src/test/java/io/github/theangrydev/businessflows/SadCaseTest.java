@@ -32,6 +32,11 @@ public class SadCaseTest {
     }
 
     @Test
+    public void isAPotentialFailure() {
+        assertThat(sadCase.toPotentialFailure(null).toHappyPath(null).ifSad().get()).isEqualTo(sad);
+    }
+
+    @Test
     public void toStringIsSad() {
         assertThat(sadCase).hasToString("Sad: " + sad);
     }

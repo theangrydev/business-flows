@@ -33,6 +33,11 @@ class HappyCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
     }
 
     @Override
+    public PotentialFailure<Sad> toPotentialFailure(Function<Exception, Sad> technicalFailureMapping) {
+        return PotentialFailure.success();
+    }
+
+    @Override
     public <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
         try {
             return happyJoiner.map(happy);

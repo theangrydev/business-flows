@@ -30,6 +30,15 @@ import static java.lang.String.format;
 interface BusinessCase<Happy, Sad> {
 
     /**
+     * Turn this {@link BusinessFlow} into a {@link PotentialFailure} that will be a success if the business case is a
+     * success and otherwise will map the business case to a failure.
+     *
+     * @param technicalFailureMapping The mapping to apply to turn an existing technical failure into a {@link Sad}
+     * @return A {@link PotentialFailure} that will be a failure if the business case is sad or a technical failure
+     */
+    PotentialFailure<Sad> toPotentialFailure(Function<Exception, Sad> technicalFailureMapping);
+
+    /**
      * Join to a common result type. No matter what the {@link BusinessCase} actually is, the result type is the same.
      *
      * @param happyJoiner What to do if this is a {@link HappyCase}

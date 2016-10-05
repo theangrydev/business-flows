@@ -25,7 +25,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class TechnicalFailureCaseTest {
 
     private final Exception technicalFailure = new Exception("technical failure");
-    private final TechnicalFailureCase<?, ?> technicalFailureCase = new TechnicalFailureCase<>(technicalFailure);
+    private final TechnicalFailureCase<?, Sad> technicalFailureCase = new TechnicalFailureCase<>(technicalFailure);
+
+    private class Sad {
+
+    }
+
+    @Test
+    public void isPotentialFailure() {
+        Sad mappedSad = new Sad();
+        assertThat(technicalFailureCase.toPotentialFailure(e -> mappedSad).toHappyPath(null).ifSad().get()).isEqualTo(mappedSad);
+    }
 
     @Test
     public void toStringIsSad() {

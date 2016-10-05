@@ -18,7 +18,6 @@
 package io.github.theangrydev.businessflows;
 
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.lang.String.format;
@@ -32,8 +31,6 @@ import static java.lang.String.format;
  * @param <Bias> The type of bias (happy, sad or technical failure) this {@link BusinessFlow} has
  */
 public interface BusinessFlow<Happy, Sad, Bias> extends BusinessCase<Happy, Sad> {
-
-    PotentialFailure<Sad> toPotentialFailure(Function<Exception, Sad> technicalFailureMapping);
 
     /**
      * @return A view of the underlying business case an {@link Optional} in terms of the {@link Bias}
