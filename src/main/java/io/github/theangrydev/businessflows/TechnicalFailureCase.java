@@ -17,6 +17,8 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.function.Function;
 
 /**
@@ -49,6 +51,9 @@ class TechnicalFailureCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 
     @Override
     public String toString() {
-        return "Technical Failure: " + technicalFailure;
+        StringWriter stringWriter = new StringWriter();
+        technicalFailure.printStackTrace(new PrintWriter(stringWriter));
+        String stackTrace = stringWriter.toString();
+        return "Technical Failure: " + stackTrace;
     }
 }

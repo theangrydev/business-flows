@@ -38,8 +38,9 @@ public class TechnicalFailureCaseTest {
     }
 
     @Test
-    public void toStringIsSad() {
-        assertThat(technicalFailureCase).hasToString("Technical Failure: " + technicalFailure);
+    public void toStringIsStackTrace() {
+        assertThat(technicalFailureCase.toString()).startsWith("Technical Failure: java.lang.Exception: technical failure" + System.lineSeparator() +
+                "\tat io.github.theangrydev.businessflows.TechnicalFailureCaseTest.<init>(TechnicalFailureCaseTest.java:27");
     }
 
     @Test
