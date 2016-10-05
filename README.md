@@ -27,6 +27,9 @@ There is no point in using this if your flows are "all or nothing". If there are
 ```
 
 ## Releases
+### 6.1.0
+* Added method `BusinessCase.toPotentialFalure` that turns a `BusinessCase` into a `PotentialFailure`
+
 ### 6.0.0
 * `ValidationPath` now has a `SadAggregate` type parameter that defaults to `List<Sad>` and can be used to map validation errors into an aggregate. ValidationPath now has a SadAggregate type parameter that defaults to List<Sad> and can be used to map validation errors into an aggregate. There are corresponding `validateInto` methods in `ValidationPath` that allow specifying a `Mapping` to a `SadAggregate` and `validate` methods that default to `List<Sad>`. This change is not backwards compatible
 
