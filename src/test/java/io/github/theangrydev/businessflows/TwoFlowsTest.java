@@ -49,20 +49,32 @@ public class TwoFlowsTest implements WithAssertions {
 
     private HappyPath<Number, ErrorResult> lookupNumber() {
         return numberRepository.lookupNumber(new NumberId())
-                .ifSad().map(numberError -> new ErrorResult())
+                .ifSad().peek(this::recordNumberError).map(numberError -> new ErrorResult())
                 .ifHappy();
+    }
+
+    private void recordNumberError(NumberError numberError) {
+        System.out.println("numberError = " + numberError);
     }
 
     private HappyPath<NumberAndService, ErrorResult> lookupService(Number number) {
         return serviceRepository.lookupService(new ServiceId())
-                .ifSad().map(serviceError -> new ErrorResult())
+                .ifSad().peek(this::recordServiceError).map(serviceError -> new ErrorResult())
                 .ifHappy().map(service -> new NumberAndService(number, service));
+    }
+
+    private void recordServiceError(ServiceError serviceError) {
+        System.out.println("serviceError = " + serviceError);
     }
 
     private HappyPath<Result, ErrorResult> executeCommand(NumberAndService numberAndService) {
         return commandExecutor.execute(numberAndService)
-                .ifSad().map(commandError -> new ErrorResult())
+                .ifSad().peek(this::recordCommandError).map(commandError -> new ErrorResult())
                 .ifHappy().map(commandResult -> new Result());
+    }
+
+    private void recordCommandError(CommandError commandError) {
+        System.out.println("commandError = " + commandError);
     }
 
     class ErrorResult {
