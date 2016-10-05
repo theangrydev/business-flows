@@ -31,11 +31,12 @@ public class TwoFlowsTest implements WithAssertions {
     private final NumberRepository numberRepository = mock(NumberRepository.class);
     private final ServiceRepository serviceRepository = mock(ServiceRepository.class);
     private final CommandExecutor commandExecutor = mock(CommandExecutor.class);
+    private final ResultNotifier resultNotifier = mock(ResultNotifier.class);
 
     @Test
     public void twoFlowsUsedToExecuteAThird() {
         when(numberRepository.lookupNumber(any())).thenReturn(happyPath(new Number()));
-        when(serviceRepository.lookupService(any())).thenReturn(happyPath(new Service()));
+        when(serviceRepository.lookupService(any())).thenReturn(happyPath(new Service(new ServiceId())));
         when(commandExecutor.execute(any())).thenReturn(happyPath(new CommandResult()));
 
         assertThat(numberAndService().ifHappy().get()).isNotNull();
@@ -44,7 +45,20 @@ public class TwoFlowsTest implements WithAssertions {
     private HappyPath<Result, ErrorResult> numberAndService() {
         return lookupNumber()
                 .then(this::lookupService)
-                .then(this::executeCommand);
+                .then(this::executeCommand)
+                .attempt(this::notifyResult)
+                .attempt(this::updateService)
+                .map(commandResult -> new Result())
+                .ifSad().peek(this::recordErrorResult)
+                .ifHappy().peek(this::recordResult);
+    }
+
+    private void recordErrorResult(ErrorResult errorResult) {
+        System.out.println("errorResult = " + errorResult);
+    }
+
+    private void recordResult(Result result) {
+        System.out.println("result = " + result);
     }
 
     private HappyPath<Number, ErrorResult> lookupNumber() {
@@ -57,20 +71,50 @@ public class TwoFlowsTest implements WithAssertions {
         System.out.println("numberError = " + numberError);
     }
 
-    private HappyPath<NumberAndService, ErrorResult> lookupService(Number number) {
+    private HappyPath<CommandParameters, ErrorResult> lookupService(Number number) {
         return serviceRepository.lookupService(new ServiceId())
                 .ifSad().peek(this::recordServiceError).map(serviceError -> new ErrorResult())
-                .ifHappy().map(service -> new NumberAndService(number, service));
+                .ifHappy().map(service -> new CommandParameters(number, service));
     }
 
     private void recordServiceError(ServiceError serviceError) {
         System.out.println("serviceError = " + serviceError);
     }
 
-    private HappyPath<Result, ErrorResult> executeCommand(NumberAndService numberAndService) {
-        return commandExecutor.execute(numberAndService)
+    private HappyPath<CommandResultAndCommandParameters, ErrorResult> executeCommand(CommandParameters commandParameters) {
+        return commandExecutor.execute(commandParameters)
                 .ifSad().peek(this::recordCommandError).map(commandError -> new ErrorResult())
-                .ifHappy().map(commandResult -> new Result());
+                .ifHappy().peek(this::recordCommandResult).map(commandResult -> new CommandResultAndCommandParameters(commandParameters, commandResult));
+    }
+
+    private PotentialFailure<ErrorResult> notifyResult(CommandResultAndCommandParameters commandResultAndCommandParameters) {
+        return resultNotifier.notify(commandResultAndCommandParameters.commandResult, commandResultAndCommandParameters.commandParameters)
+                .ifSad().peek(this::recordNotificationError).map(notificationError -> new ErrorResult())
+                .ifHappy().peek(this::recordNotificationResult)
+                .toPotentialFailure(technicalFailure -> new ErrorResult());
+    }
+
+    private void recordNotificationError(NotificationError notificationError) {
+        System.out.println("notificationError = " + notificationError);
+    }
+
+    private PotentialFailure<ErrorResult> updateService(CommandResultAndCommandParameters commandResultAndCommandParameters) {
+        return serviceRepository.updateService(commandResultAndCommandParameters.commandResult, commandResultAndCommandParameters.commandParameters.service.serviceId)
+                .ifSad().peek(this::recordServiceError).map(serviceError -> new ErrorResult())
+                .ifHappy().peek(this::recordServiceUpdate)
+                .toPotentialFailure(technicalFailure -> new ErrorResult());
+    }
+
+    private void recordServiceUpdate(Service service) {
+        System.out.println("service = " + service);
+    }
+
+    private void recordNotificationResult(NotificationResult notificationResult) {
+        System.out.println("notificationResult = " + notificationResult);
+    }
+
+    private void recordCommandResult(CommandResult commandResult) {
+        System.out.println("commandResult = " + commandResult);
     }
 
     private void recordCommandError(CommandError commandError) {
@@ -91,6 +135,11 @@ public class TwoFlowsTest implements WithAssertions {
 
     class Service {
 
+        public final ServiceId serviceId;
+
+        public Service(ServiceId serviceId) {
+            this.serviceId = serviceId;
+        }
     }
 
     class ServiceError {
@@ -113,11 +162,29 @@ public class TwoFlowsTest implements WithAssertions {
 
     }
 
-    class NumberAndService {
+    class NotificationResult {
+
+    }
+
+    class NotificationError {
+
+    }
+
+    class CommandResultAndCommandParameters {
+        private final CommandParameters commandParameters;
+        private final CommandResult commandResult;
+
+        CommandResultAndCommandParameters(CommandParameters commandParameters, CommandResult commandResult) {
+            this.commandParameters = commandParameters;
+            this.commandResult = commandResult;
+        }
+    }
+
+    class CommandParameters {
         private final Number number;
         private final Service service;
 
-        NumberAndService(Number number, Service service) {
+        CommandParameters(Number number, Service service) {
             this.number = number;
             this.service = service;
         }
@@ -125,6 +192,7 @@ public class TwoFlowsTest implements WithAssertions {
 
     interface ServiceRepository {
         HappyPath<Service, ServiceError> lookupService(ServiceId serviceId);
+        HappyPath<Service, ServiceError> updateService(CommandResult commandResult, ServiceId serviceId);
     }
 
     interface NumberRepository {
@@ -132,6 +200,10 @@ public class TwoFlowsTest implements WithAssertions {
     }
 
     interface CommandExecutor {
-        HappyPath<CommandResult, CommandError> execute(NumberAndService numberAndService);
+        HappyPath<CommandResult, CommandError> execute(CommandParameters commandParameters);
+    }
+
+    interface ResultNotifier {
+        HappyPath<NotificationResult, NotificationError> notify(CommandResult commandResult, CommandParameters commandParameters);
     }
 }
