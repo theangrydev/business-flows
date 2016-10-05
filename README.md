@@ -27,6 +27,9 @@ There is no point in using this if your flows are "all or nothing". If there are
 ```
 
 ## Releases
+### 6.2.0
+* `TechnicalFailureCase.toString` now includes the stack trace
+
 ### 6.1.0
 * Added method `BusinessCase.toPotentialFalure` that turns a `BusinessCase` into a `PotentialFailure`
 
