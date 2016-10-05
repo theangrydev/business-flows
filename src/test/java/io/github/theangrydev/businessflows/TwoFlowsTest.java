@@ -38,6 +38,8 @@ public class TwoFlowsTest implements WithAssertions {
         when(numberRepository.lookupNumber(any())).thenReturn(happyPath(new Number()));
         when(serviceRepository.lookupService(any())).thenReturn(happyPath(new Service(new ServiceId())));
         when(commandExecutor.execute(any())).thenReturn(happyPath(new CommandResult()));
+        when(resultNotifier.notify(any(), any())).thenReturn(happyPath(new NotificationResult()));
+        when(serviceRepository.updateService(any(), any())).thenReturn(happyPath(new Service(new ServiceId())));
 
         assertThat(numberAndService().ifHappy().get()).isNotNull();
     }
