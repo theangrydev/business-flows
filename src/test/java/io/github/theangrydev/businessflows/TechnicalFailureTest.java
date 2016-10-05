@@ -122,7 +122,8 @@ public class TechnicalFailureTest {
 
         assertThatThrownBy(() -> technicalFailureJoinThatWrapsAndThrows(failure))
                 .hasCause(failure)
-                .hasMessage("Exception caught when joining. Business case is: 'Technical Failure: java.lang.Exception: message'.");
+                .hasMessageStartingWith("Exception caught when joining. Business case is: 'Technical Failure: java.lang.Exception: message" + System.lineSeparator() +
+                        "\tat io.github.theangrydev.businessflows.TechnicalFailureTest.joinTechnicalFailureWrapsFailureAndThrows(TechnicalFailureTest.java:121");
     }
 
     @Test
