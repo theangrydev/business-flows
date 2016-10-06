@@ -123,7 +123,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, E
      *
      * @throws Exception if the underlying business case is a technical failure
      */
-    void throwTechnicalFailure() throws Exception;
+    void throwIt() throws Exception;
 
     /**
      * {@inheritDoc}

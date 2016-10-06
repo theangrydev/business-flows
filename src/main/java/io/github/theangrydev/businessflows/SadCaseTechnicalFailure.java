@@ -71,7 +71,7 @@ class SadCaseTechnicalFailure<Happy, Sad> extends SadCase<Happy, Sad> implements
     }
 
     @Override
-    public void throwTechnicalFailure() throws Exception {
+    public void throwIt() throws Exception {
         // nothing to throw
     }
 

@@ -36,7 +36,7 @@ public class TechnicalFailureCaseTechnicalFailureTest {
 
     @Test
     public void throwsTechnicalFailure() {
-        assertThatThrownBy(technicalFailureCaseTechnicalFailure::throwTechnicalFailure).isEqualTo(technicalFailure);
+        assertThatThrownBy(technicalFailureCaseTechnicalFailure::throwIt).isEqualTo(technicalFailure);
     }
 
     @Test

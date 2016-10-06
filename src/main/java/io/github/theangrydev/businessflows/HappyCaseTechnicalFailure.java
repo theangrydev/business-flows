@@ -71,7 +71,7 @@ class HappyCaseTechnicalFailure<Happy, Sad> extends HappyCase<Happy, Sad> implem
     }
 
     @Override
-    public void throwTechnicalFailure() throws Exception {
+    public void throwIt() throws Exception {
         // nothing to throw
     }
 
