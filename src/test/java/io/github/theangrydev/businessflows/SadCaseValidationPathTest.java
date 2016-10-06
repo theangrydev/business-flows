@@ -28,7 +28,7 @@ public class SadCaseValidationPathTest {
 
     @Test
     public void validateReturnsThis() {
-        assertThat(sadCaseValidationPath.validate(null)).isSameAs(sadCaseValidationPath);
+        assertThat(sadCaseValidationPath.validateAll(null)).isSameAs(sadCaseValidationPath);
     }
 
     @Test

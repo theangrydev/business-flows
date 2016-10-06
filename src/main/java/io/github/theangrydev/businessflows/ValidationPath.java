@@ -98,9 +98,9 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <SadAggregate> The type that the list of {@link Sad} validation errors will be aggregated into
      * @return The result of applying all the validators
      */
-     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
+     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
          ValidationPath<Happy, Sad, SadAggregate> happyPath = ValidationPath.validationPathInto(happy, sadAggregateMapping);
-         return happyPath.validate(validators);
+         return happyPath.validateAll(validators);
     }
 
     /**
@@ -114,8 +114,8 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <Sad> The type of sad object the resulting {@link ValidationPath} may represent
      * @return The result of applying all the validators
      */
-    static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validate(Happy happy, List<? extends Validator<Happy, Sad>> validators) {
-        return validateInto(happy, identity(), validators);
+    static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validateAll(Happy happy, List<? extends Validator<Happy, Sad>> validators) {
+        return validateAllInto(happy, identity(), validators);
     }
 
     /**
@@ -132,8 +132,8 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @return The result of applying all the validators
      */
     @SafeVarargs
-    static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, Validator<Happy, Sad>... validators) {
-        return validateInto(happy, sadAggregateMapping, Arrays.asList(validators));
+    static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, Validator<Happy, Sad>... validators) {
+        return validateAllInto(happy, sadAggregateMapping, Arrays.asList(validators));
     }
 
 
@@ -149,8 +149,8 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @return The result of applying all the validators
      */
     @SafeVarargs
-    static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validate(Happy happy, Validator<Happy, Sad>... validators) {
-        return validate(happy, Arrays.asList(validators));
+    static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validateAll(Happy happy, Validator<Happy, Sad>... validators) {
+        return validateAll(happy, Arrays.asList(validators));
     }
 
     /**
@@ -160,7 +160,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
      * @return The result of applying all the validators
      */
-    ValidationPath<Happy, Sad, SadAggregate> validate(List<? extends Validator<Happy, Sad>> validators);
+    ValidationPath<Happy, Sad, SadAggregate> validateAll(List<? extends Validator<Happy, Sad>> validators);
 
     /**
      * Perform a subsequent round of validation, which will take place if the previous one succeeded.
@@ -173,7 +173,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
      * @return The result of applying all the validators
      */
-    ValidationPath<Happy, Sad, SadAggregate> validateInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators);
+    ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators);
 
     /**
      * Helper method to turn an array of {@link Validator} into a list of {@link Validator}.

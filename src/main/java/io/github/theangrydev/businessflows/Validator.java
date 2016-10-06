@@ -17,14 +17,12 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.List;
-
 /**
- * A type of {@link ActionThatMightFail} that represents a list of validation failures.
+ * A type of {@link ActionThatMightFail} that represents a validation failure.
  *
  * @param <Happy> The type to validate
  * @param <Sad> The type of validation failure
  */
-public interface Validator<Happy, Sad> extends ActionThatMightFail<Happy, List<Sad>> {
+public interface Validator<Happy, Sad> extends ActionThatMightFail<Happy, Sad> {
 
 }

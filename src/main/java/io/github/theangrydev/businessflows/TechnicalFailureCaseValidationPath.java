@@ -31,12 +31,12 @@ class TechnicalFailureCaseValidationPath<Happy, Sad, SadAggregate> extends Techn
     }
 
     @Override
-    public ValidationPath<Happy, Sad, SadAggregate> validate(List<? extends Validator<Happy, Sad>> validators) {
+    public ValidationPath<Happy, Sad, SadAggregate> validateAll(List<? extends Validator<Happy, Sad>> validators) {
         return this;
     }
 
     @Override
-    public ValidationPath<Happy, Sad, SadAggregate> validateInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
+    public ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
         return this;
     }
 }

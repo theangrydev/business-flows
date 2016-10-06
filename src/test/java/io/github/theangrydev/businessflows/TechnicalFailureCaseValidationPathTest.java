@@ -27,12 +27,12 @@ public class TechnicalFailureCaseValidationPathTest {
 
     @Test
     public void validateReturnsThis() {
-        assertThat(sadCaseValidationPath.validate(null)).isSameAs(sadCaseValidationPath);
+        assertThat(sadCaseValidationPath.validateAll(null)).isSameAs(sadCaseValidationPath);
     }
 
     @Test
     public void validateIntoReturnsThis() {
-        assertThat(sadCaseValidationPath.validateInto(null, null)).isSameAs(sadCaseValidationPath);
+        assertThat(sadCaseValidationPath.validateAllInto(null, null)).isSameAs(sadCaseValidationPath);
     }
 
     @Test

@@ -22,7 +22,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static io.github.theangrydev.businessflows.FieldValidator.fieldValidator;
-import static io.github.theangrydev.businessflows.PotentialFailure.failures;
+import static io.github.theangrydev.businessflows.PotentialFailure.failure;
 import static io.github.theangrydev.businessflows.PotentialFailure.success;
 import static io.github.theangrydev.businessflows.ValidationPath.validators;
 import static java.lang.String.format;
@@ -94,9 +94,9 @@ public class ValidationExampleTest {
         }
 
         @Override
-        public PotentialFailure<List<ValidationError>> attempt(String fieldValue) {
+        public PotentialFailure<ValidationError> attempt(String fieldValue) {
             if (fieldValue == null || fieldValue.trim().isEmpty()) {
-                return failures(new ValidationError(format("Field '%s' was empty", fieldName)));
+                return failure(new ValidationError(format("Field '%s' was empty", fieldName)));
             }
             return success();
         }
@@ -142,19 +142,19 @@ public class ValidationExampleTest {
 
     private HappyPath<RegistrationForm, AggregateErrors> validate(RegistrationForm registrationForm) {
         return ValidationPath
-                .validateInto(registrationForm, AggregateErrors::errorsWithMessage1, firstNameValidator(), lastNameValidator())
-                .validate(validators(ageValidator()))
-                .validateInto(AggregateErrors::errorsWithMessage2, validators(firstNameValidator(), lastNameValidator(), ageValidator()));
+                .validateAllInto(registrationForm, AggregateErrors::errorsWithMessage1, firstNameValidator(), lastNameValidator())
+                .validateAll(validators(ageValidator()))
+                .validateAllInto(AggregateErrors::errorsWithMessage2, validators(firstNameValidator(), lastNameValidator(), ageValidator()));
     }
 
     private HappyPath<RegistrationForm, List<ValidationError>> validateWithTechnicalFailure(RegistrationForm registrationForm, Exception technicalFailure) {
         return ValidationPath.<RegistrationForm, ValidationError>validationPath(registrationForm)
-                .validate(singletonList(registrationForm1 -> {throw technicalFailure;}));
+                .validateAll(singletonList(registrationForm1 -> {throw technicalFailure;}));
     }
 
     private HappyPath<RegistrationForm, List<ValidationError>> validateWithTechnicalFailureDuringAggregateMapping(RegistrationForm registrationForm, Exception technicalFailure) {
         return ValidationPath.<RegistrationForm, ValidationError>validationPath(registrationForm)
-                .validateInto(sads -> {throw technicalFailure;}, singletonList(registrationForm1 -> failures(new ValidationError(""))));
+                .validateAllInto(sads -> {throw technicalFailure;}, singletonList(registrationForm1 -> failure(new ValidationError(""))));
     }
 
     private void logFailure(Exception exception) {
@@ -186,7 +186,7 @@ public class ValidationExampleTest {
     }
 
     private Validator<RegistrationForm, ValidationError> ageValidator() {
-        return fieldValidator(form -> form.age, "Age", NotBlankValidator::new);
+        return fieldValidator(form -> form.age, new NotBlankValidator("Age"));
     }
 
     private Validator<RegistrationForm, ValidationError> lastNameValidator() {

@@ -35,16 +35,16 @@ class HappyCaseValidationPath<Happy, Sad, SadAggregate> extends HappyCaseHappyPa
     }
 
     @Override
-    public ValidationPath<Happy, Sad, SadAggregate> validate(List<? extends Validator<Happy, Sad>> validators) {
-        return validateInto(sadAggregateMapping, validators);
+    public ValidationPath<Happy, Sad, SadAggregate> validateAll(List<? extends Validator<Happy, Sad>> validators) {
+        return validateAllInto(sadAggregateMapping, validators);
     }
 
     @Override
-    public ValidationPath<Happy, Sad, SadAggregate> validateInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
+    public ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
         List<Sad> validationFailures = new ArrayList<>(validators.size());
         for (Validator<Happy, Sad> validator : validators) {
             try {
-                validator.attempt(happy).ifSad(validationFailures::addAll);
+                validator.attempt(happy).ifSad(validationFailures::add);
             } catch (Exception technicalFailure) {
                 return ValidationPath.technicalFailure(technicalFailure);
             }
