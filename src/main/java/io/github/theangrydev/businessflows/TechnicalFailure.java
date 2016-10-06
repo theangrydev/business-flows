@@ -119,6 +119,13 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, E
     TechnicalFailure<Happy, Sad> peek(Peek<Exception> peek);
 
     /**
+     * Throw the technical failure, if it is present.
+     *
+     * @throws Exception if the underlying business case is a technical failure
+     */
+    void throwTechnicalFailure() throws Exception;
+
+    /**
      * {@inheritDoc}
      */
     @Override

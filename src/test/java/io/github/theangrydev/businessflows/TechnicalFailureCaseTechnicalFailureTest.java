@@ -20,6 +20,7 @@ package io.github.theangrydev.businessflows;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class TechnicalFailureCaseTechnicalFailureTest {
 
@@ -32,6 +33,11 @@ public class TechnicalFailureCaseTechnicalFailureTest {
 
     private final Exception technicalFailure = new Exception();
     private final TechnicalFailureCaseTechnicalFailure<Happy, Sad> technicalFailureCaseTechnicalFailure = new TechnicalFailureCaseTechnicalFailure<>(technicalFailure);
+
+    @Test
+    public void throwsTechnicalFailure() {
+        assertThatThrownBy(technicalFailureCaseTechnicalFailure::throwTechnicalFailure).isEqualTo(technicalFailure);
+    }
 
     @Test
     public void toOptionalIsPresent() {

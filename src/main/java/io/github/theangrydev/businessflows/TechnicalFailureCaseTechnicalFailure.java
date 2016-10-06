@@ -105,6 +105,11 @@ class TechnicalFailureCaseTechnicalFailure<Happy, Sad> extends TechnicalFailureC
     }
 
     @Override
+    public void throwTechnicalFailure() throws Exception {
+        throw technicalFailure;
+    }
+
+    @Override
     public HappyPath<Happy, Sad> ifHappy() {
         return HappyPath.technicalFailure(technicalFailure);
     }
