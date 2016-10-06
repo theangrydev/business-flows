@@ -31,6 +31,16 @@ public class HappyCaseTechnicalFailureTest {
     private final HappyCaseTechnicalFailure<Happy, Object> happyCaseTechnicalFailure = new HappyCaseTechnicalFailure<>(happy);
 
     @Test
+    public void throwItDoesNothing() throws Exception {
+        happyCaseTechnicalFailure.throwIt();
+    }
+
+    @Test
+    public void throwItAsARuntimeExceptionDoesNothing()  {
+        happyCaseTechnicalFailure.throwItAsARuntimeException();
+    }
+
+    @Test
     public void toOptionalIsEmpty() {
         assertThat(happyCaseTechnicalFailure.toOptional()).isEmpty();
     }

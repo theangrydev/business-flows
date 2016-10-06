@@ -30,6 +30,17 @@ public class SadCaseTechnicalFailureTest {
     private final Sad sad = new Sad();
     private final SadCaseTechnicalFailure<Object, Sad> sadCaseTechnicalFailure = new SadCaseTechnicalFailure<>(sad);
 
+
+    @Test
+    public void throwItDoesNothing() throws Exception {
+        sadCaseTechnicalFailure.throwIt();
+    }
+
+    @Test
+    public void throwItAsARuntimeExceptionDoesNothing()  {
+        sadCaseTechnicalFailure.throwItAsARuntimeException();
+    }
+
     @Test
     public void toOptionalIsEmpty() {
         assertThat(sadCaseTechnicalFailure.toOptional()).isEmpty();
