@@ -41,22 +41,23 @@ class HappyCaseValidationPath<Happy, Sad, SadAggregate> extends HappyCaseHappyPa
 
     @Override
     public ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
-        List<Sad> validationFailures = new ArrayList<>(validators.size());
-        for (Validator<Happy, Sad> validator : validators) {
-            try {
-                validator.attempt(happy).ifSad(validationFailures::add);
-            } catch (Exception technicalFailure) {
-                return ValidationPath.technicalFailure(technicalFailure);
-            }
-        }
-        if (validationFailures.isEmpty()) {
-            return ValidationPath.validationPathInto(happy, sadAggregateMapping);
-        }
         try {
+            List<Sad> validationFailures = validationFailures(validators);
+            if (validationFailures.isEmpty()) {
+                return ValidationPath.validationPathInto(happy, sadAggregateMapping);
+            }
             SadAggregate sadAggregate = sadAggregateMapping.map(validationFailures);
             return ValidationPath.validationFailure(sadAggregate);
-        } catch (Exception e) {
-            return ValidationPath.technicalFailure(e);
+        } catch (Exception technicalFailure) {
+            return ValidationPath.technicalFailure(technicalFailure);
         }
+    }
+
+    private List<Sad> validationFailures(List<? extends Validator<Happy, Sad>> validators) throws Exception {
+        List<Sad> validationFailures = new ArrayList<>(validators.size());
+        for (Validator<Happy, Sad> validator : validators) {
+            validator.attempt(happy).ifSad(validationFailures::add);
+        }
+        return validationFailures;
     }
 }
