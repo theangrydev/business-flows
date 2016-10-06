@@ -22,11 +22,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>7.0.0</version>
+    <version>7.1.0</version>
 </dependency>
 ```
 
 ## Releases
+### 7.1.0
+* Added method `TechnicalFailure.throwTechnicalFailure` that will throw an `Exception` if the business case is a technical failure
+
 ### 7.0.0
 * Changed `Validator` so that it produces just one failure not a list of failures
 * `FieldValidator` now adapts just one `Validator` not a list of them to match the `Validator` change
