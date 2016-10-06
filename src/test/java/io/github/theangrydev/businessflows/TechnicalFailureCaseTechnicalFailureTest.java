@@ -40,6 +40,13 @@ public class TechnicalFailureCaseTechnicalFailureTest {
     }
 
     @Test
+    public void throwsTechnicalFailureAsRuntimeException() {
+        assertThatThrownBy(technicalFailureCaseTechnicalFailure::throwItAsARuntimeException)
+                .isInstanceOf(RuntimeException.class)
+                .hasCause(technicalFailure);
+    }
+
+    @Test
     public void toOptionalIsPresent() {
         assertThat(technicalFailureCaseTechnicalFailure.toOptional()).contains(technicalFailure);
     }

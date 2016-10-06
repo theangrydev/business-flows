@@ -76,6 +76,11 @@ class HappyCaseTechnicalFailure<Happy, Sad> extends HappyCase<Happy, Sad> implem
     }
 
     @Override
+    public void throwItAsARuntimeException() throws RuntimeException {
+        // nothing to throw
+    }
+
+    @Override
     public HappyPath<Happy, Sad> ifHappy() {
         return HappyPath.happyPath(happy);
     }
