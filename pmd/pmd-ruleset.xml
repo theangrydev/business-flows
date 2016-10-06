@@ -64,6 +64,7 @@
     <rule ref="rulesets/java/strictexception.xml">
         <exclude name="AvoidCatchingGenericException"/><!-- This is part of the API design choices -->
         <exclude name="SignatureDeclareThrowsException"/><!-- This is part of the API design choices -->
+        <exclude name="AvoidThrowingRawExceptionTypes"/><!-- This is part of the API design choices -->
     </rule>
     <rule ref="rulesets/java/strings.xml"/>
     <rule ref="rulesets/java/sunsecure.xml"/>
