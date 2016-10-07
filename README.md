@@ -28,7 +28,7 @@ There is no point in using this if your flows are "all or nothing". If there are
 
 ## Releases
 ### 7.5.0
-* Added helper method `HappyPath.actions` that turns an array of `ActionThatMightFail` into a list. This is a workaround for the fact that interfaces can't have @SafeVarargs and so some methods accept a list when they would ideally accept varargs
+* Added helper method `HappyPath.actions` that turns an array of `ActionThatMightFail` into a list. This is a workaround for the fact that interfaces can't have `@SafeVarargs` and so some methods accept a list when they would ideally accept varargs
 
 ### 7.4.0
 * Added `HappyPath.attemptAll` convenience method that is equivalent to multiple chained `attempt` calls
