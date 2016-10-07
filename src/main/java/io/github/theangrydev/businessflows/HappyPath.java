@@ -17,6 +17,8 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.List;
+
 /**
  * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.
  * <p>
@@ -138,6 +140,16 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @return The same {@link HappyPath} if the action did not fail; if the action failure then a {@link HappyPath} that is now sad inside
      */
     HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail);
+
+    /**
+     * Attempt several actions that might fail and be mapped to a {@link Sad} object.
+     * The first action that fails will result in an early exit with the underlying sad case.
+     * The first technical failure encountered will result in a technical failure overall.
+     * *
+     * @param actionsThatMightFail The actions to apply if the underlying business case is happy
+     * @return The same {@link HappyPath} if all the actions did not fail; if an action fails then a {@link HappyPath} that is now sad inside
+     */
+    HappyPath<Happy, Sad> attemptAll(List<? extends ActionThatMightFail<Happy, Sad>> actionsThatMightFail);
 
     /**
      * Take a look at the happy case (if there really is one).

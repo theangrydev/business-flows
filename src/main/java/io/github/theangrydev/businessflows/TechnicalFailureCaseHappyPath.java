@@ -17,6 +17,7 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,6 +33,11 @@ class TechnicalFailureCaseHappyPath<Happy, Sad> extends TechnicalFailureCase<Hap
 
     @Override
     public HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail) {
+        return this;
+    }
+
+    @Override
+    public HappyPath<Happy, Sad> attemptAll(List<? extends ActionThatMightFail<Happy, Sad>> actionsThatMightFail) {
         return this;
     }
 

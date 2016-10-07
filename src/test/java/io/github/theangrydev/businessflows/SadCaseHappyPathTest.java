@@ -68,6 +68,11 @@ public class SadCaseHappyPathTest {
     }
 
     @Test
+    public void attemptAllReturnsThis() {
+        assertThat(sadCaseHappyPath.attemptAll(null)).isSameAs(sadCaseHappyPath);
+    }
+
+    @Test
     public void peekReturnsThis() {
         assertThat(sadCaseHappyPath.peek(null)).isSameAs(sadCaseHappyPath);
     }

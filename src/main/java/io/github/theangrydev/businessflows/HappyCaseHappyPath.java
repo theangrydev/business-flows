@@ -17,6 +17,7 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -80,5 +81,14 @@ class HappyCaseHappyPath<Happy, Sad> extends HappyCase<Happy, Sad> implements Ha
         } catch (Exception e) {
             return HappyPath.technicalFailure(e);
         }
+    }
+
+    @Override
+    public HappyPath<Happy, Sad> attemptAll(List<? extends ActionThatMightFail<Happy, Sad>> actionsThatMightFail) {
+        HappyPath<Happy, Sad> result = this;
+        for (ActionThatMightFail<Happy, Sad> actionThatMightFail : actionsThatMightFail) {
+            result = result.attempt(actionThatMightFail);
+        }
+        return result;
     }
 }

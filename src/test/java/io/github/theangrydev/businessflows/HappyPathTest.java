@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static io.github.theangrydev.businessflows.PotentialFailure.failure;
 import static io.github.theangrydev.businessflows.PotentialFailure.success;
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HappyPathTest {
@@ -170,6 +171,17 @@ public class HappyPathTest {
     }
 
     @Test
+    public void attemptAllWithNoFailureRemainsHappy() {
+        Happy originalHappy = new Happy();
+
+        Happy actualHappy = HappyPath.happyPath(originalHappy)
+                .attemptAll(asList(happy -> success(), happy -> success()))
+                .get();
+
+        assertThat(actualHappy).isSameAs(originalHappy);
+    }
+
+    @Test
     public void attemptWithNoFailureRemainsHappy() {
         Happy originalHappy = new Happy();
 
@@ -192,6 +204,17 @@ public class HappyPathTest {
     }
 
     @Test
+    public void attemptAllWithUncaughtExceptionTurnsSad() {
+        Exception uncaughtException = new Exception();
+
+        Exception actualException = HappyPath.happyPath(new Happy())
+                .attemptAll(asList(happy -> success(), happy -> {throw uncaughtException;}))
+                .ifTechnicalFailure().get();
+
+        assertThat(actualException).isSameAs(uncaughtException);
+    }
+
+    @Test
     public void attemptWithFailureTurnsSad() {
         Sad expectedSad = new Sad();
 
@@ -202,6 +225,16 @@ public class HappyPathTest {
         assertThat(actualSad).isSameAs(expectedSad);
     }
 
+    @Test
+    public void attemptAllWithFailureTurnsSad() {
+        Sad expectedSad = new Sad();
+
+        Sad actualSad = HappyPath.<Happy, Sad>happyPath(new Happy())
+                .attemptAll(asList(happy -> success(), happy -> failure(expectedSad)))
+                .ifSad().get();
+
+        assertThat(actualSad).isSameAs(expectedSad);
+    }
 
     @Test
     public void sadOperationWhenBusinessCaseIsActuallyHappy() {
