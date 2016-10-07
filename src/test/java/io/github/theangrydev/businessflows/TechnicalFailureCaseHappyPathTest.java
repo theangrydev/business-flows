@@ -65,7 +65,7 @@ public class TechnicalFailureCaseHappyPathTest {
 
     @Test
     public void attemptAllReturnsThis() {
-        assertThat(technicalFailureCaseHappyPath.attempt(null)).isSameAs(technicalFailureCaseHappyPath);
+        assertThat(technicalFailureCaseHappyPath.attemptAll(null)).isSameAs(technicalFailureCaseHappyPath);
     }
 
     @Test
