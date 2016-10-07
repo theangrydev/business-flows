@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.github.theangrydev.businessflows.HappyPath.actions;
 import static io.github.theangrydev.businessflows.PotentialFailure.failure;
 import static io.github.theangrydev.businessflows.PotentialFailure.success;
 import static java.util.Arrays.asList;
@@ -230,7 +231,7 @@ public class HappyPathTest {
         Sad expectedSad = new Sad();
 
         Sad actualSad = HappyPath.<Happy, Sad>happyPath(new Happy())
-                .attemptAll(asList(happy -> success(), happy -> failure(expectedSad)))
+                .attemptAll(actions(happy -> success(), happy -> failure(expectedSad)))
                 .ifSad().get();
 
         assertThat(actualSad).isSameAs(expectedSad);

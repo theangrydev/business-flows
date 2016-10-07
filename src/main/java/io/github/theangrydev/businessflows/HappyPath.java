@@ -17,6 +17,7 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -145,11 +146,24 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * Attempt several actions that might fail and be mapped to a {@link Sad} object.
      * The first action that fails will result in an early exit with the underlying sad case.
      * The first technical failure encountered will result in a technical failure overall.
-     * *
+     *
      * @param actionsThatMightFail The actions to apply if the underlying business case is happy
      * @return The same {@link HappyPath} if all the actions did not fail; if an action fails then a {@link HappyPath} that is now sad inside
      */
     HappyPath<Happy, Sad> attemptAll(List<? extends ActionThatMightFail<Happy, Sad>> actionsThatMightFail);
+
+    /**
+     * Helper method to turn an array of {@link ActionThatMightFail} into a list of {@link ActionThatMightFail}.
+     *
+     * @param actionsThatMightFail The actions that might fail
+     * @param <Happy>              The type of happy object the list of {@link Validator} can validate
+     * @param <Sad>                The type of validation error the list of {@link Validator} can produce
+     * @return A list of {@link ActionThatMightFail}
+     */
+    @SafeVarargs
+    static <Happy, Sad> List<ActionThatMightFail<Happy, Sad>> actions(ActionThatMightFail<Happy, Sad>... actionsThatMightFail) {
+        return Arrays.asList(actionsThatMightFail);
+    }
 
     /**
      * Take a look at the happy case (if there really is one).
