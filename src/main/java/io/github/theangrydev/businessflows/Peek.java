@@ -19,6 +19,7 @@ package io.github.theangrydev.businessflows;
 
 /**
  * Similar to a {@link java.util.function.Consumer} but is allowed to throw an {@link Exception}.
+ *
  * @param <T> The type to look at
  */
 @FunctionalInterface

@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * A {@link TechnicalFailureCaseValidationPath} is a {@link ValidationPath} that is actually a {@link TechnicalFailureCase}.
- *
+ * <p>
  * {@inheritDoc}
  */
 class TechnicalFailureCaseValidationPath<Happy, Sad, SadAggregate> extends TechnicalFailureCaseHappyPath<Happy, SadAggregate> implements ValidationPath<Happy, Sad, SadAggregate> {

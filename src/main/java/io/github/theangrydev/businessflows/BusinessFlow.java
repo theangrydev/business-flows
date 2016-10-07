@@ -27,8 +27,8 @@ import static java.lang.String.format;
  * This is the base {@link BusinessFlow} that contains operations that are common to all the biased views.
  *
  * @param <Happy> The type of happy object this {@link BusinessFlow} may represent
- * @param <Sad> The type of sad object this {@link BusinessFlow} may represent
- * @param <Bias> The type of bias (happy, sad or technical failure) this {@link BusinessFlow} has
+ * @param <Sad>   The type of sad object this {@link BusinessFlow} may represent
+ * @param <Bias>  The type of bias (happy, sad or technical failure) this {@link BusinessFlow} has
  */
 public interface BusinessFlow<Happy, Sad, Bias> extends BusinessCase<Happy, Sad> {
 
@@ -63,7 +63,7 @@ public interface BusinessFlow<Happy, Sad, Bias> extends BusinessCase<Happy, Sad>
 
     /**
      * @param exceptionSupplier The supplier of the exception to be thrown if the underlying business case is not the {@link Bias}
-     * @param <X> The type of {@link Exception} that will be thrown if the underlying business case is not the {@link Bias}
+     * @param <X>               The type of {@link Exception} that will be thrown if the underlying business case is not the {@link Bias}
      * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else the given alternative
      * @throws X If the underlying business case is not the {@link Bias}
      */
@@ -78,6 +78,7 @@ public interface BusinessFlow<Happy, Sad, Bias> extends BusinessCase<Happy, Sad>
      * To ensure failures are caught inside a flow, use e.g. {@link HappyPath#happyPathAttempt(Attempt)} at the top of
      * the scope, before this method is called.
      * </p>
+     *
      * @return A view of the underlying business case as a {@link TechnicalFailure}
      */
     TechnicalFailure<Happy, Sad> ifTechnicalFailure();

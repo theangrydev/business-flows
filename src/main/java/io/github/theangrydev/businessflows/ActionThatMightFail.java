@@ -20,13 +20,13 @@ package io.github.theangrydev.businessflows;
 /**
  * Attempt to perform an action on a happy business case that will either:
  * <ul>
- *     <li>Succeed and return {@link PotentialFailure#success()}</li>
- *     <li>Fail in a known way as a {@link PotentialFailure#failure(Object) PotentialFailure#failure(Sad)}
- *     <li>Result in a technical failure and throw any kind of {@link Exception}</li>
+ * <li>Succeed and return {@link PotentialFailure#success()}</li>
+ * <li>Fail in a known way as a {@link PotentialFailure#failure(Object) PotentialFailure#failure(Sad)}
+ * <li>Result in a technical failure and throw any kind of {@link Exception}</li>
  * </ul>
  *
  * @param <Happy> The type of happy object the action will be performed on
- * @param <Sad> The type of sad object that will be returned if the action fails in a known way
+ * @param <Sad>   The type of sad object that will be returned if the action fails in a known way
  */
 @FunctionalInterface
 public interface ActionThatMightFail<Happy, Sad> {

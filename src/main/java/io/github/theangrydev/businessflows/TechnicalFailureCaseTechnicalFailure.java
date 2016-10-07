@@ -21,7 +21,7 @@ import java.util.Optional;
 
 /**
  * A {@link TechnicalFailureCaseTechnicalFailure} is a {@link TechnicalFailure} that is actually a {@link TechnicalFailureCase}.
- *
+ * <p>
  * {@inheritDoc}
  */
 class TechnicalFailureCaseTechnicalFailure<Happy, Sad> extends TechnicalFailureCase<Happy, Sad> implements TechnicalFailure<Happy, Sad> {

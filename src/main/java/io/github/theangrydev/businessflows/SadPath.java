@@ -19,7 +19,7 @@ package io.github.theangrydev.businessflows;
 
 /**
  * A {@link SadPath} is a {@link BusinessFlow} that is biased towards the result being {@link Sad}.
- *
+ * <p>
  * {@inheritDoc}
  */
 public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
@@ -27,9 +27,9 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
     /**
      * Provides a {@link SadPath} view over a known {@link Sad} object.
      *
-     * @param sad The sad object to initiate the flow with
+     * @param sad     The sad object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link SadPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
+     * @param <Sad>   The type of sad object the resulting {@link SadPath} may represent
      * @return A {@link SadPath} that is sad on the inside
      */
     static <Happy, Sad> SadPath<Happy, Sad> sadPath(Sad sad) {
@@ -39,9 +39,9 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
     /**
      * Provides a {@link SadPath} view over a known {@link Happy} object.
      *
-     * @param happy The happy object to initiate the flow with
+     * @param happy   The happy object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link SadPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
+     * @param <Sad>   The type of sad object the resulting {@link SadPath} may represent
      * @return A {@link SadPath} that is happy on the inside
      */
     static <Happy, Sad> SadPath<Happy, Sad> happyPath(Happy happy) {
@@ -52,8 +52,8 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * Provides a {@link SadPath} view over a known {@link Exception} object.
      *
      * @param technicalFailure The technical failure object to initiate the flow with
-     * @param <Happy> The type of happy object the resulting {@link SadPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link SadPath} may represent
+     * @param <Happy>          The type of happy object the resulting {@link SadPath} may represent
+     * @param <Sad>            The type of sad object the resulting {@link SadPath} may represent
      * @return A {@link SadPath} that is a technical failure on the inside
      */
     static <Happy, Sad> SadPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
@@ -63,7 +63,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
     /**
      * If the underlying business case is sad, then apply the given action, otherwise do nothing to the underlying case.
      *
-     * @param action The action to apply to an existing sad case
+     * @param action   The action to apply to an existing sad case
      * @param <NewSad> The type of sad object that will be present after the action is applied to an existing sad object
      * @return The result of applying the action to the existing sad path, if applicable
      */
@@ -72,7 +72,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
     /**
      * If the underlying business case is sad, then apply the given mapping, otherwise do nothing to the underlying case.
      *
-     * @param mapping The action to apply to an existing sad case
+     * @param mapping  The action to apply to an existing sad case
      * @param <NewSad> The type of sad object that will be present after the mapping is applied to an existing sad object
      * @return The result of applying the mapping to the existing sad path, if applicable
      */

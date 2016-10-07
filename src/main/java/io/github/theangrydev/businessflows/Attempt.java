@@ -20,8 +20,8 @@ package io.github.theangrydev.businessflows;
 /**
  * Attempt to perform an action that will either:
  * <ul>
- *     <li>Succeed and return a {@link Result}</li>
- *     <li>Result in a technical failure and throw any kind of {@link Exception}</li>
+ * <li>Succeed and return a {@link Result}</li>
+ * <li>Result in a technical failure and throw any kind of {@link Exception}</li>
  * </ul>
  *
  * @param <Result> The type of happy object that will be produced in the successful case

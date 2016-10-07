@@ -21,7 +21,7 @@ package io.github.theangrydev.businessflows;
  * A type of {@link ActionThatMightFail} that represents a validation failure.
  *
  * @param <Happy> The type to validate
- * @param <Sad> The type of validation failure
+ * @param <Sad>   The type of validation failure
  */
 public interface Validator<Happy, Sad> extends ActionThatMightFail<Happy, Sad> {
 

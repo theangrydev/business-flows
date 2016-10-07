@@ -19,7 +19,7 @@ package io.github.theangrydev.businessflows;
 
 /**
  * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.
- *
+ * <p>
  * {@inheritDoc}
  */
 public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
@@ -28,8 +28,8 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * Attempt an action that produces a {@link HappyPath}.
      *
      * @param happyPathAttempt The {@link Attempt} to execute
-     * @param <Happy> The type of happy object this {@link HappyPath} may represent
-     * @param <Sad> The type of sad object this {@link HappyPath} may represent
+     * @param <Happy>          The type of happy object this {@link HappyPath} may represent
+     * @param <Sad>            The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is happy or sad or a technical failure on the inside
      */
     static <Happy, Sad> HappyPath<Happy, Sad> happyPathAttempt(Attempt<HappyPath<Happy, Sad>> happyPathAttempt) {
@@ -45,7 +45,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      *
      * @param attempt The {@link Attempt} to execute
      * @param <Happy> The type of happy object this {@link HappyPath} may represent
-     * @param <Sad> The type of sad object this {@link HappyPath} may represent
+     * @param <Sad>   The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside or a technical failure
      */
     static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt) {
@@ -59,10 +59,10 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     /**
      * Attempt an action that produces a {@link Happy}, mapping any technical failure to a {@link Sad}.
      *
-     * @param attempt The {@link Attempt} to execute
+     * @param attempt        The {@link Attempt} to execute
      * @param failureMapping What to do if there is a technical failure during the {@link Attempt}
-     * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
+     * @param <Happy>        The type of happy object the resulting {@link HappyPath} may represent
+     * @param <Sad>          The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside, sad on the inside or a technical failure
      */
     static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt, Mapping<Exception, Sad> failureMapping) {
@@ -80,9 +80,9 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     /**
      * Provides a {@link HappyPath} view over a known {@link Happy} object.
      *
-     * @param happy The happy object to initiate the flow with
+     * @param happy   The happy object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
+     * @param <Sad>   The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is happy on the inside
      */
     static <Happy, Sad> HappyPath<Happy, Sad> happyPath(Happy happy) {
@@ -92,9 +92,9 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     /**
      * Provides a {@link HappyPath} view over a known {@link Sad} object.
      *
-     * @param sad The sad object to initiate the flow with
+     * @param sad     The sad object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
+     * @param <Sad>   The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is sad on the inside
      */
     static <Happy, Sad> HappyPath<Happy, Sad> sadPath(Sad sad) {
@@ -105,8 +105,8 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * Provides a {@link HappyPath} view over a known {@link Exception} object.
      *
      * @param technicalFailure The technical failure object to initiate the flow with
-     * @param <Happy> The type of happy object the resulting {@link HappyPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link HappyPath} may represent
+     * @param <Happy>          The type of happy object the resulting {@link HappyPath} may represent
+     * @param <Sad>            The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is a technical failure on the inside
      */
     static <Happy, Sad> HappyPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
@@ -116,7 +116,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     /**
      * If the underlying business case is happy, then apply the given action, otherwise do nothing to the underlying case.
      *
-     * @param action The action to apply to an existing happy case
+     * @param action     The action to apply to an existing happy case
      * @param <NewHappy> The type of happy object that will be present after the action is applied to an existing happy object
      * @return The result of applying the action to the existing happy path, if applicable
      */
@@ -125,7 +125,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
     /**
      * If the underlying business case is happy, then apply the given mapping, otherwise do nothing to the underlying case.
      *
-     * @param mapping The action to apply to an existing happy case
+     * @param mapping    The action to apply to an existing happy case
      * @param <NewHappy> The type of happy object that will be present after the mapping is applied to an existing happy object
      * @return The result of applying the mapping to the existing happy path, if applicable
      */

@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 /**
  * A {@link HappyCase} is a {@link BusinessCase} that is actually in a happy state.
- *
+ * <p>
  * {@inheritDoc}
  */
 class HappyCase<Happy, Sad> implements BusinessCase<Happy, Sad> {

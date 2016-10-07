@@ -28,19 +28,19 @@ import static io.github.theangrydev.businessflows.Mapping.identity;
  * a list of {@link Sad}, if there are any failures.
  *
  * @param <SadAggregate> The type that the list of {@link Sad} validation errors will be aggregated into
- *
- * {@inheritDoc}
+ *                       <p>
+ *                       {@inheritDoc}
  */
 public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happy, SadAggregate> {
 
     /**
      * Provides a {@link ValidationPath} view over a known {@link Happy} object.
      *
-     * @param happy The happy object to initiate the flow with
+     * @param happy               The happy object to initiate the flow with
      * @param sadAggregateMapping The list of {@link Sad} validation errors will be mapped to the {@link SadAggregate}
-     * @param <Happy> The type of happy object the resulting {@link ValidationPath} may contain
-     * @param <Sad> The type of validation errors the resulting {@link ValidationPath} may contain
-     * @param <SadAggregate> The type that the list of {@link Sad} validation errors will be aggregated into
+     * @param <Happy>             The type of happy object the resulting {@link ValidationPath} may contain
+     * @param <Sad>               The type of validation errors the resulting {@link ValidationPath} may contain
+     * @param <SadAggregate>      The type that the list of {@link Sad} validation errors will be aggregated into
      * @return A {@link ValidationPath} that is happy on the inside
      */
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validationPathInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping) {
@@ -50,9 +50,9 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
     /**
      * Provides a {@link ValidationPath} view over a known {@link Happy} object, aggregated into a list of {@link Sad}.
      *
-     * @param happy The happy object to initiate the flow with
+     * @param happy   The happy object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link ValidationPath} may contain
-     * @param <Sad> The type of validation errors the resulting {@link ValidationPath} may contain
+     * @param <Sad>   The type of validation errors the resulting {@link ValidationPath} may contain
      * @return A {@link ValidationPath} that is happy on the inside
      */
     static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validationPath(Happy happy) {
@@ -63,9 +63,9 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * Provides a {@link ValidationPath} view over a known {@link Happy} object.
      *
      * @param validationFailures The validation failures to initiate the flow with
-     * @param <Happy> The type of happy object the resulting {@link ValidationPath} may contain
-     * @param <Sad> The type of validation errors the resulting {@link ValidationPath} may contain
-     * @param <SadAggregate> The type that the list of {@link Sad} validation errors will be aggregated into
+     * @param <Happy>            The type of happy object the resulting {@link ValidationPath} may contain
+     * @param <Sad>              The type of validation errors the resulting {@link ValidationPath} may contain
+     * @param <SadAggregate>     The type that the list of {@link Sad} validation errors will be aggregated into
      * @return A {@link ValidationPath} that has failed validation
      */
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validationFailure(SadAggregate validationFailures) {
@@ -76,9 +76,9 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * Provides a {@link ValidationPath} view over a known {@link Exception} object.
      *
      * @param technicalFailure The technical failure to initiate the flow with
-     * @param <Happy> The type of happy object the resulting {@link ValidationPath} may contain
-     * @param <Sad> The type of validation errors the resulting {@link ValidationPath} may contain
-     * @param <SadAggregate> The type that the list of {@link Sad} validation errors will be aggregated into
+     * @param <Happy>          The type of happy object the resulting {@link ValidationPath} may contain
+     * @param <Sad>            The type of validation errors the resulting {@link ValidationPath} may contain
+     * @param <SadAggregate>   The type that the list of {@link Sad} validation errors will be aggregated into
      * @return A {@link ValidationPath} that is a technical failure
      */
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> technicalFailure(Exception technicalFailure) {
@@ -90,17 +90,17 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * All validators that fail will be accumulated into the {@link SadAggregate} result.
      * The first technical failure encountered will result in a technical failure overall.
      *
-     * @param happy The {@link Happy} object to validate
+     * @param happy               The {@link Happy} object to validate
      * @param sadAggregateMapping The list of {@link Sad} validation errors will be mapped to the {@link SadAggregate}
-     * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
-     * @param <Happy> The type of happy  object the resulting {@link ValidationPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link ValidationPath} may represent
-     * @param <SadAggregate> The type that the list of {@link Sad} validation errors will be aggregated into
+     * @param validators          Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
+     * @param <Happy>             The type of happy  object the resulting {@link ValidationPath} may represent
+     * @param <Sad>               The type of sad object the resulting {@link ValidationPath} may represent
+     * @param <SadAggregate>      The type that the list of {@link Sad} validation errors will be aggregated into
      * @return The result of applying all the validators
      */
-     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
-         ValidationPath<Happy, Sad, SadAggregate> happyPath = ValidationPath.validationPathInto(happy, sadAggregateMapping);
-         return happyPath.validateAll(validators);
+    static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
+        ValidationPath<Happy, Sad, SadAggregate> happyPath = ValidationPath.validationPathInto(happy, sadAggregateMapping);
+        return happyPath.validateAll(validators);
     }
 
     /**
@@ -108,10 +108,10 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * All validators that fail will be accumulated into a list of {@link Sad} results.
      * The first technical failure encountered will result in a technical failure overall.
      *
-     * @param happy The {@link Happy} object to validate
+     * @param happy      The {@link Happy} object to validate
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
-     * @param <Happy> The type of happy  object the resulting {@link ValidationPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link ValidationPath} may represent
+     * @param <Happy>    The type of happy  object the resulting {@link ValidationPath} may represent
+     * @param <Sad>      The type of sad object the resulting {@link ValidationPath} may represent
      * @return The result of applying all the validators
      */
     static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validateAll(Happy happy, List<? extends Validator<Happy, Sad>> validators) {
@@ -123,12 +123,12 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * All validators that fail will be accumulated into the {@link SadAggregate} result.
      * The first technical failure encountered will result in a technical failure overall.
      *
-     * @param happy The {@link Happy} object to validate
+     * @param happy               The {@link Happy} object to validate
      * @param sadAggregateMapping The list of {@link Sad} validation errors will be mapped to the {@link SadAggregate}
-     * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
-     * @param <Happy> The type of happy  object the resulting {@link ValidationPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link ValidationPath} may represent
-     * @param <SadAggregate> The type that the list of {@link Sad} validation errors will be aggregated into
+     * @param validators          Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
+     * @param <Happy>             The type of happy  object the resulting {@link ValidationPath} may represent
+     * @param <Sad>               The type of sad object the resulting {@link ValidationPath} may represent
+     * @param <SadAggregate>      The type that the list of {@link Sad} validation errors will be aggregated into
      * @return The result of applying all the validators
      */
     @SafeVarargs
@@ -142,10 +142,10 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * All validators that fail will be accumulated into a list of {@link Sad} results.
      * The first technical failure encountered will result in a technical failure overall.
      *
-     * @param happy The {@link Happy} object to validate
+     * @param happy      The {@link Happy} object to validate
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
-     * @param <Happy> The type of happy  object the resulting {@link ValidationPath} may represent
-     * @param <Sad> The type of sad object the resulting {@link ValidationPath} may represent
+     * @param <Happy>    The type of happy  object the resulting {@link ValidationPath} may represent
+     * @param <Sad>      The type of sad object the resulting {@link ValidationPath} may represent
      * @return The result of applying all the validators
      */
     @SafeVarargs
@@ -165,12 +165,12 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
     /**
      * Perform a subsequent round of validation, which will take place if the previous one succeeded.
      * This can be useful when you want e.g. expensive validators to run after cheap ones, or if you want to group validators together.
-     *
+     * <p>
      * This method changes the {@link SadAggregate} mapping. This can be useful for e.g. rounds of validation that are
      * aggregated with different messages such as "Missing: A, B" in one round and "Invalid: A, B"  in another round.
      *
      * @param sadAggregateMapping The list of {@link Sad} validation errors will be mapped to the {@link SadAggregate}
-     * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
+     * @param validators          Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
      * @return The result of applying all the validators
      */
     ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators);
@@ -179,8 +179,8 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * Helper method to turn an array of {@link Validator} into a list of {@link Validator}.
      *
      * @param validators The validators
-     * @param <Happy> The type of happy object the list of {@link Validator} can validate
-     * @param <Sad> The type of validation error the list of {@link Validator} can produce
+     * @param <Happy>    The type of happy object the list of {@link Validator} can validate
+     * @param <Sad>      The type of validation error the list of {@link Validator} can produce
      * @return A list of {@link Validator}
      */
     @SafeVarargs

@@ -21,7 +21,7 @@ package io.github.theangrydev.businessflows;
  * A {@link Validator} for a {@link Field} of a {@link Happy} object.
  *
  * @param <Happy> The type that contains the {@link Field}
- * @param <Sad> The type of validation failure
+ * @param <Sad>   The type of validation failure
  * @param <Field> The type of the field to validate
  */
 public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> {
@@ -38,9 +38,9 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      *
      * @param fieldExtractor Extracts the {@link Field} from the {@link Happy}
      * @param fieldValidator The {@link Validator} will validate the {@link Field}, possibly producing a {@link Sad} failure
-     * @param <Happy> The type that contains the {@link Field}
-     * @param <Sad> The type of validation failure
-     * @param <Field> The type of the field to validate
+     * @param <Happy>        The type that contains the {@link Field}
+     * @param <Sad>          The type of validation failure
+     * @param <Field>        The type of the field to validate
      * @return The validator
      */
     public static <Happy, Sad, Field> FieldValidator<Happy, Sad, Field> fieldValidator(Mapping<Happy, Field> fieldExtractor, Validator<Field, Sad> fieldValidator) {

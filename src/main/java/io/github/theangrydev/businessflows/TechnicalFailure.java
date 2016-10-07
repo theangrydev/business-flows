@@ -19,7 +19,7 @@ package io.github.theangrydev.businessflows;
 
 /**
  * A {@link TechnicalFailure} is a {@link BusinessFlow} that is biased towards the result being an {@link Exception}.
- *
+ * <p>
  * {@inheritDoc}
  */
 public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Exception> {
@@ -28,8 +28,8 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, E
      * Provides a {@link TechnicalFailure} view over a known {@link Exception} object.
      *
      * @param technicalFailure The technical failure to initiate the flow with
-     * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
-     * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
+     * @param <Happy>          The type of happy object the resulting {@link TechnicalFailure} may represent
+     * @param <Sad>            The type of sad object the resulting {@link TechnicalFailure} may represent
      * @return A {@link TechnicalFailure} that is a technical failure on the inside
      */
     static <Happy, Sad> TechnicalFailure<Happy, Sad> technicalFailure(Exception technicalFailure) {
@@ -39,9 +39,9 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, E
     /**
      * Provides a {@link TechnicalFailure} view over a known {@link Sad} object.
      *
-     * @param sad The sad object to initiate the flow with
+     * @param sad     The sad object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
-     * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
+     * @param <Sad>   The type of sad object the resulting {@link TechnicalFailure} may represent
      * @return A {@link TechnicalFailure} that is sad on the inside
      */
     static <Happy, Sad> TechnicalFailure<Happy, Sad> sadPath(Sad sad) {
@@ -51,9 +51,9 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, E
     /**
      * Provides a {@link TechnicalFailure} view over a known {@link Happy} object.
      *
-     * @param happy The happy object to initiate the flow with
+     * @param happy   The happy object to initiate the flow with
      * @param <Happy> The type of happy object the resulting {@link TechnicalFailure} may represent
-     * @param <Sad> The type of sad object the resulting {@link TechnicalFailure} may represent
+     * @param <Sad>   The type of sad object the resulting {@link TechnicalFailure} may represent
      * @return A {@link TechnicalFailure} that is happy on the inside
      */
     static <Happy, Sad> TechnicalFailure<Happy, Sad> happyPath(Happy happy) {

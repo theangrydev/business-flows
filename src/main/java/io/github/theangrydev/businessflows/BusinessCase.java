@@ -25,7 +25,7 @@ import static java.lang.String.format;
  * A {@link BusinessCase} is either a {@link HappyCase}, a {@link SadCase} or a {@link TechnicalFailure}.
  *
  * @param <Happy> The type of happy object this case may represent
- * @param <Sad> The type of sad object this case may represent
+ * @param <Sad>   The type of sad object this case may represent
  */
 interface BusinessCase<Happy, Sad> {
 
@@ -41,10 +41,10 @@ interface BusinessCase<Happy, Sad> {
     /**
      * Join to a common result type. No matter what the {@link BusinessCase} actually is, the result type is the same.
      *
-     * @param happyJoiner What to do if this is a {@link HappyCase}
-     * @param sadJoiner What to do if this is a {@link SadCase}
+     * @param happyJoiner            What to do if this is a {@link HappyCase}
+     * @param sadJoiner              What to do if this is a {@link SadCase}
      * @param technicalFailureJoiner What to do if this is a {@link TechnicalFailureCase}
-     * @param <Result> The type of the result
+     * @param <Result>               The type of the result
      * @return The result after applying the joiner that corresponds to the underlying business case
      */
     <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner);
@@ -54,8 +54,8 @@ interface BusinessCase<Happy, Sad> {
      * {@link TechnicalFailureCase}, then the underlying exception will be thrown instead of joined.
      *
      * @param happyJoiner What to do if this is a {@link HappyCase}
-     * @param sadJoiner What to do if this is a {@link SadCase}
-     * @param <Result> The type of the result
+     * @param sadJoiner   What to do if this is a {@link SadCase}
+     * @param <Result>    The type of the result
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws Exception If this is a {@link TechnicalFailureCase}.
      */
@@ -66,8 +66,8 @@ interface BusinessCase<Happy, Sad> {
      * then the underlying exception will be thrown as a {@link RuntimeException} instead of joined.
      *
      * @param happyJoiner What to do if the underlying business case is a happy case
-     * @param sadJoiner What to do if the underlying business case is a sad case
-     * @param <Result> The type of the result
+     * @param sadJoiner   What to do if the underlying business case is a sad case
+     * @param <Result>    The type of the result
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws IllegalStateException If this is a {@link TechnicalFailureCase} or there is a failure when joining.
      */
