@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.org/theangrydev/business-flows.svg?branch=master)](https://travis-ci.org/theangrydev/business-flows)
 [![codecov](https://codecov.io/gh/theangrydev/business-flows/branch/master/graph/badge.svg)](https://codecov.io/gh/theangrydev/business-flows)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e6bc8f1d30bf43fd888014fcfa06302d)](https://www.codacy.com/app/liam-williams/business-flows?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=theangrydev/business-flows&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/6271d27e-7190-4e82-a6f5-660780e740f2)](https://codebeat.co/projects/github-com-theangrydev-business-flows)
 
 # business-flows
