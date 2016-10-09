@@ -1,8 +1,10 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.theangrydev/business-flows/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/io.github.theangrydev/business-flows)
-[![Build Status](https://travis-ci.org/theangrydev/business-flows.svg?branch=master)](https://travis-ci.org/theangrydev/business-flows)
-[![codecov](https://codecov.io/gh/theangrydev/business-flows/branch/master/graph/badge.svg)](https://codecov.io/gh/theangrydev/business-flows)
 [![Javadoc](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows.svg?label=javadoc)](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows)
 [![Gitter](https://badges.gitter.im/business-flows/Lobby.svg)](https://gitter.im/business-flows/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+[![Build Status](https://travis-ci.org/theangrydev/business-flows.svg?branch=master)](https://travis-ci.org/theangrydev/business-flows)
+[![codecov](https://codecov.io/gh/theangrydev/business-flows/branch/master/graph/badge.svg)](https://codecov.io/gh/theangrydev/business-flows)
+[![codebeat badge](https://codebeat.co/badges/6271d27e-7190-4e82-a6f5-660780e740f2)](https://codebeat.co/projects/github-com-theangrydev-business-flows)
 
 # business-flows
 A combination of the Try monad and the Either monad, to help tame complex business flows
