@@ -23,9 +23,8 @@ package io.github.theangrydev.businessflows;
  *
  * @param <Happy> The type of happy object this {@link BusinessFlow} may represent
  * @param <Sad>   The type of sad object this {@link BusinessFlow} may represent
- * @param <Bias>  The type of bias (happy, sad or technical failure) this {@link BusinessFlow} has
  */
-public interface BusinessFlow<Happy, Sad, Bias> extends BusinessCase<Happy, Sad>, WithOptional<Bias> {
+public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
 
     /**
      * A {@link TechnicalFailure} view of the {@link BusinessFlow}.

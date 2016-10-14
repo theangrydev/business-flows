@@ -47,7 +47,7 @@ class HappyCaseHappyPath<Happy, Sad> extends HappyCase<Happy, Sad> implements Ha
     }
 
     @Override
-    public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action) {
+    public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, ? extends BusinessFlow<NewHappy, Sad>> action) {
         try {
             return action.map(happy).ifHappy();
         } catch (Exception e) {

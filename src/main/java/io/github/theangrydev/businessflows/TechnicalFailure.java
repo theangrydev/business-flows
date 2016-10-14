@@ -22,7 +22,7 @@ package io.github.theangrydev.businessflows;
  * <p>
  * {@inheritDoc}
  */
-public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad, Exception> {
+public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Exception> {
 
     /**
      * Provides a {@link TechnicalFailure} view over a known {@link Exception} object.

@@ -22,7 +22,7 @@ package io.github.theangrydev.businessflows;
  * <p>
  * {@inheritDoc}
  */
-public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
+public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Sad> {
 
     /**
      * Provides a {@link SadPath} view over a known {@link Sad} object.
@@ -67,7 +67,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Sad> {
      * @param <NewSad> The type of sad object that will be present after the action is applied to an existing sad object
      * @return The result of applying the action to the existing sad path, if applicable
      */
-    <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, SadPath<Happy, NewSad>> action);
+    <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, ? extends BusinessFlow<Happy, NewSad>> action);
 
     /**
      * If the underlying business case is sad, then apply the given mapping, otherwise do nothing to the underlying case.

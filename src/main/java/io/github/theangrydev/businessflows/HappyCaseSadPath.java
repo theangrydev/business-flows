@@ -47,7 +47,7 @@ class HappyCaseSadPath<Happy, Sad> extends HappyCase<Happy, Sad> implements SadP
 
     @SuppressWarnings("unchecked") // Only the Sad changes and it is not present so all that changes is the types
     @Override
-    public <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, SadPath<Happy, NewSad>> action) {
+    public <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, ? extends BusinessFlow<Happy, NewSad>> action) {
         return (SadPath<Happy, NewSad>) this;
     }
 

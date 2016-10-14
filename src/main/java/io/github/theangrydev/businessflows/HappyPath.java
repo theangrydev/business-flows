@@ -25,7 +25,7 @@ import java.util.List;
  * <p>
  * {@inheritDoc}
  */
-public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
+public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Happy> {
 
     /**
      * Attempt an action that produces a {@link HappyPath}.
@@ -123,7 +123,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad, Happy> {
      * @param <NewHappy> The type of happy object that will be present after the action is applied to an existing happy object
      * @return The result of applying the action to the existing happy path, if applicable
      */
-    <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action);
+    <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, ? extends BusinessFlow<NewHappy, Sad>> action);
 
     /**
      * If the underlying business case is happy, then apply the given mapping, otherwise do nothing to the underlying case.

@@ -46,9 +46,9 @@ class SadCaseSadPath<Happy, Sad> extends SadCase<Happy, Sad> implements SadPath<
     }
 
     @Override
-    public <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, SadPath<Happy, NewSad>> action) {
+    public <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, ? extends BusinessFlow<Happy, NewSad>> action) {
         try {
-            return action.map(sad);
+            return action.map(sad).ifSad();
         } catch (Exception e) {
             return SadPath.technicalFailure(e);
         }

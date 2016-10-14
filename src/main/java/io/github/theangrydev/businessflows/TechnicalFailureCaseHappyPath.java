@@ -43,7 +43,7 @@ class TechnicalFailureCaseHappyPath<Happy, Sad> extends TechnicalFailureCase<Hap
 
     @SuppressWarnings("unchecked") // Only the Happy changes and it is not present so all that changes is the types
     @Override
-    public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, BusinessFlow<NewHappy, Sad, ?>> action) {
+    public <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, ? extends BusinessFlow<NewHappy, Sad>> action) {
         return (HappyPath<NewHappy, Sad>) this;
     }
 
