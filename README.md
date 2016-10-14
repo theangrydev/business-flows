@@ -26,11 +26,15 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>7.6.0</version>
+    <version>8.0.0</version>
 </dependency>
 ```
 
 ## Releases
+### 8.0.0
+* Removed the `Bias` parameter from `BusinessFlow` to make it more viable to use as an unbiased return type, instead of having to wildcard the types as `<Happy, Sad, ?>`. This is a breaking change.
+* Made the `then` methods accept `? extends BusinessFlow`.
+
 ### 7.6.0
 * Exposed some methods on `PotentialFailure` to make it easier to test when it is the return type of a method. This involved extracting a `WithOptional` interface that is used by `PotentialFailure` and `BusinessFlow`.
 
