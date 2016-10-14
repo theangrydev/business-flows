@@ -29,6 +29,7 @@ import static java.lang.String.format;
  *
  * @param <Content> The type of content that may be held
  */
+@FunctionalInterface
 public interface WithOptional<Content> {
 
     /**
