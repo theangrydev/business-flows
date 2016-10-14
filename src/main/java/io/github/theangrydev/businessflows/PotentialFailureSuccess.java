@@ -17,20 +17,27 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.Optional;
+
 /**
  * A {@link PotentialFailureSuccess} is a {@link PotentialFailure} that is actually a success.
  * <p>
  * {@inheritDoc}
  */
-class PotentialFailureSuccess<Sad> extends PotentialFailure<Sad> {
+class PotentialFailureSuccess<Sad> implements PotentialFailure<Sad> {
 
     @Override
-    <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy) {
+    public <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy) {
         return HappyPath.happyPath(happy);
     }
 
     @Override
-    void ifSad(Peek<Sad> peek) throws Exception {
-        // Nothing to do
+    public Optional<Sad> toOptional() {
+        return Optional.empty();
+    }
+
+    @Override
+    public String toString() {
+        return "Success";
     }
 }

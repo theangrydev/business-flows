@@ -51,7 +51,7 @@ public class BusinessFlowsTest implements WithAssertions {
         Sad sad = new Sad();
         assertThatThrownBy(() -> SadPath.sadPath(sad).ifHappy().get())
             .isInstanceOf(IllegalStateException.class)
-            .hasMessage(format("Not present. Business case is: 'Sad: %s'.", sad));
+            .hasMessage(format("Not present. This is: 'Sad: %s'.", sad));
     }
 
     @Test

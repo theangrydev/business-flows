@@ -56,7 +56,7 @@ class HappyCaseValidationPath<Happy, Sad, SadAggregate> extends HappyCaseHappyPa
     private List<Sad> validationFailures(List<? extends Validator<Happy, Sad>> validators) throws Exception {
         List<Sad> validationFailures = new ArrayList<>(validators.size());
         for (Validator<Happy, Sad> validator : validators) {
-            validator.attempt(happy).ifSad(validationFailures::add);
+            validator.attempt(happy).ifPresent(validationFailures::add);
         }
         return validationFailures;
     }

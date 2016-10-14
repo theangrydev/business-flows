@@ -17,11 +17,6 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import static java.lang.String.format;
-
 /**
  * A {@link BusinessFlow} is a biased view of a {@link BusinessCase}.
  * This is the base {@link BusinessFlow} that contains operations that are common to all the biased views.
@@ -30,46 +25,7 @@ import static java.lang.String.format;
  * @param <Sad>   The type of sad object this {@link BusinessFlow} may represent
  * @param <Bias>  The type of bias (happy, sad or technical failure) this {@link BusinessFlow} has
  */
-public interface BusinessFlow<Happy, Sad, Bias> extends BusinessCase<Happy, Sad> {
-
-    /**
-     * @return A view of the underlying business case an {@link Optional} in terms of the {@link Bias}
-     */
-    Optional<Bias> toOptional();
-
-    /**
-     * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else an {@link IllegalStateException}
-     * @throws IllegalStateException If the underlying business case is not the {@link Bias}
-     */
-    default Bias get() {
-        return orElseThrow(() -> new IllegalStateException(format("Not present. Business case is: '%s'.", this)));
-    }
-
-    /**
-     * @param alternative The result if the underlying business case is not the {@link Bias}
-     * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else the given alternative
-     */
-    default Bias orElse(Bias alternative) {
-        return toOptional().orElse(alternative);
-    }
-
-    /**
-     * @param alternativeSupplier The supplier of the alternative result if the underlying business case is not the {@link Bias}
-     * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else the given alternative
-     */
-    default Bias orElseGet(Supplier<Bias> alternativeSupplier) {
-        return toOptional().orElseGet(alternativeSupplier);
-    }
-
-    /**
-     * @param exceptionSupplier The supplier of the exception to be thrown if the underlying business case is not the {@link Bias}
-     * @param <X>               The type of {@link Exception} that will be thrown if the underlying business case is not the {@link Bias}
-     * @return If the underlying business case is the {@link Bias} then the {@link Bias}, else the given alternative
-     * @throws X If the underlying business case is not the {@link Bias}
-     */
-    default <X extends Exception> Bias orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        return toOptional().orElseThrow(exceptionSupplier);
-    }
+public interface BusinessFlow<Happy, Sad, Bias> extends BusinessCase<Happy, Sad>, WithOptional<Bias> {
 
     /**
      * A {@link TechnicalFailure} view of the {@link BusinessFlow}.

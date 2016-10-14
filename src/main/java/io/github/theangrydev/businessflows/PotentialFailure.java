@@ -22,7 +22,7 @@ package io.github.theangrydev.businessflows;
  *
  * @param <Sad> The type of sad object that represents a failure
  */
-public abstract class PotentialFailure<Sad> {
+public interface PotentialFailure<Sad> extends WithOptional<Sad> {
 
     /**
      * Construct a known failure that is mapped to a {@link Sad} object.
@@ -31,7 +31,7 @@ public abstract class PotentialFailure<Sad> {
      * @param <Sad> The type of sad object that represents a failure
      * @return A {@link PotentialFailure} that represents a failure
      */
-    public static <Sad> PotentialFailure<Sad> failure(Sad sad) {
+    static <Sad> PotentialFailure<Sad> failure(Sad sad) {
         return new PotentialFailureFailure<>(sad);
     }
 
@@ -41,7 +41,7 @@ public abstract class PotentialFailure<Sad> {
      * @param <Sad> The type of sad object that represents a failure
      * @return A {@link PotentialFailure} that represents a success
      */
-    public static <Sad> PotentialFailure<Sad> success() {
+    static <Sad> PotentialFailure<Sad> success() {
         return new PotentialFailureSuccess<>();
     }
 
@@ -53,13 +53,5 @@ public abstract class PotentialFailure<Sad> {
      * @return A {@link HappyPath} that is happy if the {@link PotentialFailure} is a {@link PotentialFailure#success()}
      * or sad inside if the {@link PotentialFailure} is a {@link PotentialFailure#failure(Object)}
      */
-    abstract <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy);
-
-    /**
-     * Take a look at the sad case (if there really is one).
-     *
-     * @param peek What to do if the underlying business case is sad
-     * @throws Exception If the {@link Peek} throws one
-     */
-    abstract void ifSad(Peek<Sad> peek) throws Exception;
+    <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy);
 }

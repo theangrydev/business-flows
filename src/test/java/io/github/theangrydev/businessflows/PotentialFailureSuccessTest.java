@@ -17,33 +17,15 @@
  */
 package io.github.theangrydev.businessflows;
 
-import java.util.Optional;
+import org.assertj.core.api.WithAssertions;
+import org.junit.Test;
 
-/**
- * A {@link PotentialFailureFailure} is a {@link PotentialFailure} that is actually a failure.
- * <p>
- * {@inheritDoc}
- */
-class PotentialFailureFailure<Sad> implements PotentialFailure<Sad> {
+public class PotentialFailureSuccessTest implements WithAssertions {
 
-    private final Sad sad;
+    @Test
+    public void toStringIsReadable() {
+        PotentialFailureSuccess<Object> potentialFailureSuccess = new PotentialFailureSuccess<>();
 
-    PotentialFailureFailure(Sad sad) {
-        this.sad = sad;
-    }
-
-    @Override
-    public <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy) {
-        return HappyPath.sadPath(sad);
-    }
-
-    @Override
-    public Optional<Sad> toOptional() {
-        return Optional.of(sad);
-    }
-
-    @Override
-    public String toString() {
-        return "Failure: " + sad;
+        assertThat(potentialFailureSuccess).hasToString("Success");
     }
 }
