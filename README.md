@@ -26,11 +26,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>7.5.0</version>
+    <version>7.6.0</version>
 </dependency>
 ```
 
 ## Releases
+### 7.6.0
+* Exposed some methods on `PotentialFailure` to make it easier to test when it is the return type of a method. This involved extracting a `WithOptional` interface that is used by `PotentialFailure` and `BusinessFlow`.
+
 ### 7.5.0
 * Added helper method `HappyPath.actions` that turns an array of `ActionThatMightFail` into a list. This is a workaround for the fact that interfaces can't have `@SafeVarargs` and so some methods accept a list when they would ideally accept varargs
 
