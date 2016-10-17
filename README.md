@@ -9,6 +9,8 @@
 [![Quality Gate](https://sonarqube.com/api/badges/gate?key=io.github.theangrydev:business-flows)](https://sonarqube.com/dashboard/index/io.github.theangrydev:business-flows)
 
 # business-flows
+
+[![Join the chat at https://gitter.im/business-flows/Lobby](https://badges.gitter.im/business-flows/Lobby.svg)](https://gitter.im/business-flows/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A combination of the Try monad and the Either monad, to help tame complex business flows
 
 ## Frequently asked questions
