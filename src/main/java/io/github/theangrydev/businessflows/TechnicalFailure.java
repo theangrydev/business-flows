@@ -122,6 +122,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * Throw the technical failure, if it is present.
      *
      * @throws Exception if the underlying business case is a technical failure
+     * @return This {@link TechnicalFailure} if there is not an {@link Exception} to throw
      */
     TechnicalFailure<Happy, Sad> throwIt() throws Exception;
 
@@ -129,6 +130,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * Throw the technical failure, if it is present, wrapped in a {@link RuntimeException}.
      *
      * @throws RuntimeException if the underlying business case is a technical failure
+     * @return This {@link TechnicalFailure} if there is not an {@link RuntimeException} to throw
      */
     TechnicalFailure<Happy, Sad> throwItAsARuntimeException() throws RuntimeException;
 
