@@ -31,6 +31,9 @@ There is no point in using this if your flows are "all or nothing". If there are
 ```
 
 ## Releases
+### 8.1.0
+* `throwItAsARuntimeException` and `throwIt` should not be void (closes [#5](https://github.com/theangrydev/business-flows/issues/5))
+
 ### 8.0.0
 * Removed the `Bias` parameter from `BusinessFlow` to make it more viable to use as an unbiased return type, instead of having to wildcard the types as `<Happy, Sad, ?>`. This is a breaking change.
 * Made the `then` methods accept `? extends BusinessFlow`.
