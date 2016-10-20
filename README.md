@@ -26,12 +26,12 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>8.1.0</version>
+    <version>8.1.1</version>
 </dependency>
 ```
 
 ## Releases
-### 8.1.0
+### 8.1.1
 * `throwItAsARuntimeException` and `throwIt` should not be void (closes [#5](https://github.com/theangrydev/business-flows/issues/5))
 
 ### 8.0.0
