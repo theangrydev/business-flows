@@ -26,7 +26,7 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>8.0.0</version>
+    <version>8.1.0</version>
 </dependency>
 ```
 
