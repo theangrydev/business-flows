@@ -31,13 +31,13 @@ public class HappyCaseTechnicalFailureTest {
     private final HappyCaseTechnicalFailure<Happy, Object> happyCaseTechnicalFailure = new HappyCaseTechnicalFailure<>(happy);
 
     @Test
-    public void throwItDoesNothing() throws Exception {
-        happyCaseTechnicalFailure.throwIt();
+    public void throwItReturnsThis() throws Exception {
+        assertThat(happyCaseTechnicalFailure.throwIt()).isSameAs(happyCaseTechnicalFailure);
     }
 
     @Test
-    public void throwItAsARuntimeExceptionDoesNothing()  {
-        happyCaseTechnicalFailure.throwItAsARuntimeException();
+    public void throwItAsARuntimeExceptionReturnsThis()  {
+        assertThat(happyCaseTechnicalFailure.throwItAsARuntimeException()).isSameAs(happyCaseTechnicalFailure);
     }
 
     @Test

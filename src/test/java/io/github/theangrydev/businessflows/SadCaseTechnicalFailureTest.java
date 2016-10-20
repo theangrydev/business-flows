@@ -32,13 +32,13 @@ public class SadCaseTechnicalFailureTest {
 
 
     @Test
-    public void throwItDoesNothing() throws Exception {
-        sadCaseTechnicalFailure.throwIt();
+    public void throwItReturnsThis() throws Exception {
+        assertThat(sadCaseTechnicalFailure.throwIt()).isSameAs(sadCaseTechnicalFailure);
     }
 
     @Test
-    public void throwItAsARuntimeExceptionDoesNothing()  {
-        sadCaseTechnicalFailure.throwItAsARuntimeException();
+    public void throwItAsARuntimeExceptionReturnsThis()  {
+        assertThat(sadCaseTechnicalFailure.throwItAsARuntimeException()).isSameAs(sadCaseTechnicalFailure);
     }
 
     @Test

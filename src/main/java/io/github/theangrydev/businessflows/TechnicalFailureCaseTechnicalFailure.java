@@ -105,12 +105,12 @@ class TechnicalFailureCaseTechnicalFailure<Happy, Sad> extends TechnicalFailureC
     }
 
     @Override
-    public void throwIt() throws Exception {
+    public TechnicalFailure<Happy, Sad> throwIt() throws Exception {
         throw technicalFailure;
     }
 
     @Override
-    public void throwItAsARuntimeException() throws RuntimeException {
+    public TechnicalFailure<Happy, Sad> throwItAsARuntimeException() throws RuntimeException {
         throw new RuntimeException(technicalFailure);
     }
 

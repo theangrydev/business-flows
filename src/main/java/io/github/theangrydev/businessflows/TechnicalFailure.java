@@ -123,14 +123,14 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      *
      * @throws Exception if the underlying business case is a technical failure
      */
-    void throwIt() throws Exception;
+    TechnicalFailure<Happy, Sad> throwIt() throws Exception;
 
     /**
      * Throw the technical failure, if it is present, wrapped in a {@link RuntimeException}.
      *
      * @throws RuntimeException if the underlying business case is a technical failure
      */
-    void throwItAsARuntimeException() throws RuntimeException;
+    TechnicalFailure<Happy, Sad> throwItAsARuntimeException() throws RuntimeException;
 
     /**
      * {@inheritDoc}
