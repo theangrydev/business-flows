@@ -11,7 +11,7 @@
 # business-flows
 A combination of the Try monad and the Either monad, to help tame complex business flows
 
-[Example Usage](https://github.com/theangrydev/fluent-bdd/blob/master/yatspec-extensions/src/test/java/acceptance/ExampleTest.java) (thanks to @tjheslin1)
+[Example Usage](https://github.com/theangrydev/fluent-bdd/blob/master/yatspec-extensions/src/test/java/acceptance/ExampleTest.java) (thanks [@tjheslin1](https://github.com/tjheslin1))
 
 ## Frequently asked questions
 ### What is it?
