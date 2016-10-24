@@ -11,6 +11,8 @@
 # business-flows
 A combination of the Try monad and the Either monad, to help tame complex business flows
 
+[Example Usage](https://github.com/theangrydev/fluent-bdd/blob/master/yatspec-extensions/src/test/java/acceptance/ExampleTest.java) (thanks to @tjheslin1)
+
 ## Frequently asked questions
 ### What is it?
 A small Java 8 library that can help you to model a 3-part (happy/sad/exception) business flow. No more try-catch blocks if you don't want to use them!
