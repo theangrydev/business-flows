@@ -78,6 +78,23 @@ public class ContextTest implements WithAssertions {
         }
     }
 
+    @Test
+    public void exitEarlyContext() {
+        Foo originalFoo = new Foo();
+        BusinessFlow<Foo, Object> flow1 = HappyPath.happyPath(originalFoo);
+        assertThat(flow1.isHappy()).isTrue();
+        if (flow1.isSad()) {
+            flow1.getSad();
+        }
+        assertThat(flow1.getHappy()).isEqualTo(originalFoo);
+
+        Bar originalBar = new Bar();
+        BusinessFlow<Bar, Object> flow2 = SadPath.sadPath(originalBar);
+        assertThat(flow2.isSad()).isTrue();
+        if (flow2.isSad()) {
+            assertThat(flow2.getSad()).isEqualTo(originalBar);
+        }
+    }
 
     @Test
     public void passingAlongAContext() {

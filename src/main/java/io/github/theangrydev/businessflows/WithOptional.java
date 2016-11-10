@@ -79,4 +79,11 @@ public interface WithOptional<Content> {
     default <X extends Exception> Content orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         return toOptional().orElseThrow(exceptionSupplier);
     }
+
+    /**
+     * @return true if the {@link Content} is present, false otherwise.
+     */
+    default boolean isPresent() {
+        return toOptional().isPresent();
+    }
 }

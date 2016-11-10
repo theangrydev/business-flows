@@ -51,4 +51,34 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
      * @return A view of the underlying business case as a {@link HappyPath}
      */
     HappyPath<Happy, Sad> ifHappy();
+
+    /**
+     * @return true if the underlying business case is a {@link HappyCase}, false otherwise
+     */
+    default boolean isHappy() {
+        return ifHappy().isPresent();
+    }
+
+    /**
+     * @return true if the underlying business case is a {@link SadCase}, false otherwise
+     */
+    default boolean isSad() {
+        return ifSad().isPresent();
+    }
+
+    /**
+     * @return If the underlying business case is a {@link HappyCase} then the {@link Happy} object, else an {@link IllegalStateException}
+     * @throws IllegalStateException If the underlying business case is not a {@link HappyCase}
+     */
+    default Happy getHappy() {
+        return ifHappy().get();
+    }
+
+    /**
+     * @return If the underlying business case is a {@link SadCase} then the {@link Sad} object, else an {@link IllegalStateException}
+     * @throws IllegalStateException If the underlying business case is not a {@link SadCase}
+     */
+    default Sad getSad() {
+        return ifSad().get();
+    }
 }
