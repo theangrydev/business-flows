@@ -9,6 +9,7 @@
 [![Quality Gate](https://sonarqube.com/api/badges/gate?key=io.github.theangrydev:business-flows)](https://sonarqube.com/dashboard/index/io.github.theangrydev:business-flows)
 
 # business-flows
+
 A combination of the Try monad and the Either monad, to help tame complex business flows
 
 [Example Usage](https://github.com/tjheslin1/DogFoster/blob/master/src/main/java/io/github/tjheslin1/DogShelter.java) (thanks [@tjheslin1](https://github.com/tjheslin1))
@@ -28,11 +29,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>8.1.1</version>
+    <version>8.2.0</version>
 </dependency>
 ```
 
 ## Releases
+### 8.2.0
+* Add methods to help with multiple return style: `isHappy`, `isSad`, `getHappy` and `getSad` (closes [#10](https://github.com/theangrydev/business-flows/issues/10))
+
 ### 8.1.1
 * `throwItAsARuntimeException` and `throwIt` should not be void (closes [#5](https://github.com/theangrydev/business-flows/issues/5))
 
