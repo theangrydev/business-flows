@@ -107,6 +107,25 @@ public class TechnicalFailureTest {
     }
 
     @Test
+    public void consumeSad() {
+        IllegalStateException failure = new IllegalStateException();
+
+        AtomicReference<Object> capture = new AtomicReference<>();
+        TechnicalFailure.technicalFailure(failure)
+                .consume(capture::set, capture::set, capture::set);
+
+        assertThat(capture.get()).isEqualTo(failure);
+    }
+
+    @Test
+    public void consumeSadThatMightBlowUp() throws Exception {
+        IllegalStateException failure = new IllegalStateException();
+
+        assertThatThrownBy(() -> TechnicalFailure.technicalFailure(failure).consumeOrThrow(null, null))
+            .isEqualTo(failure);
+    }
+
+    @Test
     public void joinTechnicalFailure() {
         IllegalStateException failure = new IllegalStateException();
 
@@ -123,7 +142,7 @@ public class TechnicalFailureTest {
         assertThatThrownBy(() -> technicalFailureJoinThatWrapsAndThrows(failure))
                 .hasCause(failure)
                 .hasMessageStartingWith("Exception caught when joining. Business case is: 'Technical Failure: java.lang.Exception: message" + System.lineSeparator() +
-                        "\tat io.github.theangrydev.businessflows.TechnicalFailureTest.joinTechnicalFailureWrapsFailureAndThrows(TechnicalFailureTest.java:121");
+                        "\tat io.github.theangrydev.businessflows.TechnicalFailureTest.joinTechnicalFailureWrapsFailureAndThrows(TechnicalFailureTest.java");
     }
 
     @Test

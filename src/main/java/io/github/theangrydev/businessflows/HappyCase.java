@@ -17,6 +17,7 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -49,6 +50,20 @@ class HappyCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
     @Override
     public <Result> Result joinOrThrow(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception {
         return happyJoiner.map(happy);
+    }
+
+    @Override
+    public void consumeOrThrow(Peek<Happy> happyConsumer, Peek<Sad> sadConsumer) throws Exception {
+        happyConsumer.peek(happy);
+    }
+
+    @Override
+    public void consume(Peek<Happy> happyConsumer, Peek<Sad> sadConsumer, Consumer<Exception> technicalFailureConsumer) {
+        try {
+            happyConsumer.peek(happy);
+        } catch (Exception technicalFailure) {
+            technicalFailureConsumer.accept(technicalFailure);
+        }
     }
 
     @Override

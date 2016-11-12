@@ -17,6 +17,7 @@
  */
 package io.github.theangrydev.businessflows;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static java.lang.String.format;
@@ -62,6 +63,25 @@ interface BusinessCase<Happy, Sad> {
     <Result> Result joinOrThrow(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception;
 
     /**
+     * Same as {@link #consume(Peek, Peek, Consumer)} but if the {@link BusinessCase} is a
+     * {@link TechnicalFailureCase}, then the underlying exception will be thrown instead of joined.
+     *
+     * @param happyConsumer What to do if this is a {@link HappyCase}
+     * @param sadConsumer   What to do if this is a {@link SadCase}
+     * @throws Exception If this is a {@link TechnicalFailureCase}.
+     */
+    void consumeOrThrow(Peek<Happy> happyConsumer, Peek<Sad> sadConsumer) throws Exception;
+
+    /**
+     * Consume the underlying {@link BusinessCase}.
+     *
+     * @param happyConsumer            What to do if this is a {@link HappyCase}
+     * @param sadConsumer              What to do if this is a {@link SadCase}
+     * @param technicalFailureConsumer What to do if this is a {@link TechnicalFailureCase}
+     */
+    void consume(Peek<Happy> happyConsumer, Peek<Sad> sadConsumer, Consumer<Exception> technicalFailureConsumer);
+
+    /**
      * Same as {@link #join(Mapping, Mapping, Function)} but if the {@link BusinessCase} is a {@link TechnicalFailureCase},
      * then the underlying exception will be thrown as a {@link RuntimeException} instead of joined.
      *
@@ -74,8 +94,8 @@ interface BusinessCase<Happy, Sad> {
     default <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws IllegalStateException {
         try {
             return joinOrThrow(happyJoiner, sadJoiner);
-        } catch (Exception e) {
-            throw new IllegalStateException(format("Exception caught when joining. Business case is: '%s'.", this), e);
+        } catch (Exception technicalFailure) {
+            throw new IllegalStateException(format("Exception caught when joining. Business case is: '%s'.", this), technicalFailure);
         }
     }
 }

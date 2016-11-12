@@ -29,11 +29,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>8.2.0</version>
+    <version>8.3.0</version>
 </dependency>
 ```
 
 ## Releases
+### 8.3.0
+* Add methods `consume` and `consumeOrThrow` to end a flow by performing some action that ends in a void (closes [#8](https://github.com/theangrydev/business-flows/issues/8))
+
 ### 8.2.0
 * Add methods to help with multiple return style: `isHappy`, `isSad`, `getHappy` and `getSad` (closes [#10](https://github.com/theangrydev/business-flows/issues/10))
 

@@ -274,6 +274,39 @@ public class HappyPathTest {
     }
 
     @Test
+    public void consumeHappyThatBlowsUpDuringConsume() {
+        Exception failure = new Exception();
+
+        AtomicReference<Object> capture = new AtomicReference<>();
+        HappyPath.happyPath(new Happy())
+                .consume(instance -> {throw failure;}, null, capture::set);
+
+        assertThat(capture.get()).isEqualTo(failure);
+    }
+
+    @Test
+    public void consumeHappy() {
+        Happy originalHappy = new Happy();
+
+        AtomicReference<Object> capture = new AtomicReference<>();
+        HappyPath.happyPath(originalHappy)
+                .consume(capture::set, null, null);
+
+        assertThat(capture.get()).isEqualTo(originalHappy);
+    }
+
+    @Test
+    public void consumeHappyThatMightBlowUp() throws Exception {
+        Happy originalHappy = new Happy();
+
+        AtomicReference<Object> capture = new AtomicReference<>();
+        HappyPath.happyPath(originalHappy)
+                .consumeOrThrow(capture::set, null);
+
+        assertThat(capture.get()).isEqualTo(originalHappy);
+    }
+
+    @Test
     public void joinHappyWithNoTechnicalFailureJoin() {
         Happy originalHappy = new Happy();
 

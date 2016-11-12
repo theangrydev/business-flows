@@ -133,6 +133,38 @@ public class SadPathTest {
         assertThat(actualException).isSameAs(uncaughtException);
     }
 
+    @Test
+    public void consumeSadThatBlowsUpDuringConsume() {
+        Exception failure = new Exception();
+
+        AtomicReference<Object> capture = new AtomicReference<>();
+        SadPath.sadPath(new Sad())
+                .consume(null, instance -> {throw failure;}, capture::set);
+
+        assertThat(capture.get()).isEqualTo(failure);
+    }
+
+    @Test
+    public void consumeSad() {
+        Sad originalSad = new Sad();
+
+        AtomicReference<Object> capture = new AtomicReference<>();
+        SadPath.sadPath(originalSad)
+                .consume(null, capture::set, null);
+
+        assertThat(capture.get()).isEqualTo(originalSad);
+    }
+
+    @Test
+    public void consumeSadThatMightBlowUp() throws Exception {
+        Sad originalSad = new Sad();
+
+        AtomicReference<Object> capture = new AtomicReference<>();
+        SadPath.sadPath(originalSad)
+                .consumeOrThrow(null, capture::set);
+
+        assertThat(capture.get()).isEqualTo(originalSad);
+    }
 
     @Test
     public void joinSad() {
