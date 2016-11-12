@@ -8,7 +8,7 @@
 [![codebeat badge](https://codebeat.co/badges/6271d27e-7190-4e82-a6f5-660780e740f2)](https://codebeat.co/projects/github-com-theangrydev-business-flows)
 [![Quality Gate](https://sonarqube.com/api/badges/gate?key=io.github.theangrydev:business-flows)](https://sonarqube.com/dashboard/index/io.github.theangrydev:business-flows)
 
-# business-flows
+# Business Flows
 
 A combination of the Try monad and the Either monad, to help tame complex business flows
 
