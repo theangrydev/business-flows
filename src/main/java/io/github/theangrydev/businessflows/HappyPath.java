@@ -44,6 +44,22 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
     }
 
     /**
+     * Attempt an action that produces a {@link Happy}.
+     *
+     * @param attempt The {@link Attempt} to execute
+     * @param <Happy> The type of happy object this {@link HappyPath} may represent
+     * @param <Sad>   The type of sad object this {@link HappyPath} may represent
+     * @return A {@link HappyPath} that is either happy on the inside or a technical failure
+     */
+    static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt) {
+        try {
+            return happyPath(attempt.attempt());
+        } catch (Exception technicalFailure) {
+            return technicalFailure(technicalFailure);
+        }
+    }
+
+    /**
      * Attempt an action that produces a {@link Happy}, mapping any technical failure to a {@link Sad}.
      *
      * @param attempt        The {@link Attempt} to execute
