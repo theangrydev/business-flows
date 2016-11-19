@@ -20,6 +20,8 @@ package io.github.theangrydev.businessflows;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static io.github.theangrydev.businessflows.FlowTracker.endFlow;
+
 /**
  * A {@link HappyCase} is a {@link BusinessCase} that is actually in a happy state.
  * <p>
@@ -40,6 +42,7 @@ class HappyCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 
     @Override
     public <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner) {
+        endFlow(this);
         try {
             return happyJoiner.map(happy);
         } catch (Exception technicalFailure) {
@@ -49,16 +52,19 @@ class HappyCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 
     @Override
     public <Result> Result joinOrThrow(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception {
+        endFlow(this);
         return happyJoiner.map(happy);
     }
 
     @Override
     public void consumeOrThrow(Peek<Happy> happyConsumer, Peek<Sad> sadConsumer) throws Exception {
+        endFlow(this);
         happyConsumer.peek(happy);
     }
 
     @Override
     public void consume(Peek<Happy> happyConsumer, Peek<Sad> sadConsumer, Consumer<Exception> technicalFailureConsumer) {
+        endFlow(this);
         try {
             happyConsumer.peek(happy);
         } catch (Exception technicalFailure) {

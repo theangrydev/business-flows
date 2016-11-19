@@ -20,6 +20,8 @@ package io.github.theangrydev.businessflows;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.github.theangrydev.businessflows.FlowTracker.trackFlow;
+
 /**
  * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.
  * <p>
@@ -92,7 +94,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @return A {@link HappyPath} that is happy on the inside
      */
     static <Happy, Sad> HappyPath<Happy, Sad> happyPath(Happy happy) {
-        return new HappyCaseHappyPath<>(happy);
+        return trackFlow(new HappyCaseHappyPath<>(happy));
     }
 
     /**
@@ -104,7 +106,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @return A {@link HappyPath} that is sad on the inside
      */
     static <Happy, Sad> HappyPath<Happy, Sad> sadPath(Sad sad) {
-        return new SadCaseHappyPath<>(sad);
+        return trackFlow(new SadCaseHappyPath<>(sad));
     }
 
     /**
@@ -116,7 +118,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @return A {@link HappyPath} that is a technical failure on the inside
      */
     static <Happy, Sad> HappyPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
-        return new TechnicalFailureCaseHappyPath<>(technicalFailure);
+        return trackFlow(new TechnicalFailureCaseHappyPath<>(technicalFailure));
     }
 
     /**
