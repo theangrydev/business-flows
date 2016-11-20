@@ -149,4 +149,4 @@ The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), t
 * Changed `get` failure message wording
 
 ### 1.0.0
-* Initial stab at business-flows
+* Initial stab at Business Flows
