@@ -40,7 +40,7 @@ The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), t
 * This release picks up where 8.3.0 left off, just reverting the version 9.0.0 and 9.1.0 changes
 
 ### 9.0.0 and 9.1.0
-* These releases were a failed attempt to remove the `HappyPath.happyAttempt` method that takes a `Attempt<Happy>` parameter (see [#12](https://github.com/theangrydev/business-flows/issues/12))
+* These releases were a failed attempt to remove the `HappyPath.happyAttempt` method that takes an `Attempt<Happy>` parameter (see [#12](https://github.com/theangrydev/business-flows/issues/12))
 
 ### 8.3.0
 * Add methods `consume` and `consumeOrThrow` to end a flow by performing some action that ends in a void (closes [#8](https://github.com/theangrydev/business-flows/issues/8))
