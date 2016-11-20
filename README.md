@@ -29,18 +29,12 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>9.1.0</version>
+    <version>8.3.0</version>
 </dependency>
 ```
 
 ## Releases
 The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), to help you identify non backwards-compatible changes when you are upgrading.
-
-### 9.1.0
-* Added the `HappyPath.happyAttempt` method that took an `Attempt<Happy>` parameter back again. I found a better solution than completely removing it, which is to just prevent using the `SadPath` methods in a flow created in this way, using a special `NoSad` sad path type that is package private (closes [#12](https://github.com/theangrydev/business-flows/issues/12)). See the migration advice [here](https://github.com/theangrydev/business-flows/wiki/9.1.0-Migration-Advice)
- 
-### 9.0.0
-* Removed the `HappyPath.happyAttempt` method that took an `Attempt<Happy>` parameter (closes [#12](https://github.com/theangrydev/business-flows/issues/12)). This change is not backwards compatible. The recommended alternative is described in the migration advice, which can be found [here](https://github.com/theangrydev/business-flows/wiki/9.0.0-Migration-Advice)
 
 ### 8.3.0
 * Add methods `consume` and `consumeOrThrow` to end a flow by performing some action that ends in a void (closes [#8](https://github.com/theangrydev/business-flows/issues/8))
