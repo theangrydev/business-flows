@@ -37,7 +37,7 @@ There is no point in using this if your flows are "all or nothing". If there are
 The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), to help you identify non backwards-compatible changes when you are upgrading.
 
 ### 10.0.0
-* This release picks up where 8.3.0 left off, just reverting the 9.x.x changes
+* This release picks up where 8.3.0 left off, just reverting the version 9 changes
 
 ### 9.0.0 and 9.1.0
 * These releases were a failed attempt to remove the `HappyPath.happyAttempt` method that takes a `Attempt<Happy>` parameter (see [#12](https://github.com/theangrydev/business-flows/issues/12))
