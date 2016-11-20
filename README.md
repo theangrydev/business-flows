@@ -29,12 +29,18 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>8.3.0</version>
+    <version>10.0.0</version>
 </dependency>
 ```
 
 ## Releases
 The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), to help you identify non backwards-compatible changes when you are upgrading.
+
+### 10.0.0
+* This release picks up where 8.3.0 left off, just reverting the 9.x.x changes
+
+### 9.0.0 and 9.1.0
+* These releases were a failed attempt to remove the `HappyPath.happyAttempt` method that takes a `Attempt<Happy>` parameter (see [#12](https://github.com/theangrydev/business-flows/issues/12))
 
 ### 8.3.0
 * Add methods `consume` and `consumeOrThrow` to end a flow by performing some action that ends in a void (closes [#8](https://github.com/theangrydev/business-flows/issues/8))

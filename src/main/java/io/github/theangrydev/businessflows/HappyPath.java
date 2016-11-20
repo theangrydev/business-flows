@@ -45,16 +45,13 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
 
     /**
      * Attempt an action that produces a {@link Happy}.
-     * <p>
-     * No sad path is possible at this stage. This is the reason why the sad parameter is {@link NoSad}. This special
-     * type will prevent you from calling any of the {@link SadPath} methods that expose the sad type, since it is a
-     * package private class.
      *
      * @param attempt The {@link Attempt} to execute
      * @param <Happy> The type of happy object this {@link HappyPath} may represent
+     * @param <Sad>   The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside or a technical failure
      */
-    static <Happy> HappyPath<Happy, NoSad> happyAttempt(Attempt<Happy> attempt) {
+    static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt) {
         try {
             return happyPath(attempt.attempt());
         } catch (Exception technicalFailure) {
