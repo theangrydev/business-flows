@@ -82,6 +82,18 @@
             <version>3.5.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core</artifactId>
+            <version>2.5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -435,62 +447,109 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.1.2</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.5.0</version>
                         <configuration>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                            <failOnError>true</failOnError>
+                            <mainClass>api.WikiGenerator</mainClass>
+                            <classpathScope>test</classpathScope>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>attach-javadocs</id>
+                                <id>generate-wiki</id>
+                                <phase>generate-test-resources</phase>
                                 <goals>
-                                    <goal>jar</goal>
+                                    <goal>java</goal>
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
 
+                    <!--<plugin>-->
+                    <!--<groupId>org.apache.maven.plugins</groupId>-->
+                    <!--<artifactId>maven-source-plugin</artifactId>-->
+                    <!--<version>2.1.2</version>-->
+                    <!--<executions>-->
+                    <!--<execution>-->
+                    <!--<id>attach-sources</id>-->
+                    <!--<goals>-->
+                    <!--<goal>jar-no-fork</goal>-->
+                    <!--</goals>-->
+                    <!--</execution>-->
+                    <!--</executions>-->
+                    <!--</plugin>-->
+                    <!---->
+                    <!--<plugin>-->
+                    <!--<groupId>org.apache.maven.plugins</groupId>-->
+                    <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+                    <!--<version>2.10.3</version>-->
+                    <!--<configuration>-->
+                    <!--<encoding>${project.build.sourceEncoding}</encoding>-->
+                    <!--<failOnError>true</failOnError>-->
+                    <!--</configuration>-->
+                    <!--<executions>-->
+                    <!--<execution>-->
+                    <!--<id>attach-javadocs</id>-->
+                    <!--<goals>-->
+                    <!--<goal>jar</goal>-->
+                    <!--</goals>-->
+                    <!--</execution>-->
+                    <!--</executions>-->
+                    <!--</plugin>-->
+                    <!---->
+                    <!--<plugin>-->
+                    <!--<groupId>org.apache.maven.plugins</groupId>-->
+                    <!--<artifactId>maven-gpg-plugin</artifactId>-->
+                    <!--<version>1.6</version>-->
+                    <!--<executions>-->
+                    <!--<execution>-->
+                    <!--<id>sign-artifacts</id>-->
+                    <!--<phase>verify</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>sign</goal>-->
+                    <!--</goals>-->
+                    <!--</execution>-->
+                    <!--</executions>-->
+                    <!--</plugin>-->
+                    <!---->
+                    <!--<plugin>-->
+                    <!--<groupId>org.sonatype.plugins</groupId>-->
+                    <!--<artifactId>nexus-staging-maven-plugin</artifactId>-->
+                    <!--<version>1.6.7</version>-->
+                    <!--<extensions>true</extensions>-->
+                    <!--<configuration>-->
+                    <!--<serverId>ossrh</serverId>&lt;!&ndash; This is a <server> set in my ~/.m2/settings.xml &ndash;&gt;-->
+                    <!--<nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+                    <!--<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+                    <!--</configuration>-->
+                    <!--</plugin>-->
+
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <groupId>com.github.github</groupId>
+                        <artifactId>site-maven-plugin</artifactId>
+                        <version>0.12</version>
+                        <configuration>
+                            <message>Updating wiki documentation to version ${project.version}</message>
+                            <branch>refs/heads/master</branch>
+                            <repositoryName>business-flows.wiki</repositoryName>
+                            <repositoryOwner>theangrydev</repositoryOwner>
+                            <!--<dryRun>true</dryRun>-->
+                            <outputDirectory>${project.build.directory}/wiki</outputDirectory>
+                            <!--<includes>-->
+                            <!--<include>${project.build.directory}/wiki/**</include>-->
+                            <!--</includes>-->
+                            <!--<path>.asda</path>-->
+                            <server>github</server><!-- This is a <server> set in my ~/.m2/settings.xml -->
+                        </configuration>
                         <executions>
                             <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
+                                <id>push-wiki</id>
+                                <phase>deploy</phase>
                                 <goals>
-                                    <goal>sign</goal>
+                                    <goal>site</goal>
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
