@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package acceptance;
+package api;
 
 import io.github.theangrydev.businessflows.HappyPath;
 import org.junit.Test;

@@ -239,6 +239,7 @@
                     </targetClasses>
                     <targetTests>
                         <param>io.github.theangrydev.businessflows*</param>
+                        <param>api</param>
                     </targetTests>
                     <exportLineCoverage>true</exportLineCoverage>
                 </configuration>
