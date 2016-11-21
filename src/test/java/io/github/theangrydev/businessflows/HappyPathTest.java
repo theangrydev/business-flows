@@ -60,6 +60,14 @@ public class HappyPathTest {
         assertThat(actualTechnicalFailure).isEqualTo(expectedTechnicalFailure);
     }
 
+    @Test
+    public void happyPathAttemptUsingASadPath() {
+        Happy originalHappy = new Happy();
+
+        Happy actualHappy = HappyPath.happyPathAttempt(() -> SadPath.happyPath(originalHappy)).get();
+
+        assertThat(actualHappy).isSameAs(originalHappy);
+    }
 
     @Test
     public void happyPathAttemptThatSucceedsResultsInHappyPath() {
