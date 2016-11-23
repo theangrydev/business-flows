@@ -96,11 +96,34 @@
                     <showWarnings>true</showWarnings>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <compilerArgs>
-                        <arg>-Werror</arg>
-                        <arg>-Xlint:all</arg>
-                    </compilerArgs>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>-Werror</arg>
+                                <arg>-Xlint:all</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>-Werror</arg>
+                                <arg>-Xlint:all</arg>
+                                <arg>-Xep:ClassCanBeStatic:OFF</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>org.codehaus.plexus</groupId>
