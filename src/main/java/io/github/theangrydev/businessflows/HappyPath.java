@@ -161,6 +161,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @return A list of {@link ActionThatMightFail}
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     static <Happy, Sad> List<ActionThatMightFail<Happy, Sad>> actions(ActionThatMightFail<Happy, Sad>... actionsThatMightFail) {
         return Arrays.asList(actionsThatMightFail);
     }

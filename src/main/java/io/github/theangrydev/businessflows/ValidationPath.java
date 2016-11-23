@@ -132,6 +132,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @return The result of applying all the validators
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, Validator<Happy, Sad>... validators) {
         return validateAllInto(happy, sadAggregateMapping, Arrays.asList(validators));
     }
@@ -149,6 +150,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @return The result of applying all the validators
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validateAll(Happy happy, Validator<Happy, Sad>... validators) {
         return validateAll(happy, Arrays.asList(validators));
     }
@@ -184,6 +186,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @return A list of {@link Validator}
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     static <Happy, Sad> List<Validator<Happy, Sad>> validators(Validator<Happy, Sad>... validators) {
         return Arrays.asList(validators);
     }
