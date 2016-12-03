@@ -64,7 +64,7 @@ public class WikiGenerator {
     }
 
     private static String indexMarkup() throws IOException {
-        return apiLinks();
+        return INDEX_PAGE_HEADER + "\n" + apiLinks();
     }
 
     private static String apiLinks() throws IOException {

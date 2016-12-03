@@ -19,6 +19,7 @@ package api;
 
 import io.github.theangrydev.businessflows.HappyPath;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * These tests exist to prevent the failed solution to https://github.com/theangrydev/business-flows/issues/12 from
@@ -28,6 +29,9 @@ public class HappyAttemptApiTest {
 
     private static class Sad {}
 
+    /**
+     * Here, the thing is the doodad.
+     */
     @Test
     public void happyAttemptReturnTypeCanBeUsedOutsideOfTheInternalPackage() {
         usageOfTheReturnType();
@@ -36,6 +40,14 @@ public class HappyAttemptApiTest {
     @Test
     public void happyAttemptCanIntroduceSadTypeViaThen() {
         usageOfTheReturnType().then(happy -> HappyPath.sadPath(new Sad()));
+    }
+
+    /**
+     * Here, the thing is the doodad.
+     */
+    @Test
+    public void hasaappyAttemptReturnTypeCanBeUsedOutsideOfTheInternalPackage() {
+        usageOfTheReturnType();
     }
 
     private HappyPath<Object, Sad> usageOfTheReturnType() {
