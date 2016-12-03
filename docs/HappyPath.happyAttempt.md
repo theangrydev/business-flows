@@ -6,7 +6,8 @@ These tests exist to prevent the failed solution to https://github.com/theangryd
 being attempted again in the future without realising it :)
 
 ## Happy attempt return type can be used outside of the internal package
-```java/**
+```java
+/**
      * Here, the thing is the doodad.
      */
 /**
@@ -20,14 +21,16 @@ public void happyAttemptReturnTypeCanBeUsedOutsideOfTheInternalPackage() {
 Here, the thing is the doodad.
 
 ## Happy attempt can introduce sad type via then
-```java@Test
+```java
+@Test
 public void happyAttemptCanIntroduceSadTypeViaThen() {
     usageOfTheReturnType().then( happy -> HappyPath.sadPath(new Sad()));
 }
 ```
 
 ## Hasaappy attempt return type can be used outside of the internal package
-```java/**
+```java
+/**
      * Here, the thing is the doodad.
      */
 /**

@@ -131,7 +131,7 @@ public class WikiGenerator {
     }
 
     private static String methodContents(MethodDeclaration methodDeclaration) {
-        return methodDeclaration.toString();
+        return "\n" + methodDeclaration.toString();
 //        String body = methodDeclaration.getBody().toString()
 //                .replaceFirst("\\{", "")
 //                .replaceAll("}$", "");
