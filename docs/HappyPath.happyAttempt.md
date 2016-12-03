@@ -1,5 +1,5 @@
 ---
--title: HappyPath.happyAttempt
+title: HappyPath.happyAttempt
 layout: post
 ---
 These tests exist to prevent the failed solution to https://github.com/theangrydev/business-flows/issues/12 from
