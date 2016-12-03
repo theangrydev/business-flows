@@ -65,7 +65,7 @@ public class WikiGenerator {
     }
 
     private static String pageTitle(String title) {
-        return "---\n" +
+        return "---\n-" +
                 "title: " + title + "\n" +
                 "layout: post\n" +
                 "---";
@@ -131,12 +131,13 @@ public class WikiGenerator {
     }
 
     private static String methodContents(MethodDeclaration methodDeclaration) {
-        String body = methodDeclaration.getBody().toString()
-                .replaceFirst("\\{", "")
-                .replaceAll("}$", "");
-        return stream(body.split("\n"))
-                .map(String::trim)
-                .collect(joining("\n"));
+        return methodDeclaration.toString();
+//        String body = methodDeclaration.getBody().toString()
+//                .replaceFirst("\\{", "")
+//                .replaceAll("}$", "");
+//        return stream(body.split("\n"))
+//                .map(String::trim)
+//                .collect(joining("\n"));
     }
 
     private static String camelCaseToSentence(String camelCase) {
