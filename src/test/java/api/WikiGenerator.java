@@ -29,7 +29,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -47,9 +46,7 @@ public class WikiGenerator {
 
     private static final String INDEX_PAGE = "index.md";
 
-    private static final String INDEX_PAGE_HEADER = "---\n" +
-            "title: API Documentation\n" +
-            "---";
+    private static final String INDEX_PAGE_HEADER = pageTitle("API Documentation");
 
     public static void main(String[] args) throws URISyntaxException, IOException, ParseException {
         createDirectories(wikiDirectory());
@@ -67,6 +64,12 @@ public class WikiGenerator {
         return INDEX_PAGE_HEADER + "\n" + apiLinks();
     }
 
+    private static String pageTitle(String title) {
+        return "---\n" +
+                "title: " + title + "\n" +
+                "---";
+    }
+
     private static String apiLinks() throws IOException {
         return Files.list(wikiDirectory())
                 .map(Path::toFile)
@@ -78,7 +81,7 @@ public class WikiGenerator {
 
     private static void writeWikiPage(String pageName, Class<?> apiTestClass) throws IOException, ParseException {
         Path page = wikiDirectory().resolve(pageName + ".md");
-        String markup = apiMarkup(apiTestClass);
+        String markup = pageTitle(pageName) + "\n" + apiMarkup(apiTestClass);
         writePage(page, markup);
     }
 

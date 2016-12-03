@@ -1,3 +1,6 @@
+---
+title: HappyPath.happyAttempt
+---
 These tests exist to prevent the failed solution to https://github.com/theangrydev/business-flows/issues/12 from
 being attempted again in the future without realising it :)
 
