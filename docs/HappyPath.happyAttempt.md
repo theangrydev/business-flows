@@ -20,3 +20,9 @@ usageOfTheReturnType().then( happy -> HappyPath.sadPath(new Sad()));
 usageOfTheReturnType();
 ```
 Here, the thing is the doodad.
+
+```ruby
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+```
