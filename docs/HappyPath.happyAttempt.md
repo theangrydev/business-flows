@@ -1,5 +1,6 @@
 ---
 title: HappyPath.happyAttempt
+layout: post
 ---
 These tests exist to prevent the failed solution to https://github.com/theangrydev/business-flows/issues/12 from
 being attempted again in the future without realising it :)
@@ -20,9 +21,3 @@ usageOfTheReturnType().then( happy -> HappyPath.sadPath(new Sad()));
 usageOfTheReturnType();
 ```
 Here, the thing is the doodad.
-
-```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
-```
