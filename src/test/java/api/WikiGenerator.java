@@ -53,7 +53,7 @@ public class WikiGenerator {
     }
 
     private static Path wikiDirectory() {
-        return Paths.get("./target/wiki");
+        return Paths.get("./docs");
     }
 
     private static String markup(Class<?> apiTestClass) throws ParseException, IOException {
