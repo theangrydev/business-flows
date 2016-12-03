@@ -81,7 +81,7 @@ public class WikiGenerator {
 
     private static void writeWikiPage(String pageName, Class<?> apiTestClass) throws IOException, ParseException {
         Path page = wikiDirectory().resolve(pageName + ".md");
-        String markup = pageTitle(pageName) + "\n" + apiMarkup(apiTestClass);
+        String markup = pageTitle("test") + "\n" + apiMarkup(apiTestClass);
         writePage(page, markup);
     }
 
