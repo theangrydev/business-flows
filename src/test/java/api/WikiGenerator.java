@@ -75,13 +75,14 @@ public class WikiGenerator {
                 .map(Path::toFile)
                 .map(File::getName)
                 .filter(name -> !name.equals(INDEX_PAGE))
+                .map(name -> name.replace(".md", ""))
                 .map(name -> format("[%s](%s)", name, name))
                 .collect(joining("\n"));
     }
 
     private static void writeWikiPage(String pageName, Class<?> apiTestClass) throws IOException, ParseException {
         Path page = wikiDirectory().resolve(pageName + ".md");
-        String markup = pageTitle("test") + "\n" + apiMarkup(apiTestClass);
+        String markup = pageTitle(pageName) + "\n" + apiMarkup(apiTestClass);
         writePage(page, markup);
     }
 
