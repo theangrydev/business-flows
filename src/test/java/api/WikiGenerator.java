@@ -47,6 +47,10 @@ public class WikiGenerator {
 
     private static final String INDEX_PAGE = "index.md";
 
+    private static final String INDEX_PAGE_HEADER = "---\n" +
+            "title: API Documentation\n" +
+            "---";
+
     public static void main(String[] args) throws URISyntaxException, IOException, ParseException {
         createDirectories(wikiDirectory());
         writeWikiPage("HappyPath.happyAttempt", HappyAttemptApiTest.class);
@@ -60,6 +64,10 @@ public class WikiGenerator {
     }
 
     private static String indexMarkup() throws IOException {
+        return apiLinks();
+    }
+
+    private static String apiLinks() throws IOException {
         return Files.list(wikiDirectory())
                 .map(Path::toFile)
                 .map(File::getName)
