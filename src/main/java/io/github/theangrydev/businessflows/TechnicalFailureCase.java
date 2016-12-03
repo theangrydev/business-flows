@@ -24,8 +24,6 @@ import java.util.function.Function;
 
 /**
  * A {@link TechnicalFailureCase} is a {@link BusinessCase} that is actually in an unexpected exceptional state.
- * <p>
- * {@inheritDoc}
  */
 class TechnicalFailureCase<Happy, Sad> implements BusinessCase<Happy, Sad> {
 

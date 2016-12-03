@@ -19,8 +19,6 @@ package io.github.theangrydev.businessflows;
 
 /**
  * A {@link SadPath} is a {@link BusinessFlow} that is biased towards the result being {@link Sad}.
- * <p>
- * {@inheritDoc}
  */
 public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Sad> {
 

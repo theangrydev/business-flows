@@ -22,8 +22,6 @@ import java.util.Optional;
 
 /**
  * A {@link SadCaseHappyPath} is a {@link HappyPath} that is actually a {@link SadCase}.
- * <p>
- * {@inheritDoc}
  */
 class SadCaseHappyPath<Happy, Sad> extends SadCase<Happy, Sad> implements HappyPath<Happy, Sad> {
 

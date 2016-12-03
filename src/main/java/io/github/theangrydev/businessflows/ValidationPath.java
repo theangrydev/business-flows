@@ -28,8 +28,6 @@ import static io.github.theangrydev.businessflows.Mapping.identity;
  * a list of {@link Sad}, if there are any failures.
  *
  * @param <SadAggregate> The type that the list of {@link Sad} validation errors will be aggregated into
- *                       <p>
- *                       {@inheritDoc}
  */
 public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happy, SadAggregate> {
 

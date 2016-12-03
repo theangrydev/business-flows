@@ -19,8 +19,6 @@ package io.github.theangrydev.businessflows;
 
 /**
  * A {@link TechnicalFailure} is a {@link BusinessFlow} that is biased towards the result being an {@link Exception}.
- * <p>
- * {@inheritDoc}
  */
 public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Exception> {
 

@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.
- * <p>
- * {@inheritDoc}
  */
 public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Happy> {
 

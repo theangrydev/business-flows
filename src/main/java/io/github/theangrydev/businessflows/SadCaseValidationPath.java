@@ -21,8 +21,6 @@ import java.util.List;
 
 /**
  * A {@link SadCaseValidationPath} is a {@link ValidationPath} that is actually a {@link SadCase}.
- * <p>
- * {@inheritDoc}
  */
 class SadCaseValidationPath<Happy, Sad, SadAggregate> extends SadCaseHappyPath<Happy, SadAggregate> implements ValidationPath<Happy, Sad, SadAggregate> {
 

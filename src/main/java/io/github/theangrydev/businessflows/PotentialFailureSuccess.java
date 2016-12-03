@@ -21,8 +21,6 @@ import java.util.Optional;
 
 /**
  * A {@link PotentialFailureSuccess} is a {@link PotentialFailure} that is actually a success.
- * <p>
- * {@inheritDoc}
  */
 class PotentialFailureSuccess<Sad> implements PotentialFailure<Sad> {
 
