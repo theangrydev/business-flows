@@ -67,6 +67,7 @@ public class WikiGenerator {
     private static String pageTitle(String title) {
         return "---\n" +
                 "title: " + title + "\n" +
+                "layout: post\n" +
                 "---";
     }
 
