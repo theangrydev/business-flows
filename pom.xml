@@ -519,16 +519,18 @@
                         <executions>
                             <execution>
                                 <id>commit-generated-files</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>checkin</goal>
+                                </goals>
                                 <configuration>
                                     <includes>docs/**/*</includes>
                                     <pushChanges>false</pushChanges>
                                 </configuration>
-                                <goals>
-                                    <goal>checkin</goal>
-                                </goals>
                             </execution>
                         </executions>
                     </plugin>
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
