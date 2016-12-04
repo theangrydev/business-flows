@@ -425,6 +425,9 @@
                         <goals>
                             <goal>check-local-modification</goal>
                         </goals>
+                        <configuration>
+                            <skip>${skip.check.local.modifications}</skip>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
