@@ -58,6 +58,7 @@
         <sonar.language>java</sonar.language>
         <apache.commons.lang.version>3.5</apache.commons.lang.version>
         <maven.scm.plugin.version>1.9.5</maven.scm.plugin.version>
+        <scm.excludes>none</scm.excludes>
     </properties>
 
     <prerequisites>
@@ -427,6 +428,7 @@
                         <configuration>
                             <message>Updated documentation files for ${project.version}</message>
                             <includes>docs/**/*</includes>
+                            <excludes>${scm.excludes}</excludes>
                             <pushChanges>false</pushChanges>
                         </configuration>
                     </execution>
@@ -539,27 +541,11 @@
         <!-- Release -->
         <profile>
             <id>release</id>
+            <properties>
+                <scm.excludes>pom.xml</scm.excludes>
+            </properties>
             <build>
                 <plugins>
-                    <!-- Check there are no uncommitted files -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-scm-plugin</artifactId>
-                        <version>${maven.scm.plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>check-local-modification</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>check-local-modification</goal>
-                                </goals>
-                                <configuration combine.self="override">
-                                    <excludes>pom.xml</excludes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
