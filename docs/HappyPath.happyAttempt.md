@@ -1,5 +1,5 @@
 ---
-title: HappyPath.happyAttempt
+title: HappyPath.happyAttempt(io.github.theangrydev.businessflows.Attempt<Happy>)
 layout: post
 ---
 These tests exist to prevent the failed solution to <a href="https://github.com/theangrydev/business-flows/issues/12">#12</a>

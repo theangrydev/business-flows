@@ -31,11 +31,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -58,8 +58,17 @@ public class WikiGenerator {
 
     public static void main(String[] args) throws URISyntaxException, IOException, ParseException, NoSuchMethodException {
         createDirectories(wikiDirectory());
-        writeWikiPage("HappyPath.happyAttempt", HappyAttemptApiTest.class);
+        removeAllMarkdownFiles();
+        writeWikiPage(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class));
         writeIndexPage();
+    }
+
+    private static void removeAllMarkdownFiles() throws IOException {
+        Files.walk(wikiDirectory(), FileVisitOption.FOLLOW_LINKS)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .filter(file -> file.getName().endsWith(MARKDOWN_FILE_EXTENSION))
+                .forEach(File::delete);
     }
 
     private static void writeIndexPage() throws IOException {
@@ -90,10 +99,25 @@ public class WikiGenerator {
                 .collect(joining("\n"));
     }
 
-    private static void writeWikiPage(String pageName, Class<?> apiTestClass) throws IOException, ParseException, NoSuchMethodException {
+    private static void writeWikiPage(Class<?> apiTestClass, Method apiMethod) throws IOException, ParseException {
+        String pageDisplayName = pageDisplayName(apiMethod);
+        String pageName = pageName(apiMethod);
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
-        String markup = pageTitle(pageName) + "\n" + apiMarkup(apiTestClass);
+        String markup = pageTitle(pageDisplayName) + "\n" + apiMarkup(apiTestClass, apiMethod);
         writePage(page, markup);
+    }
+
+    private static String pageName(Method apiMethod) {
+        String methodName = apiMethod.getName();
+        String className = apiMethod.getDeclaringClass().getSimpleName();
+        return className + "." + methodName;
+    }
+
+    private static String pageDisplayName(Method apiMethod) {
+        String methodName = apiMethod.getName();
+        String className = apiMethod.getDeclaringClass().getSimpleName();
+        String parameterTypes = stream(apiMethod.getGenericParameterTypes()).map(String::valueOf).collect(joining(", "));
+        return className + "." + methodName + "(" + parameterTypes +  ")";
     }
 
     private static void writePage(Path page, String markup) throws IOException {
@@ -104,7 +128,7 @@ public class WikiGenerator {
         return Paths.get("./docs");
     }
 
-    private static String apiMarkup(Class<?> apiTestClass) throws ParseException, IOException, NoSuchMethodException {
+    private static String apiMarkup(Class<?> apiTestClass, Method apiMethod) throws ParseException, IOException {
         String apiTestName = apiTestClass.getSimpleName();
         TypeDeclaration typeDeclaration = JavaParser.parse(Paths.get("./src/test/java/api/" + apiTestName + ".java").toFile()).getTypes().get(0);
         String description = description(typeDeclaration.getJavaDoc());
@@ -116,7 +140,7 @@ public class WikiGenerator {
                 .collect(joining("\n"));
         return description + "\n"
                 + examples + "\n"
-                + "[test](" + javaDocLink(HappyPath.class.getMethod("happyAttempt", Attempt.class)) + ")";
+                + "[test](" + javaDocLink(apiMethod) + ")";
     }
 
     private static String description(JavadocComment comment) {
@@ -150,7 +174,7 @@ public class WikiGenerator {
         String artifactId = "business-flows";
         String groupIdSlashes = groupId.replace('.', '/');
         String packageSlashes = aPackage.getName().replace('.', '/');
-        String parameterSlashes = Arrays.stream(parameterTypes).map(Class::getName).collect(joining("-", "", "-"));
+        String parameterSlashes = stream(parameterTypes).map(Class::getName).collect(joining("-", "", "-"));
         return "https://oss.sonatype.org/service/local/repositories/releases/archive/"
                 + groupIdSlashes + "/"
                 + artifactId + "/"
