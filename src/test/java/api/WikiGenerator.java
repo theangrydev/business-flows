@@ -119,7 +119,6 @@ public class WikiGenerator {
         return "---\n" +
                 "title: " + title + "\n" +
                 "layout: post\n" +
-                "generated_at: " + ZonedDateTime.now() + "\n" +
                 "---";
     }
 
