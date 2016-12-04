@@ -22,7 +22,6 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.DumpVisitor;
 import io.github.theangrydev.businessflows.Attempt;
 import io.github.theangrydev.businessflows.HappyPath;
@@ -88,6 +87,13 @@ public class WikiGenerator {
                 "---";
     }
 
+    private static String pageTitle(String title, String link) {
+        return "---\n" +
+                "title: [" + title + "](" + link + ")\n" +
+                "layout: post\n" +
+                "---";
+    }
+
     private static String apiLinks() throws IOException {
         return Files.list(wikiDirectory())
                 .map(Path::toFile)
@@ -103,7 +109,7 @@ public class WikiGenerator {
         String pageDisplayName = pageDisplayName(apiMethod);
         String pageName = pageName(apiMethod);
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
-        String markup = pageTitle(pageDisplayName) + "\n" + apiMarkup(apiTestClass, apiMethod);
+        String markup = pageTitle(pageDisplayName, javaDocLink(apiMethod)) + "\n" + apiMarkup(apiTestClass, apiMethod);
         writePage(page, markup);
     }
 
