@@ -1177,9 +1177,14 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printOrphanCommentsBeforeThisChildNode(n);
         printJavaComment(n.getComment(), arg);
         if (n.getStmts() != null) {
+            Statement previous = n.getStmts().get(0);
             for (final Statement s : n.getStmts()) {
+                int lines = s.getBegin().line - previous.getEnd().line;
+                for (int i = 0; i < lines; i++) {
+                    printer.printLn();
+                }
                 s.accept(this, arg);
-                printer.printLn();
+                previous = s;
             }
         }
         printOrphanCommentsEnding(n);

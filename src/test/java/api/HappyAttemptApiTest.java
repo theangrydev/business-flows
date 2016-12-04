@@ -34,8 +34,10 @@ public class HappyAttemptApiTest implements WithAssertions {
     @Test
     public void happyAttemptCanIntroduceSadTypeViaThen() {
         Sad sad = new Sad();
+
         HappyPath<Happy, Sad> happyPath = HappyPath.<Happy, Sad>happyAttempt(Happy::new)
                 .then(happy -> HappyPath.sadPath(sad));
+
         assertThat(happyPath.getSad()).isEqualTo(sad);
     }
 }
