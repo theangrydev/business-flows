@@ -44,6 +44,7 @@ import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.text.WordUtils.uncapitalize;
 
+//TODO: refactor before this gets out of hand
 public class WikiGenerator {
 
     private static final String INDEX_PAGE = "index.md";
