@@ -29,14 +29,14 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>10.1.0</version>
+    <version>10.1.2</version>
 </dependency>
 ```
 
 ## Releases
 The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), to help you identify non backwards-compatible changes when you are upgrading.
 
-### 10.1.0
+### 10.1.2
 * `HappyPath.happyPathAttempt` now accepts any `BusinessFlow`, not just a `HappyPath`, which is useful when you have a collaborator that returns a `BusinessFlow` that is not a `HappyPath` view (closes [#13](https://github.com/theangrydev/business-flows/issues/13))
 
 ### 10.0.0
