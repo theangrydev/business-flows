@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.javaparser.ast.visitor;
+package api;
 
 import static com.github.javaparser.PositionUtils.sortByBeginPosition;
 
@@ -71,6 +71,7 @@ import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -79,6 +80,8 @@ import java.util.List;
 import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
 
 /**
+ * MODIFIED to suit the documentation generation needs of business-flows by Liam Williams
+ *
  * Dumps the AST to formatted Java source code.
  *
  * @author Julio Vilmar Gesser
