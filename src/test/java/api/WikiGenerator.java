@@ -35,7 +35,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,15 +80,17 @@ public class WikiGenerator {
         writeIndexPage();
     }
 
-    private static String closestReleaseVersion(String version) {
-        //TODO: during release:prepare, this will change but will not be committed, which means the tag will always reference the wrong javadoc (the old one)
+    private static String latestReleasedVersion(String version) {
         Pattern pattern = Pattern.compile(".*(\\d+)-SNAPSHOT");
         Matcher matcher = pattern.matcher(version);
         if (matcher.matches()) {
+            // assume that if e.g. we are 10.1.8-SNAPSHOT then the most recent release was 10.1.7
+            // this works even for major bumps, e.g. 11.0.1-SNAPSHOT will mean 11.0.0 was just released
             int patchVersion = Integer.parseInt(matcher.group(1));
             String closestReleasePatch = String.valueOf(patchVersion - 1);
             return version.replace(patchVersion + "-SNAPSHOT", closestReleasePatch);
         } else {
+            // no SNAPSHOT means we are in the middle of a release, so use that version
             return version;
         }
     }
@@ -146,15 +147,8 @@ public class WikiGenerator {
 
     private String usageLink(Class<?> apiTestClass) {
         String packagePath = apiTestClass.getPackage().getName().replace('.', '/');
-        return "https://github.com/theangrydev/business-flows/blob/" + masterOrTagVersion() + "/src/test/java/" + packagePath + "/" + apiTestClass.getSimpleName() + ".java";
-    }
-
-    private String masterOrTagVersion() {
-        if (version.endsWith("SNAPSHOT")) {
-            return "master";
-        } else {
-            return artifactId + "-" + version;
-        }
+        // always master copy, since there is only ever one live copy of the documentation site
+        return "https://github.com/theangrydev/business-flows/blob/master/src/test/java/" + packagePath + "/" + apiTestClass.getSimpleName() + ".java";
     }
 
     private static String pageName(Method apiMethod) {
@@ -222,7 +216,7 @@ public class WikiGenerator {
         String groupIdSlashes = groupId.replace('.', '/');
         String packageSlashes = aPackage.getName().replace('.', '/');
         String parameterSlashes = stream(parameterTypes).map(Class::getName).collect(joining("-", "", "-"));
-        String closestReleasedVersion = closestReleaseVersion(version);
+        String closestReleasedVersion = latestReleasedVersion(version);
         return "https://oss.sonatype.org/service/local/repositories/releases/archive/"
                 + groupIdSlashes + "/"
                 + artifactId + "/"
