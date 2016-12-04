@@ -1,7 +1,7 @@
 ---
 title: HappyPath.happyAttempt(io.github.theangrydev.businessflows.Attempt<Happy>)
 layout: post
-generated_at: 2016-12-04T22:25:55.866Z[Europe/London]
+generated_at: 2016-12-04T22:28:36.510Z[Europe/London]
 ---
 [happyAttempt javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/io/github/theangrydev/business-flows/10.1.6/business-flows-10.1.6-javadoc.jar/!/io/github/theangrydev/businessflows/HappyPath.html#happyAttempt-io.github.theangrydev.businessflows.Attempt-)
 
