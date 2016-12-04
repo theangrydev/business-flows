@@ -24,9 +24,12 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.DumpVisitor;
+import io.github.theangrydev.businessflows.Attempt;
+import io.github.theangrydev.businessflows.HappyPath;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,7 +54,7 @@ public class WikiGenerator {
 
     private static final String INDEX_PAGE_HEADER = pageTitle("API Documentation");
 
-    public static void main(String[] args) throws URISyntaxException, IOException, ParseException {
+    public static void main(String[] args) throws URISyntaxException, IOException, ParseException, NoSuchMethodException {
         createDirectories(wikiDirectory());
         writeWikiPage("HappyPath.happyAttempt", HappyAttemptApiTest.class);
         writeIndexPage();
@@ -85,7 +88,7 @@ public class WikiGenerator {
                 .collect(joining("\n"));
     }
 
-    private static void writeWikiPage(String pageName, Class<?> apiTestClass) throws IOException, ParseException {
+    private static void writeWikiPage(String pageName, Class<?> apiTestClass) throws IOException, ParseException, NoSuchMethodException {
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
         String markup = pageTitle(pageName) + "\n" + apiMarkup(apiTestClass);
         writePage(page, markup);
@@ -99,7 +102,7 @@ public class WikiGenerator {
         return Paths.get("./docs");
     }
 
-    private static String apiMarkup(Class<?> apiTestClass) throws ParseException, IOException {
+    private static String apiMarkup(Class<?> apiTestClass) throws ParseException, IOException, NoSuchMethodException {
         String apiTestName = apiTestClass.getSimpleName();
         TypeDeclaration typeDeclaration = JavaParser.parse(Paths.get("./src/test/java/api/" + apiTestName + ".java").toFile()).getTypes().get(0);
         String description = description(typeDeclaration.getJavaDoc());
@@ -109,7 +112,7 @@ public class WikiGenerator {
                 .filter(WikiGenerator::isExampleMethod)
                 .map(WikiGenerator::renderExampleMarkup)
                 .collect(joining("\n"));
-        return description + "\n" + examples;
+        return description + "\n" + examples + "\n" + "[test](" + javaDocLink(HappyPath.class.getMethod("happyAttempt", Attempt.class)) + ")";
     }
 
     private static String description(JavadocComment comment) {
@@ -129,9 +132,30 @@ public class WikiGenerator {
     }
 
     private static String renderExampleMarkup(MethodDeclaration methodDeclaration) {
-        return "## [" + camelCaseToSentence(methodDeclaration.getName()) + "](" + "https://oss.sonatype.org/service/local/repositories/releases/archive/io/github/theangrydev/business-flows/10.1.0/business-flows-10.1.0-javadoc.jar/!/io/github/theangrydev/businessflows/HappyPath.html#happyAttempt-io.github.theangrydev.businessflows.Attempt-" + ")\n"
-                + "```java\n" + methodContents(methodDeclaration) + "\n```\n" +
-                description(methodDeclaration.getJavaDoc());
+        return "## " + camelCaseToSentence(methodDeclaration.getName()) + "\n"
+                + "```java\n" + methodContents(methodDeclaration) + "\n```\n"
+                + description(methodDeclaration.getJavaDoc());
+    }
+
+    private static String javaDocLink(Method method) {
+        Class<?> declaringClass = method.getDeclaringClass();
+        Package aPackage = declaringClass.getPackage();
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        String version = "10.1.0";
+        String groupId = "io.github.theangrydev";
+        String artifactId = "business-flows";
+        //https://oss.sonatype.org/service/local/repositories/releases/archive/io/github/theangrydev/business-flows/10.1.0/business-flows-10.1.0-javadoc.jar/!/io/github/theangrydev/businessflows/HappyPath.html#happyAttempt-io.github.theangrydev.businessflows.Attempt-io.github.theangrydev.businessflows.Mapping-
+        String groupIdSlashes = groupId.replace('.', '/');
+        String packageSlashes = aPackage.getName().replace('.', '/');
+        String parameterSlashes = "io.github.theangrydev.businessflows.Attempt-";
+        return "https://oss.sonatype.org/service/local/repositories/releases/archive/"
+                + groupIdSlashes + "/"
+                + artifactId + "/"
+                + version + "/"
+                + artifactId + "-" + version + "-javadoc.jar/!/"
+                + packageSlashes + "/"
+                + declaringClass.getSimpleName() + ".html#"
+                + method.getName() + "-" + parameterSlashes;
     }
 
     private static String methodContents(MethodDeclaration methodDeclaration) {
