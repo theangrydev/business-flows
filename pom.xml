@@ -58,7 +58,7 @@
         <sonar.language>java</sonar.language>
         <apache.commons.lang.version>3.5</apache.commons.lang.version>
         <maven.scm.plugin.version>1.9.5</maven.scm.plugin.version>
-        <scm.excludes>none</scm.excludes>
+        <skip.check.local.modifications>false</skip.check.local.modifications>
     </properties>
 
     <prerequisites>
@@ -438,7 +438,7 @@
                             <goal>check-local-modification</goal>
                         </goals>
                         <configuration>
-                            <excludes>**/pom.xml</excludes>
+                            <skip>${skip.check.local.modifications}</skip>
                         </configuration>
                     </execution>
                 </executions>
@@ -544,7 +544,7 @@
         <profile>
             <id>release</id>
             <properties>
-                <scm.excludes>pom.xml</scm.excludes>
+                <skip.check.local.modifications>true</skip.check.local.modifications>
             </properties>
             <build>
                 <plugins>
