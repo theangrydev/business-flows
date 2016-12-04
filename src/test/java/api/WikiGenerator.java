@@ -212,7 +212,6 @@ public class WikiGenerator {
         Class<?> declaringClass = method.getDeclaringClass();
         Package aPackage = declaringClass.getPackage();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        // TODO: parameterize (get from pom.xml)
         String groupIdSlashes = groupId.replace('.', '/');
         String packageSlashes = aPackage.getName().replace('.', '/');
         String parameterSlashes = stream(parameterTypes).map(Class::getName).collect(joining("-", "", "-"));
