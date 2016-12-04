@@ -19,7 +19,6 @@ package api;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
-import com.github.javaparser.Position;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -48,6 +47,7 @@ import static org.apache.commons.lang3.text.WordUtils.uncapitalize;
 public class WikiGenerator {
 
     private static final String INDEX_PAGE = "index.md";
+    private static final String MARKDOWN_FILE_EXTENSION = ".md";
 
     private static final String INDEX_PAGE_HEADER = pageTitle("API Documentation");
 
@@ -78,14 +78,15 @@ public class WikiGenerator {
         return Files.list(wikiDirectory())
                 .map(Path::toFile)
                 .map(File::getName)
+                .filter(name -> name.endsWith(MARKDOWN_FILE_EXTENSION))
                 .filter(name -> !name.equals(INDEX_PAGE))
-                .map(name -> name.replace(".md", ""))
+                .map(name -> name.replace(MARKDOWN_FILE_EXTENSION, ""))
                 .map(name -> format("[%s](%s)", name, name))
                 .collect(joining("\n"));
     }
 
     private static void writeWikiPage(String pageName, Class<?> apiTestClass) throws IOException, ParseException {
-        Path page = wikiDirectory().resolve(pageName + ".md");
+        Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
         String markup = pageTitle(pageName) + "\n" + apiMarkup(apiTestClass);
         writePage(page, markup);
     }
