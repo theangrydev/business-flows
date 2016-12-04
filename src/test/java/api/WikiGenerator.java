@@ -33,6 +33,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,6 +44,7 @@ import java.util.regex.Pattern;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createDirectories;
+import static java.nio.file.Files.newBufferedReader;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Arrays.stream;
@@ -68,7 +70,7 @@ public class WikiGenerator {
 
     public static void main(String[] args) throws URISyntaxException, IOException, ParseException, NoSuchMethodException, XmlPullParserException {
         MavenXpp3Reader mavenXpp3Reader = new MavenXpp3Reader();
-        Model model = mavenXpp3Reader.read(new FileReader("pom.xml"));
+        Model model = mavenXpp3Reader.read(newBufferedReader(Paths.get("pom.xml"), UTF_8));
         String closestReleasedVersion = closestReleaseVersion(model.getVersion());
         WikiGenerator wikiGenerator = new WikiGenerator(model.getGroupId(), model.getArtifactId(), closestReleasedVersion);
         wikiGenerator.generate();
