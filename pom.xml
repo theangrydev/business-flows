@@ -428,7 +428,6 @@
                         <configuration>
                             <message>Updated documentation files for ${project.version}</message>
                             <includes>docs/**/*</includes>
-                            <excludes>pom.xml</excludes>
                             <pushChanges>false</pushChanges>
                         </configuration>
                     </execution>
@@ -438,6 +437,9 @@
                         <goals>
                             <goal>check-local-modification</goal>
                         </goals>
+                        <configuration>
+                            <excludes>${scm.excludes}</excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
