@@ -553,7 +553,7 @@
                                 <goals>
                                     <goal>check-local-modification</goal>
                                 </goals>
-                                <configuration>
+                                <configuration combine.self="override">
                                     <excludes>pom.xml</excludes>
                                 </configuration>
                             </execution>
