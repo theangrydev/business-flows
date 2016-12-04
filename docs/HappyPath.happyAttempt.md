@@ -1,11 +1,11 @@
 ---
 title: HappyPath.happyAttempt(io.github.theangrydev.businessflows.Attempt<Happy>)
 layout: post
-generated_at: 2016-12-04T22:19:27.578Z[Europe/London]
+generated_at: 2016-12-04T22:24:25.764Z[Europe/London]
 ---
-[happyAttempt javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/io/github/theangrydev/business-flows/10.1.5/business-flows-10.1.5-javadoc.jar/!/io/github/theangrydev/businessflows/HappyPath.html#happyAttempt-io.github.theangrydev.businessflows.Attempt-)
+[happyAttempt javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/io/github/theangrydev/business-flows/10.1.6/business-flows-10.1.6-javadoc.jar/!/io/github/theangrydev/businessflows/HappyPath.html#happyAttempt-io.github.theangrydev.businessflows.Attempt-)
 
-[happyAttempt usage tests](https://github.com/theangrydev/business-flows/blob/master/src/test/java/api/HappyAttemptApiTest.java)
+[happyAttempt usage tests](https://github.com/theangrydev/business-flows/blob/business-flows-10.1.6/src/test/java/api/HappyAttemptApiTest.java)
 
 These tests exist to prevent the failed solution to <a href="https://github.com/theangrydev/business-flows/issues/12">#12</a>
 from being attempted again in the future without realising it :)
