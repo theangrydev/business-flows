@@ -18,21 +18,24 @@
 package api;
 
 import io.github.theangrydev.businessflows.HappyPath;
+import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
 /**
  * These tests exist to prevent the failed solution to <a href="https://github.com/theangrydev/business-flows/issues/12">#12</a>
  * from being attempted again in the future without realising it :)
  */
-public class HappyAttemptApiTest {
+public class HappyAttemptApiTest implements WithAssertions {
 
     /**
      * An attempt that was once happy can be turned into a sad path.
-     * The `happyAttempt` method is playing the role of the Try monad here.
+     * The `happyAttempt` method is playing the role of the Try monad here, but is lifted into the Either monad immediately, which is why the `Sad` type has to be specified up front.
      */
     @Test
     public void happyAttemptCanIntroduceSadTypeViaThen() {
-        HappyPath.<Happy, Sad>happyAttempt(Happy::new)
-            .then(happy -> HappyPath.sadPath(new Sad()));
+        Sad sad = new Sad();
+        HappyPath<Happy, Sad> happyPath = HappyPath.<Happy, Sad>happyAttempt(Happy::new)
+                .then(happy -> HappyPath.sadPath(sad));
+        assertThat(happyPath.getSad()).isEqualTo(sad);
     }
 }

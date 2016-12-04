@@ -187,9 +187,7 @@ public class WikiGenerator {
 
     private static String methodContents(MethodDeclaration methodDeclaration) {
         DumpVisitor dumpVisitor = new DumpVisitor(true);
-        for (Statement statement : methodDeclaration.getBody().getStmts()) {
-            statement.accept(dumpVisitor, null);
-        }
+        dumpVisitor.visit(methodDeclaration.getBody(), null);
         return dumpVisitor.getSource().replace("( ", "("); //TODO: figure out what is causing this
     }
 

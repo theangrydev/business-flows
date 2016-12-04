@@ -917,7 +917,7 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printer.print("super");
     }
 
-    //TODO: pull request
+    //TODO: this was modified
     @Override public void visit(final MethodCallExpr n, final Object arg) {
         Position begin = n.getBegin();
         Position nameBegin = n.getNameExpr().getBegin();
@@ -1172,21 +1172,17 @@ public class DumpVisitor implements VoidVisitor<Object> {
         printer.print(";");
     }
 
+    //TODO: this was modified
     @Override public void visit(final BlockStmt n, final Object arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printJavaComment(n.getComment(), arg);
-        printer.printLn("{");
         if (n.getStmts() != null) {
-            printer.indent();
             for (final Statement s : n.getStmts()) {
                 s.accept(this, arg);
                 printer.printLn();
             }
-            printer.unindent();
         }
         printOrphanCommentsEnding(n);
-        printer.print("}");
-
     }
 
     @Override public void visit(final LabeledStmt n, final Object arg) {
