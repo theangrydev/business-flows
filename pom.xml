@@ -438,7 +438,7 @@
                             <goal>check-local-modification</goal>
                         </goals>
                         <configuration>
-                            <excludes>${scm.excludes}</excludes>
+                            <excludes>**/pom.xml</excludes>
                         </configuration>
                     </execution>
                 </executions>
