@@ -129,7 +129,7 @@ public class WikiGenerator {
     }
 
     private static String renderExampleMarkup(MethodDeclaration methodDeclaration) {
-        return "## " + camelCaseToSentence(methodDeclaration.getName()) + "\n"
+        return "## [" + camelCaseToSentence(methodDeclaration.getName()) + "](" + "https://oss.sonatype.org/service/local/repositories/releases/archive/io/github/theangrydev/business-flows/10.1.0/business-flows-10.1.0-javadoc.jar/!/io/github/theangrydev/businessflows/HappyPath.html#happyAttempt-io.github.theangrydev.businessflows.Attempt-" + ")\n"
                 + "```java\n" + methodContents(methodDeclaration) + "\n```\n" +
                 description(methodDeclaration.getJavaDoc());
     }
