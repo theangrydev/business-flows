@@ -428,7 +428,7 @@
                         <configuration>
                             <message>Updated documentation files for ${project.version}</message>
                             <includes>docs/**/*</includes>
-                            <excludes>${scm.excludes}</excludes>
+                            <excludes>pom.xml</excludes>
                             <pushChanges>false</pushChanges>
                         </configuration>
                     </execution>
