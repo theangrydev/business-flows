@@ -71,8 +71,7 @@ public class WikiGenerator {
     public static void main(String[] args) throws URISyntaxException, IOException, ParseException, NoSuchMethodException, XmlPullParserException {
         MavenXpp3Reader mavenXpp3Reader = new MavenXpp3Reader();
         Model model = mavenXpp3Reader.read(newBufferedReader(Paths.get("pom.xml"), UTF_8));
-        String closestReleasedVersion = closestReleaseVersion(model.getVersion());
-        WikiGenerator wikiGenerator = new WikiGenerator(model.getGroupId(), model.getArtifactId(), closestReleasedVersion);
+        WikiGenerator wikiGenerator = new WikiGenerator(model.getGroupId(), model.getArtifactId(), model.getVersion());
         wikiGenerator.generate();
     }
 
@@ -142,13 +141,21 @@ public class WikiGenerator {
         String markup = pageTitle(pageDisplayName) + "\n"
                 + "[" + apiMethod.getName() + " javadoc](" + javaDocLink(apiMethod) + ")" + "\n\n"
                 + "[" + apiMethod.getName() + " usage tests](" + usageLink(apiTestClass) + ")" + "\n\n"
-                + apiMarkup(apiTestClass, apiMethod) + "\n";
+                + apiMarkup(apiTestClass, apiMethod);
         writePage(page, markup);
     }
 
     private String usageLink(Class<?> apiTestClass) {
         String packagePath = apiTestClass.getPackage().getName().replace('.', '/');
-        return "https://github.com/theangrydev/business-flows/blob/business-flows-" + version + "/src/test/java/" + packagePath + "/" + apiTestClass.getSimpleName() + ".java";
+        return "https://github.com/theangrydev/business-flows/blob/" + masterOrTagVersion() + "/src/test/java/" + packagePath + "/" + apiTestClass.getSimpleName() + ".java";
+    }
+
+    private String masterOrTagVersion() {
+        if (version.endsWith("SNAPSHOT")) {
+            return "master";
+        } else {
+            return artifactId + "-" + version;
+        }
     }
 
     private static String pageName(Method apiMethod) {
@@ -216,11 +223,12 @@ public class WikiGenerator {
         String groupIdSlashes = groupId.replace('.', '/');
         String packageSlashes = aPackage.getName().replace('.', '/');
         String parameterSlashes = stream(parameterTypes).map(Class::getName).collect(joining("-", "", "-"));
+        String closestReleasedVersion = closestReleaseVersion(version);
         return "https://oss.sonatype.org/service/local/repositories/releases/archive/"
                 + groupIdSlashes + "/"
                 + artifactId + "/"
-                + version + "/"
-                + artifactId + "-" + version + "-javadoc.jar/!/"
+                + closestReleasedVersion + "/"
+                + artifactId + "-" + closestReleasedVersion + "-javadoc.jar/!/"
                 + packageSlashes + "/"
                 + declaringClass.getSimpleName() + ".html#"
                 + method.getName() + "-" + parameterSlashes;
