@@ -172,9 +172,9 @@ public class WikiGenerator {
         Class<?> declaringClass = method.getDeclaringClass();
         Package aPackage = declaringClass.getPackage();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        String version = "10.1.0";
-        String groupId = "io.github.theangrydev";
-        String artifactId = "business-flows";
+        String version = "10.1.0"; // TODO: parameterize (get from pom.xml)
+        String groupId = "io.github.theangrydev"; // TODO: parameterize (get from pom.xml)
+        String artifactId = "business-flows"; // TODO: parameterize (get from pom.xml)
         String groupIdSlashes = groupId.replace('.', '/');
         String packageSlashes = aPackage.getName().replace('.', '/');
         String parameterSlashes = stream(parameterTypes).map(Class::getName).collect(joining("-", "", "-"));
