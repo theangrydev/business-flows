@@ -519,6 +519,10 @@
                         <executions>
                             <execution>
                                 <id>commit-generated-files</id>
+                                <configuration>
+                                    <includes>docs/**</includes>
+                                    <pushChanges>false</pushChanges>
+                                </configuration>
                                 <goals>
                                     <goal>checkin</goal>
                                 </goals>
