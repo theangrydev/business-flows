@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,9 +42,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.StringUtils.capitalize;
-import static org.apache.commons.lang3.StringUtils.join;
-import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.text.WordUtils.uncapitalize;
 
 public class WikiGenerator {
@@ -63,7 +60,7 @@ public class WikiGenerator {
     }
 
     private static void removeAllMarkdownFiles() throws IOException {
-        Files.walk(wikiDirectory(), FileVisitOption.FOLLOW_LINKS)
+        Files.walk(wikiDirectory())
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)
                 .filter(file -> file.getName().endsWith(MARKDOWN_FILE_EXTENSION))
