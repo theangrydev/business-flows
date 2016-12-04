@@ -57,6 +57,7 @@
         <skipTests>false</skipTests>
         <sonar.language>java</sonar.language>
         <apache.commons.lang.version>3.5</apache.commons.lang.version>
+        <maven.scm.plugin.version>1.9.5</maven.scm.plugin.version>
     </properties>
 
     <prerequisites>
@@ -410,6 +411,22 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Check there are no uncommitted files -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>${maven.scm.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>check-local-modification</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check-local-modification</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -515,7 +532,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-scm-plugin</artifactId>
-                        <version>1.9.5</version>
+                        <version>${maven.scm.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>commit-generated-files</id>
