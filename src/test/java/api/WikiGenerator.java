@@ -134,11 +134,11 @@ public class WikiGenerator {
     private static String apiLinks(List<ApiDocumentation> apiDocumentations) throws IOException {
         return apiDocumentations.stream()
                 .map(apiDocumentation -> apiDocumentation.apiMethod)
-                .map(apiMethod -> pageLink(pageDisplayName(apiMethod), pageName(apiMethod)))
+                .map(apiMethod -> hyperLink(pageDisplayName(apiMethod), pageName(apiMethod)))
                 .collect(joining("\n"));
     }
 
-    private static String pageLink(String displayName, String pageName) {
+    private static String hyperLink(String displayName, String pageName) {
         return format("[%s](%s)", escapeHtml4(displayName), pageName);
     }
 
@@ -147,8 +147,8 @@ public class WikiGenerator {
         String pageName = pageName(apiDocumentation.apiMethod);
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
         String markup = pageTitle(pageDisplayName) + "\n"
-                + "[" + apiDocumentation.apiMethod.getName() + " javadoc](" + javaDocLink(apiDocumentation.apiMethod) + ")" + "\n\n"
-                + "[" + apiDocumentation.apiMethod.getName() + " usage tests](" + usageLink(apiDocumentation.apiTest) + ")" + "\n\n"
+                + hyperLink("javadoc", javaDocLink(apiDocumentation.apiMethod)) + " "
+                + hyperLink("usage tests", usageLink(apiDocumentation.apiTest)) + "\n\n"
                 + apiMarkup(apiDocumentation.apiTest);
         writePage(page, markup);
     }
