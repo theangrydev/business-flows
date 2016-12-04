@@ -34,6 +34,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -112,7 +114,9 @@ public class WikiGenerator {
                 .filter(WikiGenerator::isExampleMethod)
                 .map(WikiGenerator::renderExampleMarkup)
                 .collect(joining("\n"));
-        return description + "\n" + examples + "\n" + "[test](" + javaDocLink(HappyPath.class.getMethod("happyAttempt", Attempt.class)) + ")";
+        return description + "\n"
+                + examples + "\n"
+                + "[test](" + javaDocLink(HappyPath.class.getMethod("happyAttempt", Attempt.class)) + ")";
     }
 
     private static String description(JavadocComment comment) {
@@ -144,10 +148,9 @@ public class WikiGenerator {
         String version = "10.1.0";
         String groupId = "io.github.theangrydev";
         String artifactId = "business-flows";
-        //https://oss.sonatype.org/service/local/repositories/releases/archive/io/github/theangrydev/business-flows/10.1.0/business-flows-10.1.0-javadoc.jar/!/io/github/theangrydev/businessflows/HappyPath.html#happyAttempt-io.github.theangrydev.businessflows.Attempt-io.github.theangrydev.businessflows.Mapping-
         String groupIdSlashes = groupId.replace('.', '/');
         String packageSlashes = aPackage.getName().replace('.', '/');
-        String parameterSlashes = "io.github.theangrydev.businessflows.Attempt-";
+        String parameterSlashes = Arrays.stream(parameterTypes).map(Class::getName).collect(joining("-", "", "-"));
         return "https://oss.sonatype.org/service/local/repositories/releases/archive/"
                 + groupIdSlashes + "/"
                 + artifactId + "/"
