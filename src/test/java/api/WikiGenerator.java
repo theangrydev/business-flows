@@ -141,7 +141,7 @@ public class WikiGenerator {
         String markup = pageTitle(pageDisplayName) + "\n"
                 + "[" + apiMethod.getName() + " javadoc](" + javaDocLink(apiMethod) + ")" + "\n\n"
                 + "[" + apiMethod.getName() + " usage tests](" + usageLink(apiTestClass) + ")" + "\n\n"
-                + apiMarkup(apiTestClass, apiMethod);
+                + apiMarkup(apiTestClass);
         writePage(page, markup);
     }
 
@@ -172,7 +172,7 @@ public class WikiGenerator {
         return Paths.get("./docs");
     }
 
-    private String apiMarkup(Class<?> apiTestClass, Method apiMethod) throws ParseException, IOException {
+    private String apiMarkup(Class<?> apiTestClass) throws ParseException, IOException {
         String apiTestName = apiTestClass.getSimpleName();
         TypeDeclaration typeDeclaration = JavaParser.parse(Paths.get("./src/test/java/api/" + apiTestName + ".java").toFile()).getTypes().get(0);
         String description = description(typeDeclaration.getJavaDoc());
