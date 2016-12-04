@@ -541,6 +541,25 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <!-- Check there are no uncommitted files -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <version>${maven.scm.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>check-local-modification</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check-local-modification</goal>
+                                </goals>
+                                <configuration>
+                                    <excludes>pom.xml</excludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
