@@ -358,6 +358,7 @@
                                 <exclude>src/test/resources/**</exclude>
                                 <exclude>src/main/resources/**</exclude>
                                 <exclude>.*yml</exclude>
+                                <exclude>docs/**</exclude>
                                 <exclude>sonar-project.properties</exclude>
                             </excludes>
                             <header>${project.basedir}/license-header/license-header.txt</header>
