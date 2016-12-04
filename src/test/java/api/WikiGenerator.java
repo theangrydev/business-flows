@@ -138,7 +138,7 @@ public class WikiGenerator {
         for (Statement statement : methodDeclaration.getBody().getStmts()) {
             statement.accept(dumpVisitor, null);
         }
-        return dumpVisitor.getSource();
+        return dumpVisitor.getSource().replace("( ", "("); //TODO: figure out what is causing this
     }
 
     private static String camelCaseToSentence(String camelCase) {
