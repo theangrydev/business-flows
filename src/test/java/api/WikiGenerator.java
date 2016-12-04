@@ -24,8 +24,12 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import io.github.theangrydev.businessflows.Attempt;
 import io.github.theangrydev.businessflows.HappyPath;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -33,6 +37,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -50,7 +56,37 @@ public class WikiGenerator {
     private static final String INDEX_PAGE = "index.md";
     private static final String MARKDOWN_FILE_EXTENSION = ".md";
 
-    public static void main(String[] args) throws URISyntaxException, IOException, ParseException, NoSuchMethodException {
+    private final String groupId;
+    private final String artifactId;
+    private final String version;
+
+    public WikiGenerator(String groupId, String artifactId, String version) {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.version = version;
+    }
+
+    public static void main(String[] args) throws URISyntaxException, IOException, ParseException, NoSuchMethodException, XmlPullParserException {
+        MavenXpp3Reader mavenXpp3Reader = new MavenXpp3Reader();
+        Model model = mavenXpp3Reader.read(new FileReader("pom.xml"));
+        String closestReleasedVersion = closestReleaseVersion(model.getVersion());
+        WikiGenerator wikiGenerator = new WikiGenerator(model.getGroupId(), model.getArtifactId(), closestReleasedVersion);
+        wikiGenerator.generate();
+    }
+
+    public static String closestReleaseVersion(String version) {
+        Pattern pattern = Pattern.compile(".*(\\d+)-SNAPSHOT");
+        Matcher matcher = pattern.matcher(version);
+        if (matcher.matches()) {
+            int patchVersion = Integer.parseInt(matcher.group(1));
+            String closestReleasePatch = String.valueOf(patchVersion - 1);
+            return version.replace(patchVersion + "-SNAPSHOT", closestReleasePatch);
+        } else {
+            return version;
+        }
+    }
+
+    public void generate() throws IOException, ParseException, NoSuchMethodException {
         createDirectories(wikiDirectory());
         removeAllMarkdownFiles();
         writeWikiPage(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class));
@@ -73,7 +109,8 @@ public class WikiGenerator {
 
     private static String indexMarkup() throws IOException {
         return pageTitle("API Usage Examples") + "\n"
-                + "This is an index of usage examples of the API, with the aim of demonstrating what you can as a learning aid." + "\n\n"
+                + "This is an index of usage examples of the API, with the aim of demonstrating what you can as a learning aid.\n"
+                + "All of these examples were generated from real tests, so you can be confident that the usage shown is up to date." + "\n\n"
                 + apiLinks();
     }
 
@@ -95,7 +132,7 @@ public class WikiGenerator {
                 .collect(joining("\n"));
     }
 
-    private static void writeWikiPage(Class<?> apiTestClass, Method apiMethod) throws IOException, ParseException {
+    private void writeWikiPage(Class<?> apiTestClass, Method apiMethod) throws IOException, ParseException {
         String pageDisplayName = pageDisplayName(apiMethod);
         String pageName = pageName(apiMethod);
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
@@ -126,7 +163,7 @@ public class WikiGenerator {
         return Paths.get("./docs");
     }
 
-    private static String apiMarkup(Class<?> apiTestClass, Method apiMethod) throws ParseException, IOException {
+    private String apiMarkup(Class<?> apiTestClass, Method apiMethod) throws ParseException, IOException {
         String apiTestName = apiTestClass.getSimpleName();
         TypeDeclaration typeDeclaration = JavaParser.parse(Paths.get("./src/test/java/api/" + apiTestName + ".java").toFile()).getTypes().get(0);
         String description = description(typeDeclaration.getJavaDoc());
@@ -163,13 +200,11 @@ public class WikiGenerator {
                 + description(methodDeclaration.getJavaDoc());
     }
 
-    private static String javaDocLink(Method method) {
+    private String javaDocLink(Method method) {
         Class<?> declaringClass = method.getDeclaringClass();
         Package aPackage = declaringClass.getPackage();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        String version = "10.1.0"; // TODO: parameterize (get from pom.xml)
-        String groupId = "io.github.theangrydev"; // TODO: parameterize (get from pom.xml)
-        String artifactId = "business-flows"; // TODO: parameterize (get from pom.xml)
+        // TODO: parameterize (get from pom.xml)
         String groupIdSlashes = groupId.replace('.', '/');
         String packageSlashes = aPackage.getName().replace('.', '/');
         String parameterSlashes = stream(parameterTypes).map(Class::getName).collect(joining("-", "", "-"));
