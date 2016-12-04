@@ -19,38 +19,19 @@ package api;
 
 import io.github.theangrydev.businessflows.HappyPath;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
- * These tests exist to prevent the failed solution to https://github.com/theangrydev/business-flows/issues/12 from
- * being attempted again in the future without realising it :)
+ * These tests exist to prevent the failed solution to <a href="https://github.com/theangrydev/business-flows/issues/12">#12</a>
+ * from being attempted again in the future without realising it :)
  */
 public class HappyAttemptApiTest {
 
-    private static class Sad {}
-
     /**
-     * Here, the thing is the doodad.
+     * An attempt that was once happy can be turned into a sad path.
      */
-    @Test
-    public void happyAttemptReturnTypeCanBeUsedOutsideOfTheInternalPackage() {
-        usageOfTheReturnType();
-    }
-
     @Test
     public void happyAttemptCanIntroduceSadTypeViaThen() {
-        usageOfTheReturnType().then(happy -> HappyPath.sadPath(new Sad()));
-    }
-
-    /**
-     * Here, the thing is the doodad.
-     */
-    @Test
-    public void hasaappyAttemptReturnTypeCanBeUsedOutsideOfTheInternalPackage() {
-        usageOfTheReturnType();
-    }
-
-    private HappyPath<Object, Sad> usageOfTheReturnType() {
-        return HappyPath.happyAttempt(Object::new);
+        HappyPath.<Happy, Sad>happyAttempt(Happy::new)
+            .then(happy -> HappyPath.sadPath(new Sad()));
     }
 }

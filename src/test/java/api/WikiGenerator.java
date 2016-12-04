@@ -19,9 +19,12 @@ package api;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.visitor.DumpVisitor;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,18 +129,16 @@ public class WikiGenerator {
 
     private static String renderExampleMarkup(MethodDeclaration methodDeclaration) {
         return "## " + camelCaseToSentence(methodDeclaration.getName()) + "\n"
-                + "```java" + methodContents(methodDeclaration) + "\n```\n" +
+                + "```java\n" + methodContents(methodDeclaration) + "\n```\n" +
                 description(methodDeclaration.getJavaDoc());
     }
 
     private static String methodContents(MethodDeclaration methodDeclaration) {
-        return "\n" + methodDeclaration.toString();
-//        String body = methodDeclaration.getBody().toString()
-//                .replaceFirst("\\{", "")
-//                .replaceAll("}$", "");
-//        return stream(body.split("\n"))
-//                .map(String::trim)
-//                .collect(joining("\n"));
+        DumpVisitor dumpVisitor = new DumpVisitor(true);
+        for (Statement statement : methodDeclaration.getBody().getStmts()) {
+            statement.accept(dumpVisitor, null);
+        }
+        return dumpVisitor.getSource();
     }
 
     private static String camelCaseToSentence(String camelCase) {
