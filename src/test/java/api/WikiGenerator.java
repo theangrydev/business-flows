@@ -29,14 +29,13 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,6 +119,7 @@ public class WikiGenerator {
         return "---\n" +
                 "title: " + title + "\n" +
                 "layout: post\n" +
+                "generated_at: " + ZonedDateTime.now() + "\n" +
                 "---";
     }
 
