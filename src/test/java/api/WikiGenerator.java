@@ -83,7 +83,7 @@ public class WikiGenerator {
     }
 
     private static String closestReleaseVersion(String version) {
-        //TODO: during release:perform, this will change but will not be committed, which means the tag will always reference the wrong javadoc (the old one)
+        //TODO: during release:prepare, this will change but will not be committed, which means the tag will always reference the wrong javadoc (the old one)
         Pattern pattern = Pattern.compile(".*(\\d+)-SNAPSHOT");
         Matcher matcher = pattern.matcher(version);
         if (matcher.matches()) {
