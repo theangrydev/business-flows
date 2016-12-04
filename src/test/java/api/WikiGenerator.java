@@ -141,8 +141,14 @@ public class WikiGenerator {
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
         String markup = pageTitle(pageDisplayName) + "\n"
                 + "[" + apiMethod.getName() + " javadoc](" + javaDocLink(apiMethod) + ")" + "\n\n"
+                + "[" + apiMethod.getName() + " usage tests](" + usageLink(apiTestClass) + ")" + "\n\n"
                 + apiMarkup(apiTestClass, apiMethod) + "\n";
         writePage(page, markup);
+    }
+
+    private String usageLink(Class<?> apiTestClass) {
+        String packagePath = apiTestClass.getPackage().getName().replace('.', '/');
+        return "https://github.com/theangrydev/business-flows/blob/business-flows-" + version + "/src/test/java/" + packagePath + "/" + apiTestClass.getSimpleName() + ".java";
     }
 
     private static String pageName(Method apiMethod) {

@@ -4,6 +4,8 @@ layout: post
 ---
 [happyAttempt javadoc](https://oss.sonatype.org/service/local/repositories/releases/archive/io/github/theangrydev/business-flows/10.1.2/business-flows-10.1.2-javadoc.jar/!/io/github/theangrydev/businessflows/HappyPath.html#happyAttempt-io.github.theangrydev.businessflows.Attempt-)
 
+[happyAttempt usage tests](https://github.com/theangrydev/business-flows/blob/business-flows-10.1.2/src/test/java/api/HappyAttemptApiTest.java)
+
 These tests exist to prevent the failed solution to <a href="https://github.com/theangrydev/business-flows/issues/12">#12</a>
 from being attempted again in the future without realising it :)
 
