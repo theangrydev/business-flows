@@ -24,7 +24,6 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import io.github.theangrydev.businessflows.Attempt;
 import io.github.theangrydev.businessflows.HappyPath;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -32,14 +31,17 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static api.ApiDocumentation.apiDocumentation;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createDirectories;
@@ -47,6 +49,7 @@ import static java.nio.file.Files.newBufferedReader;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Arrays.stream;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import static org.apache.commons.lang3.StringUtils.*;
@@ -78,8 +81,11 @@ public class WikiGenerator {
     public void generate() throws IOException, ParseException, NoSuchMethodException {
         createDirectories(wikiDirectory());
         removeAllMarkdownFiles();
-        writeWikiPage(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class));
-        writeIndexPage();
+        List<ApiDocumentation> apiDocumentations = singletonList(apiDocumentation(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)));
+        for (ApiDocumentation apiDocumentation : apiDocumentations) {
+            writeWikiPage(apiDocumentation);
+        }
+        writeIndexPage(apiDocumentations);
     }
 
     private static String latestReleasedVersion(String version) {
@@ -105,17 +111,17 @@ public class WikiGenerator {
                 .forEach(File::delete);
     }
 
-    private static void writeIndexPage() throws IOException {
+    private static void writeIndexPage(List<ApiDocumentation> apiDocumentations) throws IOException {
         Path page = wikiDirectory().resolve(INDEX_PAGE);
-        String markup = indexMarkup();
+        String markup = indexMarkup(apiDocumentations);
         writePage(page, markup);
     }
 
-    private static String indexMarkup() throws IOException {
+    private static String indexMarkup(List<ApiDocumentation> apiDocumentations) throws IOException {
         return pageTitle("API Usage Examples") + "\n"
                 + "This is an index of usage examples of the API, with the aim of demonstrating what you can as a learning aid.\n"
                 + "All of these examples were generated from real tests, so you can be confident that the usage shown is up to date." + "\n\n"
-                + apiLinks();
+                + apiLinks(apiDocumentations);
     }
 
     private static String pageTitle(String title) {
@@ -125,25 +131,25 @@ public class WikiGenerator {
                 "---";
     }
 
-    private static String apiLinks() throws IOException {
-        return Files.list(wikiDirectory())
-                .map(Path::toFile)
-                .map(File::getName)
-                .filter(name -> name.endsWith(MARKDOWN_FILE_EXTENSION))
-                .filter(name -> !name.equals(INDEX_PAGE))
-                .map(name -> name.replace(MARKDOWN_FILE_EXTENSION, ""))
-                .map(name -> format("[%s](%s)", name, name))
+    private static String apiLinks(List<ApiDocumentation> apiDocumentations) throws IOException {
+        return apiDocumentations.stream()
+                .map(apiDocumentation -> apiDocumentation.apiMethod)
+                .map(apiMethod -> pageLink(pageDisplayName(apiMethod), pageName(apiMethod)))
                 .collect(joining("\n"));
     }
 
-    private void writeWikiPage(Class<?> apiTestClass, Method apiMethod) throws IOException, ParseException {
-        String pageDisplayName = pageDisplayName(apiMethod);
-        String pageName = pageName(apiMethod);
+    private static String pageLink(String displayName, String pageName) {
+        return format("[%s](%s)", escapeHtml4(displayName), pageName);
+    }
+
+    private void writeWikiPage(ApiDocumentation apiDocumentation) throws IOException, ParseException {
+        String pageDisplayName = pageDisplayName(apiDocumentation.apiMethod);
+        String pageName = pageName(apiDocumentation.apiMethod);
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
         String markup = pageTitle(pageDisplayName) + "\n"
-                + "[" + apiMethod.getName() + " javadoc](" + javaDocLink(apiMethod) + ")" + "\n\n"
-                + "[" + apiMethod.getName() + " usage tests](" + usageLink(apiTestClass) + ")" + "\n\n"
-                + apiMarkup(apiTestClass);
+                + "[" + apiDocumentation.apiMethod.getName() + " javadoc](" + javaDocLink(apiDocumentation.apiMethod) + ")" + "\n\n"
+                + "[" + apiDocumentation.apiMethod.getName() + " usage tests](" + usageLink(apiDocumentation.apiTest) + ")" + "\n\n"
+                + apiMarkup(apiDocumentation.apiTest);
         writePage(page, markup);
     }
 
@@ -154,16 +160,21 @@ public class WikiGenerator {
     }
 
     private static String pageName(Method apiMethod) {
-        String methodName = apiMethod.getName();
-        String className = apiMethod.getDeclaringClass().getSimpleName();
-        return className + "." + methodName;
+        return pageDisplayName(apiMethod).replace('<', '[').replace('>', ']');
     }
 
     private static String pageDisplayName(Method apiMethod) {
         String methodName = apiMethod.getName();
         String className = apiMethod.getDeclaringClass().getSimpleName();
-        String parameterTypes = stream(apiMethod.getGenericParameterTypes()).map(String::valueOf).collect(joining(", "));
+        String parameterTypes = stream(apiMethod.getGenericParameterTypes())
+                .map(Type::getTypeName)
+                .map(WikiGenerator::stripPackage)
+                .collect(joining(", "));
         return className + "." + methodName + "(" + parameterTypes +  ")";
+    }
+
+    private static String stripPackage(String name) {
+        return name.replaceFirst("^.*\\.", "");
     }
 
     private static void writePage(Path page, String markup) throws IOException {
