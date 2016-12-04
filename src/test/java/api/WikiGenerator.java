@@ -24,6 +24,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import io.github.theangrydev.businessflows.Attempt;
 import io.github.theangrydev.businessflows.HappyPath;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -47,6 +48,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.text.WordUtils.uncapitalize;
 
@@ -118,7 +120,7 @@ public class WikiGenerator {
 
     private static String pageTitle(String title) {
         return "---\n" +
-                "title: " + title + "\n" +
+                "title: " + escapeHtml4(title) + "\n" +
                 "layout: post\n" +
                 "---";
     }
