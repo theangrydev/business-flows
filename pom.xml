@@ -520,7 +520,7 @@
                             <execution>
                                 <id>commit-generated-files</id>
                                 <configuration>
-                                    <includes>docs/**</includes>
+                                    <includes>docs/**/*</includes>
                                     <pushChanges>false</pushChanges>
                                 </configuration>
                                 <goals>
