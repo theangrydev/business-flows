@@ -84,13 +84,6 @@ public class WikiGenerator {
                 "---";
     }
 
-    private static String pageTitle(String title, String link) {
-        return "---\n" +
-                "title: [" + title + "](" + link + ")\n" +
-                "layout: post\n" +
-                "---";
-    }
-
     private static String apiLinks() throws IOException {
         return Files.list(wikiDirectory())
                 .map(Path::toFile)
@@ -106,7 +99,9 @@ public class WikiGenerator {
         String pageDisplayName = pageDisplayName(apiMethod);
         String pageName = pageName(apiMethod);
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
-        String markup = pageTitle(pageDisplayName, javaDocLink(apiMethod)) + "\n" + apiMarkup(apiTestClass, apiMethod);
+        String markup = pageTitle(pageDisplayName) + "\n"
+                + "[" + apiMethod.getName() + " javadoc](" + javaDocLink(apiMethod) + ")" + "\n\n"
+                + apiMarkup(apiTestClass, apiMethod) + "\n";
         writePage(page, markup);
     }
 
