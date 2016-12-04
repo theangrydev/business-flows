@@ -28,6 +28,7 @@ public class HappyAttemptApiTest {
 
     /**
      * An attempt that was once happy can be turned into a sad path.
+     * The `happyAttempt` method is playing the role of the Try monad here.
      */
     @Test
     public void happyAttemptCanIntroduceSadTypeViaThen() {
