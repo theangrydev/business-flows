@@ -76,7 +76,14 @@ public class WikiGenerator {
         wikiGenerator.generate();
     }
 
-    public static String closestReleaseVersion(String version) {
+    public void generate() throws IOException, ParseException, NoSuchMethodException {
+        createDirectories(wikiDirectory());
+        removeAllMarkdownFiles();
+        writeWikiPage(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class));
+        writeIndexPage();
+    }
+
+    private static String closestReleaseVersion(String version) {
         //TODO: during release:perform, this will change but will not be committed, which means the tag will always reference the wrong javadoc (the old one)
         Pattern pattern = Pattern.compile(".*(\\d+)-SNAPSHOT");
         Matcher matcher = pattern.matcher(version);
@@ -87,13 +94,6 @@ public class WikiGenerator {
         } else {
             return version;
         }
-    }
-
-    public void generate() throws IOException, ParseException, NoSuchMethodException {
-        createDirectories(wikiDirectory());
-        removeAllMarkdownFiles();
-        writeWikiPage(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class));
-        writeIndexPage();
     }
 
     private static void removeAllMarkdownFiles() throws IOException {
@@ -183,8 +183,7 @@ public class WikiGenerator {
                 .map(WikiGenerator::renderExampleMarkup)
                 .collect(joining("\n"));
         return description + "\n"
-                + examples + "\n"
-                + "[test](" + javaDocLink(apiMethod) + ")";
+                + examples + "\n";
     }
 
     private static String description(JavadocComment comment) {
