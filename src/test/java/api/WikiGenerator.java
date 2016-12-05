@@ -161,7 +161,7 @@ public class WikiGenerator {
     }
 
     private static String pageName(Method apiMethod) {
-        return pageDisplayName(apiMethod).replace('<', '[').replace('>', ']');
+        return pageDisplayName(apiMethod).replace('<', '-').replace('>', '-');
     }
 
     private static String pageDisplayName(Method apiMethod) {
@@ -171,7 +171,7 @@ public class WikiGenerator {
                 .map(Type::getTypeName)
                 .map(WikiGenerator::stripPackage)
                 .collect(joining(", "));
-        return className + "." + methodName + "(" + parameterTypes +  ")";
+        return className + "." + methodName + "-" + parameterTypes +  "-";
     }
 
     private static String stripPackage(String name) {
