@@ -515,6 +515,26 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <version>${maven.scm.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>commit-generated-files</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>checkin</goal>
+                                </goals>
+                                <configuration>
+                                    <message>Updated documentation files for ${project.version}</message>
+                                    <includes>docs/**/*</includes>
+                                    <pushChanges>false</pushChanges>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                         <version>2.1.2</version>
                         <executions>
