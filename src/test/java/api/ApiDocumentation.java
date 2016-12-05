@@ -1,5 +1,7 @@
 package api;
 
+import io.github.theangrydev.businessflows.ApiFeature;
+
 import java.lang.reflect.Method;
 
 public class ApiDocumentation {
@@ -13,5 +15,9 @@ public class ApiDocumentation {
 
     public static ApiDocumentation apiDocumentation(Class<?> apiTest, Method apiMethod) {
         return new ApiDocumentation(apiTest, apiMethod);
+    }
+
+    public String addedInVersion() {
+        return apiMethod.getDeclaredAnnotation(ApiFeature.class).since();
     }
 }

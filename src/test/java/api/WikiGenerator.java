@@ -149,6 +149,7 @@ public class WikiGenerator {
         String markup = pageTitle(pageDisplayName) + "\n"
                 + hyperLink("javadoc", javaDocLink(apiDocumentation.apiMethod)) + " "
                 + hyperLink("usage tests", usageLink(apiDocumentation.apiTest)) + "\n\n"
+                + "Added in version " + apiDocumentation.addedInVersion() + "\n\n"
                 + apiMarkup(apiDocumentation.apiTest);
         writePage(page, markup);
     }
