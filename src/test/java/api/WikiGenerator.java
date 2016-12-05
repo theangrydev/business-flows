@@ -161,7 +161,7 @@ public class WikiGenerator {
     }
 
     private static String pageName(Method apiMethod) {
-        return pageDisplayName(apiMethod).replace('<', '-').replace('>', '-');
+        return pageDisplayName(apiMethod).replace('<', '[').replace('>', ']');
     }
 
     private static String pageDisplayName(Method apiMethod) {
