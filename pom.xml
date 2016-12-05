@@ -58,7 +58,6 @@
         <sonar.language>java</sonar.language>
         <apache.commons.lang.version>3.5</apache.commons.lang.version>
         <maven.scm.plugin.version>1.9.5</maven.scm.plugin.version>
-        <skip.check.local.modifications>false</skip.check.local.modifications>
     </properties>
 
     <prerequisites>
@@ -412,25 +411,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Check there are no uncommitted files -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-scm-plugin</artifactId>
-                <version>${maven.scm.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>check-local-modification</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check-local-modification</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skip.check.local.modifications}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -531,9 +511,6 @@
         <!-- Release -->
         <profile>
             <id>release</id>
-            <properties>
-                <skip.check.local.modifications>true</skip.check.local.modifications>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
