@@ -23,6 +23,7 @@ import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_1
 @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
 public enum ApiVersionHistory {
     VERSION_10_1_13(10, 1, 13),
+    VERSION_5_1_0(5, 1, 0),
     VERSION_5_0_0(5, 0, 0),
     VERSION_4_0_0(4, 0, 0),
     VERSION_3_1_1(3, 1, 1),

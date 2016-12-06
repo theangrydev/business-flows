@@ -19,6 +19,7 @@ package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_1_0;
 
 /**
  * A {@link Validator} for a {@link Field} of a {@link Happy} object.
@@ -47,6 +48,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
      * @param <Field>        The type of the field to validate
      * @return The validator
      */
+    @ApiFeature(since = VERSION_5_1_0, stability = STABLE)
     public static <Happy, Sad, Field> FieldValidator<Happy, Sad, Field> fieldValidator(Mapping<Happy, Field> fieldExtractor, Validator<Field, Sad> fieldValidator) {
         return new FieldValidator<>(fieldExtractor, fieldValidator);
     }
