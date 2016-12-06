@@ -22,9 +22,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_3_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_7_6_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.*;
 import static java.lang.String.format;
 
 /**
@@ -94,6 +92,7 @@ public interface WithOptional<Content> {
     /**
      * @return true if the {@link Content} is present, false otherwise.
      */
+    @ApiFeature(since = VERSION_8_2_0, stability = STABLE)
     default boolean isPresent() {
         return toOptional().isPresent();
     }

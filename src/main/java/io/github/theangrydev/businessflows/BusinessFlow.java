@@ -19,6 +19,8 @@ package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_7_6_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_8_2_0;
 
 /**
  * A {@link BusinessFlow} is a biased view of a {@link BusinessCase}.
@@ -62,6 +64,7 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
     /**
      * @return true if the underlying business case is a {@link HappyCase}, false otherwise
      */
+    @ApiFeature(since = VERSION_8_2_0, stability = STABLE)
     default boolean isHappy() {
         return ifHappy().isPresent();
     }
@@ -69,6 +72,7 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
     /**
      * @return true if the underlying business case is a {@link SadCase}, false otherwise
      */
+    @ApiFeature(since = VERSION_8_2_0, stability = STABLE)
     default boolean isSad() {
         return ifSad().isPresent();
     }
@@ -77,6 +81,7 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
      * @return If the underlying business case is a {@link HappyCase} then the {@link Happy} object, else an {@link IllegalStateException}
      * @throws IllegalStateException If the underlying business case is not a {@link HappyCase}
      */
+    @ApiFeature(since = VERSION_8_2_0, stability = STABLE)
     default Happy getHappy() {
         return ifHappy().get();
     }
@@ -85,6 +90,7 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
      * @return If the underlying business case is a {@link SadCase} then the {@link Sad} object, else an {@link IllegalStateException}
      * @throws IllegalStateException If the underlying business case is not a {@link SadCase}
      */
+    @ApiFeature(since = VERSION_8_2_0, stability = STABLE)
     default Sad getSad() {
         return ifSad().get();
     }
