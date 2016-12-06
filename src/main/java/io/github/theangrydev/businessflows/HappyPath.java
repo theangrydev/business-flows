@@ -161,6 +161,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param actionsThatMightFail The actions to apply if the underlying business case is happy
      * @return The same {@link HappyPath} if all the actions did not fail; if an action fails then a {@link HappyPath} that is now sad inside
      */
+    @ApiFeature(since = VERSION_7_4_0, stability = STABLE)
     HappyPath<Happy, Sad> attemptAll(List<? extends ActionThatMightFail<Happy, Sad>> actionsThatMightFail);
 
     /**
