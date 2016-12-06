@@ -19,6 +19,7 @@ package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_6_0_0;
 
 /**
  * Similar to a {@link java.util.function.Function} but is allowed to throw an {@link Exception}.
@@ -46,6 +47,7 @@ public interface Mapping<Old, New> {
      * @param <Old> The old type
      * @return The identity mapping
      */
+    @ApiFeature(since = VERSION_6_0_0, stability = STABLE)
     static <Old> Mapping<Old, Old> identity() {
         return old -> old;
     }

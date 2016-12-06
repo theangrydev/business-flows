@@ -24,6 +24,7 @@ import java.util.List;
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_6_0_0;
 import static io.github.theangrydev.businessflows.Mapping.identity;
 
 /**
@@ -45,6 +46,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <SadAggregate>      The type that the list of {@link Sad} validation errors will be aggregated into
      * @return A {@link ValidationPath} that is happy on the inside
      */
+    @ApiFeature(since = VERSION_6_0_0, stability = STABLE)
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validationPathInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping) {
         return new HappyCaseValidationPath<>(happy, sadAggregateMapping);
     }
