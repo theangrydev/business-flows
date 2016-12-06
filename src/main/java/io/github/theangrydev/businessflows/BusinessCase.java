@@ -21,9 +21,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_7_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_4_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.*;
 import static java.lang.String.format;
 
 /**
@@ -42,6 +40,7 @@ interface BusinessCase<Happy, Sad> {
      * @param technicalFailureMapping The mapping to apply to turn an existing technical failure into a {@link Sad}
      * @return A {@link PotentialFailure} that will be a failure if the business case is sad or a technical failure
      */
+    @ApiFeature(since = VERSION_6_1_0, stability = STABLE)
     PotentialFailure<Sad> toPotentialFailure(Function<Exception, Sad> technicalFailureMapping);
 
     /**
@@ -98,7 +97,7 @@ interface BusinessCase<Happy, Sad> {
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws IllegalStateException If this is a {@link TechnicalFailureCase} or there is a failure when joining.
      */
-    @ApiFeature(since = VERSION_4_0_0, stability = STABLE)
+    @ApiFeature(since = VERSION_6_1_0, stability = STABLE)
     default <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws IllegalStateException {
         try {
             return joinOrThrow(happyJoiner, sadJoiner);
