@@ -76,6 +76,7 @@ interface BusinessCase<Happy, Sad> {
      * @param sadConsumer   What to do if this is a {@link SadCase}
      * @throws Exception If this is a {@link TechnicalFailureCase}.
      */
+    @ApiFeature(since = VERSION_8_3_0, stability = STABLE)
     void consumeOrThrow(Peek<Happy> happyConsumer, Peek<Sad> sadConsumer) throws Exception;
 
     /**
@@ -85,6 +86,7 @@ interface BusinessCase<Happy, Sad> {
      * @param sadConsumer              What to do if this is a {@link SadCase}
      * @param technicalFailureConsumer What to do if this is a {@link TechnicalFailureCase}
      */
+    @ApiFeature(since = VERSION_8_3_0, stability = STABLE)
     void consume(Peek<Happy> happyConsumer, Peek<Sad> sadConsumer, Consumer<Exception> technicalFailureConsumer);
 
     /**
