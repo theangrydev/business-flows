@@ -20,6 +20,7 @@ package io.github.theangrydev.businessflows;
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_3_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_5_0;
 
 /**
  * A {@link SadPath} is a {@link BusinessFlow} that is biased towards the result being {@link Sad}.
@@ -101,6 +102,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptio
      * @param recovery The recovery to apply to an existing sad case
      * @return The result of applying {@link Attempt}, if applicable
      */
+    @ApiFeature(since = VERSION_2_5_0, stability = STABLE)
     HappyPath<Happy, Sad> recover(Attempt<Happy> recovery);
 
     /**

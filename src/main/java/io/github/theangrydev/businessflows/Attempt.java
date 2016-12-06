@@ -17,6 +17,9 @@
  */
 package io.github.theangrydev.businessflows;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_5_0;
+
 /**
  * Attempt to perform an action that will either:
  * <ul>
@@ -27,6 +30,7 @@ package io.github.theangrydev.businessflows;
  * @param <Result> The type of happy object that will be produced in the successful case
  */
 @FunctionalInterface
+@ApiFeature(since = VERSION_2_5_0, stability = STABLE)
 public interface Attempt<Result> {
 
     /**
@@ -35,5 +39,6 @@ public interface Attempt<Result> {
      * @return The happy object that the method attempts to produce
      * @throws Exception If there was a technical failure in producing
      */
+    @ApiFeature(since = VERSION_2_5_0, stability = STABLE)
     Result attempt() throws Exception;
 }
