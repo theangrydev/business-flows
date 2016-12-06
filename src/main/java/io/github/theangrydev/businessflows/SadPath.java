@@ -18,9 +18,7 @@
 package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_3_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_5_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.*;
 
 /**
  * A {@link SadPath} is a {@link BusinessFlow} that is biased towards the result being {@link Sad}.
@@ -117,6 +115,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptio
     /**
      * {@inheritDoc}
      */
+    @ApiFeature(since = VERSION_3_1_1, stability = STABLE)
     @Override
     default SadPath<Happy, Sad> ifSad() {
         return this;

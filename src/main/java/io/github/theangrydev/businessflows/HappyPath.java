@@ -189,6 +189,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
     /**
      * {@inheritDoc}
      */
+    @ApiFeature(since = VERSION_3_1_1, stability = STABLE)
     @Override
     default HappyPath<Happy, Sad> ifHappy() {
         return this;

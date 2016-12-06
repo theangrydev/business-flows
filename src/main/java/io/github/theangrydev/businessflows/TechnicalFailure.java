@@ -18,9 +18,7 @@
 package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_3_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_5_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.*;
 
 /**
  * A {@link TechnicalFailure} is a {@link BusinessFlow} that is biased towards the result being an {@link Exception}.
@@ -151,6 +149,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
     /**
      * {@inheritDoc}
      */
+    @ApiFeature(since = VERSION_3_1_1, stability = STABLE)
     @Override
     default TechnicalFailure<Happy, Sad> ifTechnicalFailure() {
         return this;
