@@ -23,6 +23,7 @@ import java.util.function.Function;
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_7_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_4_0_0;
 import static java.lang.String.format;
 
 /**
@@ -65,6 +66,7 @@ interface BusinessCase<Happy, Sad> {
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws Exception If this is a {@link TechnicalFailureCase}.
      */
+    @ApiFeature(since = VERSION_4_0_0, stability = STABLE)
     <Result> Result joinOrThrow(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws Exception;
 
     /**
@@ -96,6 +98,7 @@ interface BusinessCase<Happy, Sad> {
      * @return The result after applying the joiner that corresponds to the underlying business case
      * @throws IllegalStateException If this is a {@link TechnicalFailureCase} or there is a failure when joining.
      */
+    @ApiFeature(since = VERSION_4_0_0, stability = STABLE)
     default <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner) throws IllegalStateException {
         try {
             return joinOrThrow(happyJoiner, sadJoiner);
