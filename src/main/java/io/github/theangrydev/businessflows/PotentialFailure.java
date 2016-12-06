@@ -19,6 +19,7 @@ package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_3_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_7_6_0;
 
 /**
  * This type represents a failure that may occur in e.g. {@link HappyPath#attempt(ActionThatMightFail)}.
@@ -59,5 +60,6 @@ public interface PotentialFailure<Sad> extends WithOptional<Sad> {
      * @return A {@link HappyPath} that is happy if the {@link PotentialFailure} is a {@link PotentialFailure#success()}
      * or sad inside if the {@link PotentialFailure} is a {@link PotentialFailure#failure(Object)}
      */
+    @ApiFeature(since = VERSION_7_6_0, stability = STABLE)
     <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy);
 }

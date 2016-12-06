@@ -23,6 +23,8 @@ import java.util.function.Supplier;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_3_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_7_6_0;
 import static java.lang.String.format;
 
 /**
@@ -31,18 +33,21 @@ import static java.lang.String.format;
  *
  * @param <Content> The type of content that may be held
  */
+@ApiFeature(since = VERSION_7_6_0, stability = STABLE)
 @FunctionalInterface
 public interface WithOptional<Content> {
 
     /**
      * @return The {@link Optional} {@link Content}
      */
+    @ApiFeature(since = VERSION_7_6_0, stability = STABLE)
     Optional<Content> toOptional();
 
     /**
      * @return If the {@link Content} is present then the {@link Content}, else an {@link IllegalStateException}
      * @throws IllegalStateException If the underlying {@link Content} is not present
      */
+    @ApiFeature(since = VERSION_7_6_0, stability = STABLE)
     default Content get() {
         return orElseThrow(() -> new IllegalStateException(format("Not present. This is: '%s'.", this)));
     }
@@ -51,6 +56,7 @@ public interface WithOptional<Content> {
      * @param alternative The result if the {@link Content} is not present
      * @return If {@link Content} is present then the {@link Content}, else the given alternative
      */
+    @ApiFeature(since = VERSION_7_6_0, stability = STABLE)
     default Content orElse(Content alternative) {
         return toOptional().orElse(alternative);
     }
@@ -59,6 +65,7 @@ public interface WithOptional<Content> {
      * @param alternativeSupplier The supplier of the alternative result if the {@link Content} is not present
      * @return If the {@link Content} is present then the {@link Content}, else the given alternative
      */
+    @ApiFeature(since = VERSION_7_6_0, stability = STABLE)
     default Content orElseGet(Supplier<Content> alternativeSupplier) {
         return toOptional().orElseGet(alternativeSupplier);
     }
@@ -68,6 +75,7 @@ public interface WithOptional<Content> {
      *
      * @param consumer What to do if the {@link Content} is present
      */
+    @ApiFeature(since = VERSION_7_6_0, stability = STABLE)
     default void ifPresent(Consumer<Content> consumer) {
         toOptional().ifPresent(consumer);
     }
@@ -78,6 +86,7 @@ public interface WithOptional<Content> {
      * @return The {@link Content} if the {@link Content} is present
      * @throws X If the {@link Content} is not present
      */
+    @ApiFeature(since = VERSION_7_6_0, stability = STABLE)
     default <X extends Exception> Content orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         return toOptional().orElseThrow(exceptionSupplier);
     }
