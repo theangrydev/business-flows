@@ -23,6 +23,7 @@ import java.util.List;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_0_0;
 import static io.github.theangrydev.businessflows.Mapping.identity;
 
 /**
@@ -56,6 +57,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <Sad>   The type of validation errors the resulting {@link ValidationPath} may contain
      * @return A {@link ValidationPath} that is happy on the inside
      */
+    @ApiFeature(since = VERSION_5_0_0, stability = STABLE)
     static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validationPath(Happy happy) {
         return validationPathInto(happy, identity());
     }
@@ -69,6 +71,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <SadAggregate>     The type that the list of {@link Sad} validation errors will be aggregated into
      * @return A {@link ValidationPath} that has failed validation
      */
+    @ApiFeature(since = VERSION_5_0_0, stability = STABLE)
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validationFailure(SadAggregate validationFailures) {
         return new SadCaseValidationPath<>(validationFailures);
     }
@@ -82,6 +85,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <SadAggregate>   The type that the list of {@link Sad} validation errors will be aggregated into
      * @return A {@link ValidationPath} that is a technical failure
      */
+    @ApiFeature(since = VERSION_5_0_0, stability = STABLE)
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> technicalFailure(Exception technicalFailure) {
         return new TechnicalFailureCaseValidationPath<>(technicalFailure);
     }
@@ -186,6 +190,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <Sad>      The type of validation error the list of {@link Validator} can produce
      * @return A list of {@link Validator}
      */
+    @ApiFeature(since = VERSION_5_0_0, stability = STABLE)
     @SafeVarargs
     @SuppressWarnings("varargs")
     static <Happy, Sad> List<Validator<Happy, Sad>> validators(Validator<Happy, Sad>... validators) {
