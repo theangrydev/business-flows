@@ -22,7 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.EXPERIMENTAL;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_1_13;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_2_0;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -32,7 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({TYPE, METHOD, FIELD, CONSTRUCTOR})
 @Retention(RUNTIME)
-@ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+@ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_2_0)
 public @interface ApiFeature {
 
     /**
@@ -41,18 +41,18 @@ public @interface ApiFeature {
      *
      * @return The version that this feature was added.
      */
-    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_2_0)
     ApiVersionHistory since();
 
     /**
      * @return How stable this feature is.
      */
-    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_2_0)
     ApiFeatureStability stability();
 
     /**
      * @return Comments about the feature (e.g. if it is deprecated, what else to use instead).
      */
-    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_2_0)
     String comments() default "";
 }

@@ -18,11 +18,11 @@
 package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.EXPERIMENTAL;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_1_13;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_2_0;
 
-@ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+@ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_2_0)
 public enum ApiVersionHistory {
-    VERSION_10_1_13(10, 1, 13),
+    VERSION_10_2_0(10, 2, 0),
     VERSION_8_3_0(8, 3, 0),
     VERSION_8_2_0(8, 2, 0),
     VERSION_7_6_0(7, 6, 0),
@@ -54,7 +54,7 @@ public enum ApiVersionHistory {
         this.patch = patch;
     }
 
-    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_2_0)
     @Override
     public String toString() {
         return major + "." + minor + "." + patch;
