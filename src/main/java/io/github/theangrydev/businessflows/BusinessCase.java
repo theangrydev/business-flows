@@ -22,6 +22,7 @@ import java.util.function.Function;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_7_0;
 import static java.lang.String.format;
 
 /**
@@ -51,6 +52,7 @@ interface BusinessCase<Happy, Sad> {
      * @param <Result>               The type of the result
      * @return The result after applying the joiner that corresponds to the underlying business case
      */
+    @ApiFeature(since = VERSION_2_7_0, stability = STABLE)
     <Result> Result join(Mapping<Happy, Result> happyJoiner, Mapping<Sad, Result> sadJoiner, Function<Exception, Result> technicalFailureJoiner);
 
     /**
