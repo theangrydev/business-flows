@@ -20,6 +20,9 @@ package io.github.theangrydev.businessflows;
 import static io.github.theangrydev.businessflows.ApiFeatureStability.EXPERIMENTAL;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_2_0;
 
+/**
+ * These are all the versions that originally introduced API features that are still present in the current version.
+ */
 @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_2_0)
 public enum ApiVersionHistory {
     VERSION_10_2_0(10, 2, 0),
@@ -54,6 +57,9 @@ public enum ApiVersionHistory {
         this.patch = patch;
     }
 
+    /**
+     * @return The version string MAJOR.MINOR.PATCH
+     */
     @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_2_0)
     @Override
     public String toString() {
