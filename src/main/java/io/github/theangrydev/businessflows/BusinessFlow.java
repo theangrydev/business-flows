@@ -19,7 +19,6 @@ package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_7_6_0;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_8_2_0;
 
 /**
