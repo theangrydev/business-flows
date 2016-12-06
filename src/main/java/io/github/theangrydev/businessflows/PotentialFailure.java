@@ -59,6 +59,5 @@ public interface PotentialFailure<Sad> extends WithOptional<Sad> {
      * @return A {@link HappyPath} that is happy if the {@link PotentialFailure} is a {@link PotentialFailure#success()}
      * or sad inside if the {@link PotentialFailure} is a {@link PotentialFailure#failure(Object)}
      */
-    @ApiFeature(since = VERSION_3_0_0, stability = STABLE)
     <Happy> HappyPath<Happy, Sad> toHappyPath(Happy happy);
 }
