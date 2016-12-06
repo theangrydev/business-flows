@@ -17,15 +17,26 @@
  */
 package io.github.theangrydev.businessflows;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.EXPERIMENTAL;
+import static io.github.theangrydev.businessflows.VersionHistory.VERSION_10_1_13;
+
 /**
  * This is a description of how stable part of the API is considered to be.
  */
+@ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
 public enum ApiFeatureStability {
+
+    /**
+     * Unstable. Could change at any time for any reason.
+     */
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+    EXPERIMENTAL,
 
     /**
      * Considered stable.
      * Backwards compatibility will always be preserved.
      */
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
     STABLE,
 
     /**
@@ -33,15 +44,12 @@ public enum ApiFeatureStability {
      * Backwards compatibility will always be preserved while this feature exists.
      * If the maintenance cost is too high or this feature clashes with a new feature, this feature may be removed.
      */
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
     DEPRECATED,
 
     /**
      * In the beta testing phase. Could change based on user feedback.
      */
-    BETA,
-
-    /**
-     * Unstable. Could change at any time for any reason.
-     */
-    EXPERIMENTAL
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+    BETA
 }

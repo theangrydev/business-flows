@@ -35,6 +35,6 @@ public class ApiDocumentation {
     }
 
     public String addedInVersion() {
-        return apiMethod.getDeclaredAnnotation(ApiFeature.class).since();
+        return apiMethod.getDeclaredAnnotation(ApiFeature.class).since().toString();
     }
 }

@@ -21,6 +21,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.EXPERIMENTAL;
+import static io.github.theangrydev.businessflows.VersionHistory.VERSION_10_1_13;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -28,22 +30,29 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Documentation about a feature of the API.
  */
 @Documented
-@Target({TYPE, METHOD, CONSTRUCTOR})
+@Target({TYPE, METHOD, FIELD, CONSTRUCTOR})
 @Retention(RUNTIME)
+@ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
 public @interface ApiFeature {
 
     /**
+     * NOTE: This is used in preference of {@code @since} to make it easier for tools to extract the version, rather
+     * than having to parse Javadoc comments.
+     *
      * @return The version that this feature was added.
      */
-    String since();
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
+    VersionHistory since();
 
     /**
      * @return How stable this feature is.
      */
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
     ApiFeatureStability stability();
 
     /**
      * @return Comments about the feature (e.g. if it is deprecated, what else to use instead).
      */
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
     String comments() default "";
 }

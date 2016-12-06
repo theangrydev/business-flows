@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.VersionHistory.VERSION_1_0_0;
 
 /**
  * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.
@@ -51,7 +52,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param <Sad>   The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside or a technical failure
      */
-    @ApiFeature(since = "1.0.0", stability = STABLE)
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt) {
         try {
             return happyPath(attempt.attempt());
