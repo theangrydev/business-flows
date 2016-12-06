@@ -54,6 +54,7 @@ public enum ApiVersionHistory {
         this.patch = patch;
     }
 
+    @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
     @Override
     public String toString() {
         return major + "." + minor + "." + patch;
