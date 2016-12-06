@@ -1,5 +1,6 @@
-package io.github.theangrydev.businessflows;
+package api;
 
+import io.github.theangrydev.businessflows.ApiFeatureStability;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
