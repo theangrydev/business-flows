@@ -29,14 +29,20 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>10.1.12</version>
+    <version>10.2.0</version>
 </dependency>
 ```
 
 ## Releases
 The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), to help you identify non backwards-compatible changes when you are upgrading.
 
-### 10.1.12
+### 10.2.0
+* Starting to document the API with some new annotations `@ApiFeature`, which describes `ApiFeatureStability` for a version in the `ApiVersionHistory`. These features are EXPERIMENTAL and may be removed at any time
+
+### 10.1.1 to 10.1.12
+* Experimenting with the release process and generating documentation, no functional changes
+
+### 10.1.0
 * `HappyPath.happyPathAttempt` now accepts any `BusinessFlow`, not just a `HappyPath`, which is useful when you have a collaborator that returns a `BusinessFlow` that is not a `HappyPath` view (closes [#13](https://github.com/theangrydev/business-flows/issues/13))
 
 ### 10.0.0

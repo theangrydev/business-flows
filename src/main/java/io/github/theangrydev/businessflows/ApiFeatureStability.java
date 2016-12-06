@@ -18,7 +18,7 @@
 package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.EXPERIMENTAL;
-import static io.github.theangrydev.businessflows.VersionHistory.VERSION_10_1_13;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_1_13;
 
 /**
  * This is a description of how stable part of the API is considered to be.

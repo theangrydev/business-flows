@@ -22,7 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.EXPERIMENTAL;
-import static io.github.theangrydev.businessflows.VersionHistory.VERSION_10_1_13;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_1_13;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -42,7 +42,7 @@ public @interface ApiFeature {
      * @return The version that this feature was added.
      */
     @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
-    VersionHistory since();
+    ApiVersionHistory since();
 
     /**
      * @return How stable this feature is.

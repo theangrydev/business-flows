@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
-import static io.github.theangrydev.businessflows.VersionHistory.VERSION_1_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
 
 /**
  * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.

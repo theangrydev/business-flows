@@ -18,10 +18,10 @@
 package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.EXPERIMENTAL;
-import static io.github.theangrydev.businessflows.VersionHistory.VERSION_10_1_13;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_1_13;
 
 @ApiFeature(stability = EXPERIMENTAL, since = VERSION_10_1_13)
-public enum VersionHistory {
+public enum ApiVersionHistory {
     VERSION_10_1_13(10, 1, 13),
     VERSION_1_0_0(1, 0, 0);
 
@@ -29,7 +29,7 @@ public enum VersionHistory {
     private final int minor;
     private final int patch;
 
-    VersionHistory(int major, int minor, int patch) {
+    ApiVersionHistory(int major, int minor, int patch) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
