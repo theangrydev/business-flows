@@ -23,6 +23,7 @@ import java.util.List;
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_1_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_3_0;
 
 /**
  * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.
@@ -105,6 +106,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param <Sad>   The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is sad on the inside
      */
+    @ApiFeature(since = VERSION_2_3_0, stability = STABLE)
     static <Happy, Sad> HappyPath<Happy, Sad> sadPath(Sad sad) {
         return new SadCaseHappyPath<>(sad);
     }
@@ -117,6 +119,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param <Sad>            The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is a technical failure on the inside
      */
+    @ApiFeature(since = VERSION_2_3_0, stability = STABLE)
     static <Happy, Sad> HappyPath<Happy, Sad> technicalFailure(Exception technicalFailure) {
         return new TechnicalFailureCaseHappyPath<>(technicalFailure);
     }

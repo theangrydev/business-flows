@@ -19,6 +19,7 @@ package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_2_3_0;
 
 /**
  * A {@link TechnicalFailure} is a {@link BusinessFlow} that is biased towards the result being an {@link Exception}.
@@ -47,6 +48,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @param <Sad>   The type of sad object the resulting {@link TechnicalFailure} may represent
      * @return A {@link TechnicalFailure} that is sad on the inside
      */
+    @ApiFeature(since = VERSION_2_3_0, stability = STABLE)
     static <Happy, Sad> TechnicalFailure<Happy, Sad> sadPath(Sad sad) {
         return new SadCaseTechnicalFailure<>(sad);
     }
@@ -59,6 +61,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @param <Sad>   The type of sad object the resulting {@link TechnicalFailure} may represent
      * @return A {@link TechnicalFailure} that is happy on the inside
      */
+    @ApiFeature(since = VERSION_2_3_0, stability = STABLE)
     static <Happy, Sad> TechnicalFailure<Happy, Sad> happyPath(Happy happy) {
         return new HappyCaseTechnicalFailure<>(happy);
     }
