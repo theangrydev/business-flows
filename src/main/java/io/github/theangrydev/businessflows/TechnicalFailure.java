@@ -17,9 +17,13 @@
  */
 package io.github.theangrydev.businessflows;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+
 /**
  * A {@link TechnicalFailure} is a {@link BusinessFlow} that is biased towards the result being an {@link Exception}.
  */
+@ApiFeature(since = VERSION_1_0_0, stability = STABLE)
 public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Exception> {
 
     /**
@@ -30,6 +34,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @param <Sad>            The type of sad object the resulting {@link TechnicalFailure} may represent
      * @return A {@link TechnicalFailure} that is a technical failure on the inside
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     static <Happy, Sad> TechnicalFailure<Happy, Sad> technicalFailure(Exception technicalFailure) {
         return new TechnicalFailureCaseTechnicalFailure<>(technicalFailure);
     }
@@ -65,6 +70,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @param action The action to apply to an existing technical failure
      * @return The result of applying the action to the existing technical failure, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     TechnicalFailure<Happy, Sad> then(Mapping<Exception, TechnicalFailure<Happy, Sad>> action);
 
     /**
@@ -74,6 +80,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @param mapping The mapping to apply to an existing technical failure
      * @return The result of applying the mapping to the existing technical failure, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     TechnicalFailure<Happy, Sad> map(Mapping<Exception, Exception> mapping);
 
     /**
@@ -82,6 +89,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @param recovery The recovery to apply to an existing technical failure
      * @return The result of applying the recovery to the existing technical failure, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     HappyPath<Happy, Sad> recover(Mapping<Exception, Happy> recovery);
 
     /**
@@ -98,6 +106,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @param mapping The mapping to apply to an existing technical failure
      * @return The result of applying the mapping to the existing technical failure, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     SadPath<Happy, Sad> mapToSadPath(Mapping<Exception, Sad> mapping);
 
     /**
@@ -114,6 +123,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @param peek What to do if the underlying business case is a technical failure
      * @return The same {@link TechnicalFailure}
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     TechnicalFailure<Happy, Sad> peek(Peek<Exception> peek);
 
     /**

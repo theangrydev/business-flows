@@ -17,6 +17,9 @@
  */
 package io.github.theangrydev.businessflows;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+
 /**
  * A {@link BusinessFlow} is a biased view of a {@link BusinessCase}.
  * This is the base {@link BusinessFlow} that contains operations that are common to all the biased views.
@@ -24,6 +27,7 @@ package io.github.theangrydev.businessflows;
  * @param <Happy> The type of happy object this {@link BusinessFlow} may represent
  * @param <Sad>   The type of sad object this {@link BusinessFlow} may represent
  */
+@ApiFeature(since = VERSION_1_0_0, stability = STABLE)
 public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
 
     /**
@@ -36,6 +40,7 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
      *
      * @return A view of the underlying business case as a {@link TechnicalFailure}
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     TechnicalFailure<Happy, Sad> ifTechnicalFailure();
 
     /**
@@ -43,6 +48,7 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
      *
      * @return A view of the underlying business case as a {@link SadPath}
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     SadPath<Happy, Sad> ifSad();
 
     /**
@@ -50,6 +56,7 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
      *
      * @return A view of the underlying business case as a {@link HappyPath}
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     HappyPath<Happy, Sad> ifHappy();
 
     /**

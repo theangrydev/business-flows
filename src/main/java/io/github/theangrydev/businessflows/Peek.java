@@ -17,12 +17,16 @@
  */
 package io.github.theangrydev.businessflows;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+
 /**
  * Similar to a {@link java.util.function.Consumer} but is allowed to throw an {@link Exception}.
  *
  * @param <T> The type to look at
  */
 @FunctionalInterface
+@ApiFeature(since = VERSION_1_0_0, stability = STABLE)
 public interface Peek<T> {
 
     /**
@@ -31,5 +35,6 @@ public interface Peek<T> {
      * @param instance The instance to look at (if it is present)
      * @throws Exception If there is a technical failure during the peek
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     void peek(T instance) throws Exception;
 }

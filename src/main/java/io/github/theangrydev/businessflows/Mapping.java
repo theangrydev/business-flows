@@ -17,6 +17,9 @@
  */
 package io.github.theangrydev.businessflows;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+
 /**
  * Similar to a {@link java.util.function.Function} but is allowed to throw an {@link Exception}.
  *
@@ -24,6 +27,7 @@ package io.github.theangrydev.businessflows;
  * @param <New> The new type (after mapping)
  */
 @FunctionalInterface
+@ApiFeature(since = VERSION_1_0_0, stability = STABLE)
 public interface Mapping<Old, New> {
 
     /**
@@ -33,6 +37,7 @@ public interface Mapping<Old, New> {
      * @return The new result
      * @throws Exception If there is a technical failure during the mapping
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     New map(Old old) throws Exception;
 
     /**

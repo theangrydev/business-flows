@@ -26,6 +26,7 @@ import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_
 /**
  * A {@link HappyPath} is a {@link BusinessFlow} that is biased towards the result being {@link Happy}.
  */
+@ApiFeature(since = VERSION_1_0_0, stability = STABLE)
 public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Happy> {
 
     /**
@@ -52,7 +53,6 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param <Sad>   The type of sad object this {@link HappyPath} may represent
      * @return A {@link HappyPath} that is either happy on the inside or a technical failure
      */
-    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     static <Happy, Sad> HappyPath<Happy, Sad> happyAttempt(Attempt<Happy> attempt) {
         try {
             return happyPath(attempt.attempt());
@@ -90,6 +90,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param <Sad>   The type of sad object the resulting {@link HappyPath} may represent
      * @return A {@link HappyPath} that is happy on the inside
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     static <Happy, Sad> HappyPath<Happy, Sad> happyPath(Happy happy) {
         return new HappyCaseHappyPath<>(happy);
     }
@@ -125,6 +126,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param <NewHappy> The type of happy object that will be present after the action is applied to an existing happy object
      * @return The result of applying the action to the existing happy path, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     <NewHappy> HappyPath<NewHappy, Sad> then(Mapping<Happy, ? extends BusinessFlow<NewHappy, Sad>> action);
 
     /**
@@ -134,6 +136,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param <NewHappy> The type of happy object that will be present after the mapping is applied to an existing happy object
      * @return The result of applying the mapping to the existing happy path, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     <NewHappy> HappyPath<NewHappy, Sad> map(Mapping<Happy, NewHappy> mapping);
 
     /**
@@ -142,6 +145,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param actionThatMightFail The {@link ActionThatMightFail} to apply if the underlying business case is happy
      * @return The same {@link HappyPath} if the action did not fail; if the action failure then a {@link HappyPath} that is now sad inside
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     HappyPath<Happy, Sad> attempt(ActionThatMightFail<Happy, Sad> actionThatMightFail);
 
     /**
@@ -174,6 +178,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param peek What to do if the underlying business case is happy
      * @return The same {@link HappyPath}
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     HappyPath<Happy, Sad> peek(Peek<Happy> peek);
 
     /**

@@ -17,9 +17,13 @@
  */
 package io.github.theangrydev.businessflows;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+
 /**
  * A {@link SadPath} is a {@link BusinessFlow} that is biased towards the result being {@link Sad}.
  */
+@ApiFeature(since = VERSION_1_0_0, stability = STABLE)
 public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptional<Sad> {
 
     /**
@@ -30,6 +34,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptio
      * @param <Sad>   The type of sad object the resulting {@link SadPath} may represent
      * @return A {@link SadPath} that is sad on the inside
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     static <Happy, Sad> SadPath<Happy, Sad> sadPath(Sad sad) {
         return new SadCaseSadPath<>(sad);
     }
@@ -65,6 +70,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptio
      * @param <NewSad> The type of sad object that will be present after the action is applied to an existing sad object
      * @return The result of applying the action to the existing sad path, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     <NewSad> SadPath<Happy, NewSad> then(Mapping<Sad, ? extends BusinessFlow<Happy, NewSad>> action);
 
     /**
@@ -74,6 +80,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptio
      * @param <NewSad> The type of sad object that will be present after the mapping is applied to an existing sad object
      * @return The result of applying the mapping to the existing sad path, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     <NewSad> SadPath<Happy, NewSad> map(Mapping<Sad, NewSad> mapping);
 
     /**
@@ -82,6 +89,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptio
      * @param recovery The recovery to apply to an existing sad case
      * @return The result of applying the recovery to the existing sad path, if applicable
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     HappyPath<Happy, Sad> recover(Mapping<Sad, Happy> recovery);
 
     /**
@@ -98,6 +106,7 @@ public interface SadPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOptio
      * @param peek What to do if the underlying business case is sad
      * @return The same {@link SadPath}
      */
+    @ApiFeature(since = VERSION_1_0_0, stability = STABLE)
     SadPath<Happy, Sad> peek(Peek<Sad> peek);
 
     /**

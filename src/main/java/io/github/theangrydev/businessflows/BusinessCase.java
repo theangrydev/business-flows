@@ -20,6 +20,8 @@ package io.github.theangrydev.businessflows;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
 import static java.lang.String.format;
 
 /**
@@ -28,6 +30,7 @@ import static java.lang.String.format;
  * @param <Happy> The type of happy object this case may represent
  * @param <Sad>   The type of sad object this case may represent
  */
+@ApiFeature(since = VERSION_1_0_0, stability = STABLE)
 interface BusinessCase<Happy, Sad> {
 
     /**

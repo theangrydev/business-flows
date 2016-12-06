@@ -17,6 +17,9 @@
  */
 package io.github.theangrydev.businessflows;
 
+import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+
 /**
  * Attempt to perform an action on a happy business case that will either:
  * <ul>
@@ -29,6 +32,7 @@ package io.github.theangrydev.businessflows;
  * @param <Sad>   The type of sad object that will be returned if the action fails in a known way
  */
 @FunctionalInterface
+@ApiFeature(since = VERSION_1_0_0, stability = STABLE)
 public interface ActionThatMightFail<Happy, Sad> {
 
     /**
