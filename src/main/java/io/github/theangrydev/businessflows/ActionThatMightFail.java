@@ -19,6 +19,7 @@ package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_3_0_0;
 
 /**
  * Attempt to perform an action on a happy business case that will either:
@@ -42,5 +43,6 @@ public interface ActionThatMightFail<Happy, Sad> {
      * @return {@link PotentialFailure#success()} if the action succeeded, else a {@link PotentialFailure#failure(Object) PotentialFailure#failure(Sad)}
      * @throws Exception If there was a technical failure when attempting
      */
+    @ApiFeature(since = VERSION_3_0_0, stability = STABLE)
     PotentialFailure<Sad> attempt(Happy happy) throws Exception;
 }
