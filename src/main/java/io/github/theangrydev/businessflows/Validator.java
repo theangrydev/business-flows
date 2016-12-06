@@ -18,7 +18,7 @@
 package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_7_0_0;
 
 /**
  * A type of {@link ActionThatMightFail} that represents a validation failure.
@@ -26,7 +26,7 @@ import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_0_
  * @param <Happy> The type to validate
  * @param <Sad>   The type of validation failure
  */
-@ApiFeature(since = VERSION_5_0_0, stability = STABLE)
+@ApiFeature(since = VERSION_7_0_0, stability = STABLE)
 public interface Validator<Happy, Sad> extends ActionThatMightFail<Happy, Sad> {
 
 }

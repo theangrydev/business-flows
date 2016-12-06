@@ -22,9 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_6_0_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.*;
 import static io.github.theangrydev.businessflows.Mapping.identity;
 
 /**
@@ -105,6 +103,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <SadAggregate>      The type that the list of {@link Sad} validation errors will be aggregated into
      * @return The result of applying all the validators
      */
+    @ApiFeature(since = VERSION_7_0_0, stability = STABLE)
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators) {
         ValidationPath<Happy, Sad, SadAggregate> happyPath = ValidationPath.validationPathInto(happy, sadAggregateMapping);
         return happyPath.validateAll(validators);
@@ -121,6 +120,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <Sad>      The type of sad object the resulting {@link ValidationPath} may represent
      * @return The result of applying all the validators
      */
+    @ApiFeature(since = VERSION_7_0_0, stability = STABLE)
     static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validateAll(Happy happy, List<? extends Validator<Happy, Sad>> validators) {
         return validateAllInto(happy, identity(), validators);
     }
@@ -138,6 +138,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <SadAggregate>      The type that the list of {@link Sad} validation errors will be aggregated into
      * @return The result of applying all the validators
      */
+    @ApiFeature(since = VERSION_7_0_0, stability = STABLE)
     @SafeVarargs
     @SuppressWarnings("varargs")
     static <Happy, Sad, SadAggregate> ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Happy happy, Mapping<List<Sad>, SadAggregate> sadAggregateMapping, Validator<Happy, Sad>... validators) {
@@ -156,6 +157,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param <Sad>      The type of sad object the resulting {@link ValidationPath} may represent
      * @return The result of applying all the validators
      */
+    @ApiFeature(since = VERSION_7_0_0, stability = STABLE)
     @SafeVarargs
     @SuppressWarnings("varargs")
     static <Happy, Sad> ValidationPath<Happy, Sad, List<Sad>> validateAll(Happy happy, Validator<Happy, Sad>... validators) {
@@ -169,6 +171,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param validators Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
      * @return The result of applying all the validators
      */
+    @ApiFeature(since = VERSION_7_0_0, stability = STABLE)
     ValidationPath<Happy, Sad, SadAggregate> validateAll(List<? extends Validator<Happy, Sad>> validators);
 
     /**
@@ -182,6 +185,7 @@ public interface ValidationPath<Happy, Sad, SadAggregate> extends HappyPath<Happ
      * @param validators          Actions that act on the happy object and may indicate a validation failure by returning {@link Sad}
      * @return The result of applying all the validators
      */
+    @ApiFeature(since = VERSION_7_0_0, stability = STABLE)
     ValidationPath<Happy, Sad, SadAggregate> validateAllInto(Mapping<List<Sad>, SadAggregate> sadAggregateMapping, List<? extends Validator<Happy, Sad>> validators);
 
     /**

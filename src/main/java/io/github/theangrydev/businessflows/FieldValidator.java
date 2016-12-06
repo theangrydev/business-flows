@@ -18,8 +18,7 @@
 package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_0_0;
-import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_5_1_0;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.*;
 
 /**
  * A {@link Validator} for a {@link Field} of a {@link Happy} object.
@@ -53,6 +52,7 @@ public class FieldValidator<Happy, Sad, Field> implements Validator<Happy, Sad> 
         return new FieldValidator<>(fieldExtractor, fieldValidator);
     }
 
+    @ApiFeature(since = VERSION_7_0_0, stability = STABLE)
     @Override
     public PotentialFailure<Sad> attempt(Happy happy) throws Exception {
         Field field = fieldExtractor.map(happy);
