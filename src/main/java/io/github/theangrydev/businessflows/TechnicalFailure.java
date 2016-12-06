@@ -136,6 +136,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @throws Exception if the underlying business case is a technical failure
      * @return This {@link TechnicalFailure} if there is not an {@link Exception} to throw
      */
+    @ApiFeature(since = VERSION_7_2_0, stability = STABLE)
     TechnicalFailure<Happy, Sad> throwIt() throws Exception;
 
     /**
@@ -144,6 +145,7 @@ public interface TechnicalFailure<Happy, Sad> extends BusinessFlow<Happy, Sad>, 
      * @throws RuntimeException if the underlying business case is a technical failure
      * @return This {@link TechnicalFailure} if there is not an {@link RuntimeException} to throw
      */
+    @ApiFeature(since = VERSION_7_3_0, stability = STABLE)
     TechnicalFailure<Happy, Sad> throwItAsARuntimeException() throws RuntimeException;
 
     /**
