@@ -172,6 +172,7 @@ public interface HappyPath<Happy, Sad> extends BusinessFlow<Happy, Sad>, WithOpt
      * @param <Sad>                The type of validation error the list of {@link Validator} can produce
      * @return A list of {@link ActionThatMightFail}
      */
+    @ApiFeature(since = VERSION_7_5_0, stability = STABLE)
     @SafeVarargs
     @SuppressWarnings("varargs")
     static <Happy, Sad> List<ActionThatMightFail<Happy, Sad>> actions(ActionThatMightFail<Happy, Sad>... actionsThatMightFail) {
