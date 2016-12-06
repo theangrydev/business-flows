@@ -108,7 +108,7 @@ The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), t
 * Removed `andThen` methods from `Attempt` and `Mapping`. This change is not backwards compatible
 
 ### 3.1.1
-* Optimized overrides for ifHappy etc (closes [#2](https://github.com/theangrydev/business-flows/issues/2))
+* Optimized overrides for `ifHappy` etc (closes [#2](https://github.com/theangrydev/business-flows/issues/2))
 
 ### 3.1.0
 * Allow `? extends ActionThatMightFail<Happy, Sad>` in the `ValidationPath`
