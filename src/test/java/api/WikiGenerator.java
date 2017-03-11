@@ -140,7 +140,7 @@ public class WikiGenerator {
 
     private static String apiLinksGroupedByApiClass(List<ApiDocumentation> apiDocumentations) throws IOException {
         return apiDocumentations.stream()
-                .collect(groupingBy((java.util.function.Function<ApiDocumentation, ? extends Class<?>>) (apiDocumentation) -> apiDocumentation.apiMethod.getDeclaringClass()))
+                .collect(groupingBy(apiDocumentation -> apiDocumentation.apiMethod.getDeclaringClass()))
                 .entrySet()
                 .stream()
                 .map(entry -> apiClassMethodLinks(entry.getKey(), entry.getValue()))
