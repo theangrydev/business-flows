@@ -68,7 +68,7 @@ $linenos: #A9B7C6;
    .ld { color: $strings } /* Literal.Date */
    .m { color: $numbers} /* Literal.Number */
    .s { color: $strings } /* Literal.String */
-   .na { color: $names } /* Name.Attribute */
+   .na { color: $varAndProp } /* Name.Attribute */
    .nb { color: $varAndProp } /* Name.Builtin */
    .nc { color: $names } /* Name.Class */
    .no { color: $keywords } /* Name.Constant */
