@@ -1,5 +1,5 @@
 ---
-title: BusinessFlow.getTechnicalFailure()
+title: BusinessFlow.Exception getTechnicalFailure()
 layout: post
 ---
 TODO: this is just a generated example

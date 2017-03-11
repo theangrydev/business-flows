@@ -180,17 +180,22 @@ public class WikiGenerator {
 
     private static String pageName(Method apiMethod) {
         return pageDisplayName(apiMethod)
-                .replaceAll("[<(>)]", "-");
+                .replaceAll("[<(>)]", "-")
+                .replace(" ", "_");
     }
 
     private static String methodDisplayName(Method apiMethod) {
         String methodName = apiMethod.getName();
         String parameterTypes = stream(apiMethod.getGenericParameterTypes())
-                .map(Type::getTypeName)
-                .map(WikiGenerator::stripPackage)
+                .map(WikiGenerator::typeDisplayName)
                 .collect(joining(", "));
-        return methodName + "(" + parameterTypes +  ")";
+        return typeDisplayName(apiMethod.getGenericReturnType()) + " " + methodName + "(" + parameterTypes +  ")";
     }
+
+    private static String typeDisplayName(Type type) {
+        return stripPackage(type.getTypeName());
+    }
+
     private static String pageDisplayName(Method apiMethod) {
         String className = apiMethod.getDeclaringClass().getSimpleName();
         return className + "." + methodDisplayName(apiMethod);
