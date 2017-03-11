@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Liam Williams <liam.williams@zoho.com>.
+ * Copyright 2016-2017 Liam Williams <liam.williams@zoho.com>.
  *
  * This file is part of business-flows.
  *
@@ -140,6 +140,7 @@ public class WikiGenerator {
 
     private static String apiLinksGroupedByApiClass(List<ApiDocumentation> apiDocumentations) throws IOException {
         return apiDocumentations.stream()
+                .sorted(comparing(apiDocumentation -> apiDocumentation.apiMethod.getDeclaringClass().getName()))
                 .collect(groupingBy(apiDocumentation -> apiDocumentation.apiMethod.getDeclaringClass()))
                 .entrySet()
                 .stream()
@@ -149,8 +150,8 @@ public class WikiGenerator {
 
     private static String apiClassMethodLinks(Class<?> declaringClass, List<ApiDocumentation> apiDocumentations) {
         return "## " + declaringClass.getSimpleName() + "\n" + apiDocumentations.stream()
-                .sorted(comparing(apiDocumentation -> apiDocumentation.apiMethod.getName()))
                 .map(apiDocumentation -> apiDocumentation.apiMethod)
+                .sorted(comparing(Method::getName))
                 .map(apiMethod -> "* " + hyperLink(apiMethod))
                 .collect(joining("\n"));
     }
