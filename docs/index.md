@@ -6,8 +6,8 @@ This is an index of usage examples of the API, with the aim of demonstrating wha
 All of these examples were generated from real tests, so you can be confident that the usage shown is up to date.
 
 ## BusinessFlow
-* [BusinessFlow.getTechnicalFailure()](BusinessFlow.getTechnicalFailure--)
-* [BusinessFlow.isTechnicalFailure()](BusinessFlow.isTechnicalFailure--)
+* [getTechnicalFailure()](BusinessFlow.getTechnicalFailure--)
+* [isTechnicalFailure()](BusinessFlow.isTechnicalFailure--)
 
 ## HappyPath
-* [HappyPath.happyAttempt(Attempt&lt;Happy&gt;)](HappyPath.happyAttempt-Attempt-Happy--)
+* [happyAttempt(Attempt&lt;Happy&gt;)](HappyPath.happyAttempt-Attempt-Happy--)

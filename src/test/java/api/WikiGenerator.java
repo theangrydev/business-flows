@@ -128,7 +128,7 @@ public class WikiGenerator {
         return pageTitle("API Usage Examples") + "\n"
                 + "This is an index of usage examples of the API, with the aim of demonstrating what you can do as a learning aid.\n"
                 + "All of these examples were generated from real tests, so you can be confident that the usage shown is up to date." + "\n\n"
-                + apiLinks(apiDocumentations);
+                + apiLinksGroupedByApiClass(apiDocumentations);
     }
 
     private static String pageTitle(String title) {
@@ -138,20 +138,20 @@ public class WikiGenerator {
                 "---";
     }
 
-    private static String apiLinks(List<ApiDocumentation> apiDocumentations) throws IOException {
+    private static String apiLinksGroupedByApiClass(List<ApiDocumentation> apiDocumentations) throws IOException {
         return apiDocumentations.stream()
                 .collect(groupingBy((java.util.function.Function<ApiDocumentation, ? extends Class<?>>) (apiDocumentation) -> apiDocumentation.apiMethod.getDeclaringClass()))
                 .entrySet()
                 .stream()
-                .map(entry -> apiLinks(entry.getKey(), entry.getValue()))
+                .map(entry -> apiClassMethodLinks(entry.getKey(), entry.getValue()))
                 .collect(joining("\n\n"));
     }
 
-    private static String apiLinks(Class<?> declaringClass, List<ApiDocumentation> apiDocumentations) {
+    private static String apiClassMethodLinks(Class<?> declaringClass, List<ApiDocumentation> apiDocumentations) {
         return "## " + declaringClass.getSimpleName() + "\n" + apiDocumentations.stream()
                 .sorted(comparing((apiDocumentation1) -> apiDocumentation1.apiMethod.getName()))
                 .map(apiDocumentation -> apiDocumentation.apiMethod)
-                .map(apiMethod -> "* " + hyperLink(pageDisplayName(apiMethod), pageName(apiMethod)))
+                .map(apiMethod -> "* " + hyperLink(methodDisplayName(apiMethod), pageName(apiMethod)))
                 .collect(joining("\n"));
     }
 
@@ -183,14 +183,17 @@ public class WikiGenerator {
                 .replaceAll("[<(>)]", "-");
     }
 
-    private static String pageDisplayName(Method apiMethod) {
+    private static String methodDisplayName(Method apiMethod) {
         String methodName = apiMethod.getName();
-        String className = apiMethod.getDeclaringClass().getSimpleName();
         String parameterTypes = stream(apiMethod.getGenericParameterTypes())
                 .map(Type::getTypeName)
                 .map(WikiGenerator::stripPackage)
                 .collect(joining(", "));
-        return className + "." + methodName + "(" + parameterTypes +  ")";
+        return methodName + "(" + parameterTypes +  ")";
+    }
+    private static String pageDisplayName(Method apiMethod) {
+        String className = apiMethod.getDeclaringClass().getSimpleName();
+        return className + "." + methodDisplayName(apiMethod);
     }
 
     private static String stripPackage(String name) {
