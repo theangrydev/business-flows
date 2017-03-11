@@ -149,20 +149,26 @@ public class WikiGenerator {
 
     private static String apiClassMethodLinks(Class<?> declaringClass, List<ApiDocumentation> apiDocumentations) {
         return "## " + declaringClass.getSimpleName() + "\n" + apiDocumentations.stream()
-                .sorted(comparing((apiDocumentation1) -> apiDocumentation1.apiMethod.getName()))
+                .sorted(comparing(apiDocumentation -> apiDocumentation.apiMethod.getName()))
                 .map(apiDocumentation -> apiDocumentation.apiMethod)
-                .map(apiMethod -> "* " + hyperLink(methodDisplayName(apiMethod), pageName(apiMethod)))
+                .map(apiMethod -> "* " + hyperLink(apiMethod))
                 .collect(joining("\n"));
     }
 
-    private static String hyperLink(String displayName, String pageName) {
-        return format("[%s](%s)", escapeHtml4(displayName), pageName);
+    private static String hyperLink(Method apiMethod) {
+        String className = apiMethod.getDeclaringClass().getSimpleName();
+        String pageLocation = className + "/" + pageName(apiMethod);
+        return hyperLink(methodDisplayName(apiMethod), pageLocation);
+    }
+
+    private static String hyperLink(String displayName, String pageLocation) {
+        return format("[%s](%s)", escapeHtml4(displayName), pageLocation);
     }
 
     private void writeWikiPage(ApiDocumentation apiDocumentation) throws IOException, ParseException {
-        String pageDisplayName = pageDisplayName(apiDocumentation.apiMethod);
+        String pageDisplayName = methodDisplayName(apiDocumentation.apiMethod);
         String pageName = pageName(apiDocumentation.apiMethod);
-        Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
+        Path page = pageLocation(apiDocumentation.apiMethod).resolve(pageName + MARKDOWN_FILE_EXTENSION);
         String markup = pageTitle(pageDisplayName) + "\n"
                 + "TODO: this is just a generated example\n\n" // TODO: remove once this is live properly
                 + hyperLink("javadoc", javaDocLink(apiDocumentation.apiMethod)) + " "
@@ -172,6 +178,11 @@ public class WikiGenerator {
         writePage(page, markup);
     }
 
+    private Path pageLocation(Method apiMethod) {
+        String className = apiMethod.getDeclaringClass().getSimpleName();
+        return wikiDirectory().resolve(className);
+    }
+
     private String usageLink(Class<?> apiTestClass) {
         String packagePath = apiTestClass.getPackage().getName().replace('.', '/');
         // always master copy, since there is only ever one live copy of the documentation site
@@ -179,7 +190,7 @@ public class WikiGenerator {
     }
 
     private static String pageName(Method apiMethod) {
-        return pageDisplayName(apiMethod)
+        return methodDisplayName(apiMethod)
                 .replaceAll("[<(>)]", "-")
                 .replace(" ", "_");
     }
@@ -196,16 +207,12 @@ public class WikiGenerator {
         return stripPackage(type.getTypeName());
     }
 
-    private static String pageDisplayName(Method apiMethod) {
-        String className = apiMethod.getDeclaringClass().getSimpleName();
-        return className + "." + methodDisplayName(apiMethod);
-    }
-
     private static String stripPackage(String name) {
         return name.replaceFirst("^.*\\.", "");
     }
 
     private static void writePage(Path page, String markup) throws IOException {
+        Files.createDirectories(page.getParent());
         Files.write(page, markup.getBytes(UTF_8), CREATE, TRUNCATE_EXISTING);
     }
 

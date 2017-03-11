@@ -1,5 +1,5 @@
 ---
-title: BusinessFlow.boolean isTechnicalFailure()
+title: boolean isTechnicalFailure()
 layout: post
 ---
 TODO: this is just a generated example

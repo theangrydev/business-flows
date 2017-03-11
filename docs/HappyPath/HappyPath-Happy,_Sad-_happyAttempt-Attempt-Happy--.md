@@ -1,5 +1,5 @@
 ---
-title: HappyPath.HappyPath&lt;Happy, Sad&gt; happyAttempt(Attempt&lt;Happy&gt;)
+title: HappyPath&lt;Happy, Sad&gt; happyAttempt(Attempt&lt;Happy&gt;)
 layout: post
 ---
 TODO: this is just a generated example
