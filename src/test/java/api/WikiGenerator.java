@@ -141,7 +141,7 @@ public class WikiGenerator {
         return apiDocumentations.stream()
                 .map(apiDocumentation -> apiDocumentation.apiMethod)
                 .map(apiMethod -> hyperLink(pageDisplayName(apiMethod), pageName(apiMethod)))
-                .collect(joining("\n"));
+                .collect(joining("\n\n"));
     }
 
     private static String hyperLink(String displayName, String pageName) {
