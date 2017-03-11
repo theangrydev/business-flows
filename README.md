@@ -29,12 +29,16 @@ There is no point in using this if your flows are "all or nothing". If there are
 <dependency>
     <groupId>io.github.theangrydev</groupId>
     <artifactId>business-flows</artifactId>
-    <version>10.2.0</version>
+    <version>10.3.0</version>
 </dependency>
 ```
 
 ## Releases
 The versioning scheme follows [Semantic Versioning 2.0.0](http://semver.org/), to help you identify non backwards-compatible changes when you are upgrading.
+
+### 10.3.0
+* Added `BusinessFlow.isTechnicalFailure` method to complement the existing `isHappy` and `isSad` methods
+* Added `BusinessFlow.getTechnicalFailure` method to complement the existing `getHappy` and `getSad` methods
 
 ### 10.2.0
 * Starting to document the API with some new annotations `@ApiFeature`, which describes `ApiFeatureStability` for a version in the `ApiVersionHistory`. These features are EXPERIMENTAL and may be removed at any time
