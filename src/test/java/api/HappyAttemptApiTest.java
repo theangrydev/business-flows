@@ -17,15 +17,25 @@
  */
 package api;
 
+import io.github.theangrydev.businessflows.Attempt;
 import io.github.theangrydev.businessflows.HappyPath;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
-/**
- * These tests exist to prevent the failed solution to <a href="https://github.com/theangrydev/business-flows/issues/12">#12</a>
- * from being attempted again in the future without realising it :)
- */
 public class HappyAttemptApiTest implements WithAssertions {
+
+    /**
+     * An attempt can fail and turn into a technical failure.
+     */
+    @Test
+    public void happyAttemptCanFail() {
+        RuntimeException technicalFailure = new RuntimeException();
+        Attempt<Happy> attempt = () -> {throw technicalFailure;};
+
+        HappyPath<Happy, Sad> happyPath = HappyPath.happyAttempt(attempt);
+
+        assertThat(happyPath.getTechnicalFailure()).isEqualTo(technicalFailure);
+    }
 
     /**
      * An attempt that was once happy can be turned into a sad path.

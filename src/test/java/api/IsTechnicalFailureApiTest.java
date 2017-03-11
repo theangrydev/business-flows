@@ -17,23 +17,24 @@
  */
 package api;
 
-/**
- * Happy type to use in tests.
- */
-public class Happy {
+import io.github.theangrydev.businessflows.HappyPath;
+import io.github.theangrydev.businessflows.TechnicalFailure;
+import org.assertj.core.api.WithAssertions;
+import org.junit.Test;
 
-    private final String name;
+public class IsTechnicalFailureApiTest implements WithAssertions {
 
-    public Happy() {
-        this("");
+    @Test
+    public void returnsTrueForTechnicalFailure() {
+        TechnicalFailure<Happy, Sad> technicalFailure = TechnicalFailure.technicalFailure(new Exception());
+
+        assertThat(technicalFailure.isTechnicalFailure()).isTrue();
     }
 
-    public Happy(String name) {
-        this.name = name;
-    }
+    @Test
+    public void returnsFalseForNonTechnicalFailure() {
+        HappyPath<Happy, Sad> happyPath = HappyPath.happyPath(new Happy());
 
-    @Override
-    public String toString() {
-        return name;
+        assertThat(happyPath.isTechnicalFailure()).isFalse();
     }
 }

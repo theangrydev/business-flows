@@ -23,6 +23,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import io.github.theangrydev.businessflows.Attempt;
+import io.github.theangrydev.businessflows.BusinessFlow;
 import io.github.theangrydev.businessflows.HappyPath;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -36,6 +37,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -81,7 +83,11 @@ public class WikiGenerator {
     public void generate() throws IOException, ParseException, NoSuchMethodException {
         createDirectories(wikiDirectory());
         removeAllMarkdownFiles();
-        List<ApiDocumentation> apiDocumentations = singletonList(apiDocumentation(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)));
+        List<ApiDocumentation> apiDocumentations = Arrays.asList(
+                apiDocumentation(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)),
+                apiDocumentation(GetTechnicalFailureApiTest.class, BusinessFlow.class.getMethod("getTechnicalFailure")),
+                apiDocumentation(IsTechnicalFailureApiTest.class, BusinessFlow.class.getMethod("isTechnicalFailure"))
+        );
         for (ApiDocumentation apiDocumentation : apiDocumentations) {
             writeWikiPage(apiDocumentation);
         }
@@ -147,6 +153,7 @@ public class WikiGenerator {
         String pageName = pageName(apiDocumentation.apiMethod);
         Path page = wikiDirectory().resolve(pageName + MARKDOWN_FILE_EXTENSION);
         String markup = pageTitle(pageDisplayName) + "\n"
+                + "TODO: this is just a generated example\n\n" // TODO: remove once this is live properly
                 + hyperLink("javadoc", javaDocLink(apiDocumentation.apiMethod)) + " "
                 + hyperLink("usage tests", usageLink(apiDocumentation.apiTest)) + "\n\n"
                 + "Added in version " + apiDocumentation.addedInVersion() + "\n\n"

@@ -18,6 +18,7 @@
 package io.github.theangrydev.businessflows;
 
 import static io.github.theangrydev.businessflows.ApiFeatureStability.STABLE;
+import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_10_3_0;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_1_0_0;
 import static io.github.theangrydev.businessflows.ApiVersionHistory.VERSION_8_2_0;
 
@@ -77,6 +78,14 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
     }
 
     /**
+     * @return true if the underlying business case is a {@link SadCase}, false otherwise
+     */
+    @ApiFeature(since = VERSION_10_3_0, stability = STABLE)
+    default boolean isTechnicalFailure() {
+        return ifTechnicalFailure().isPresent();
+    }
+
+    /**
      * @return If the underlying business case is a {@link HappyCase} then the {@link Happy} object, else an {@link IllegalStateException}
      * @throws IllegalStateException If the underlying business case is not a {@link HappyCase}
      */
@@ -92,5 +101,14 @@ public interface BusinessFlow<Happy, Sad> extends BusinessCase<Happy, Sad> {
     @ApiFeature(since = VERSION_8_2_0, stability = STABLE)
     default Sad getSad() {
         return ifSad().get();
+    }
+
+    /**
+     * @return If the underlying business case is a {@link TechnicalFailureCase} then the {@link Exception} object, else an {@link IllegalStateException}
+     * @throws IllegalStateException If the underlying business case is not a {@link TechnicalFailureCase}
+     */
+    @ApiFeature(since = VERSION_10_3_0, stability = STABLE)
+    default Exception getTechnicalFailure() {
+        return ifTechnicalFailure().get();
     }
 }

@@ -47,6 +47,7 @@ public class ApiVersionHistoryTest implements WithAssertions {
         assertThat(valueOf("VERSION_8_2_0")).hasToString("8.2.0");
         assertThat(valueOf("VERSION_8_3_0")).hasToString("8.3.0");
         assertThat(valueOf("VERSION_10_2_0")).hasToString("10.2.0");
+        assertThat(valueOf("VERSION_10_3_0")).hasToString("10.3.0");
     }
 
     @Test

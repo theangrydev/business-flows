@@ -277,11 +277,11 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.1.10</version>
+                <version>1.1.11</version>
                 <configuration>
                     <skip>${skipTests}</skip>
                     <threads>1</threads>
-                    <maxSurviving>1</maxSurviving>
+                    <maxSurviving>0</maxSurviving>
                     <withHistory>false</withHistory>
                     <timestampedReports>false</timestampedReports>
                     <failWhenNoMutations>true</failWhenNoMutations>
@@ -303,7 +303,7 @@
                     </targetClasses>
                     <targetTests>
                         <param>io.github.theangrydev.businessflows*</param>
-                        <param>api</param>
+                        <param>api*</param>
                     </targetTests>
                     <exportLineCoverage>true</exportLineCoverage>
                 </configuration>
