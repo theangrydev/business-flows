@@ -15,26 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package api;
+package api.regression;
 
-import io.github.theangrydev.businessflows.HappyPath;
-import io.github.theangrydev.businessflows.TechnicalFailure;
+import io.github.theangrydev.businessflows.ApiFeatureStability;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
-public class IsTechnicalFailureApiTest implements WithAssertions {
+import static io.github.theangrydev.businessflows.ApiFeatureStability.*;
+
+/**
+ * Make sure the constants are not inadvertently renamed
+ */
+public class ApiFeatureStabilityTest implements WithAssertions {
 
     @Test
-    public void returnsTrueForTechnicalFailure() {
-        TechnicalFailure<Happy, Sad> technicalFailure = TechnicalFailure.technicalFailure(new Exception());
-
-        assertThat(technicalFailure.isTechnicalFailure()).isTrue();
+    public void constantNames() {
+        assertThat(BETA).hasToString("BETA");
+        assertThat(DEPRECATED).hasToString("DEPRECATED");
+        assertThat(STABLE).hasToString("STABLE");
+        assertThat(EXPERIMENTAL).hasToString("EXPERIMENTAL");
     }
 
     @Test
-    public void returnsFalseForNonTechnicalFailure() {
-        HappyPath<Happy, Sad> happyPath = HappyPath.happyPath(new Happy());
-
-        assertThat(happyPath.isTechnicalFailure()).isFalse();
+    public void className() {
+        assertThat(ApiFeatureStability.class.getName()).isEqualTo("io.github.theangrydev.businessflows.ApiFeatureStability");
     }
 }

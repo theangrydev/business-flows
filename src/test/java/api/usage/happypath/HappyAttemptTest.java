@@ -15,14 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package api;
+package api.usage.happypath;
 
+import api.usage.Happy;
+import api.usage.Sad;
 import io.github.theangrydev.businessflows.Attempt;
 import io.github.theangrydev.businessflows.HappyPath;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
-public class HappyAttemptApiTest implements WithAssertions {
+public class HappyAttemptTest implements WithAssertions {
 
     /**
      * An attempt can fail and turn into a technical failure.

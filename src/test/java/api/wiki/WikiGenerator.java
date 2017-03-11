@@ -15,8 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package api;
+package api.wiki;
 
+import api.usage.businessflow.GetTechnicalFailureTest;
+import api.usage.happypath.HappyAttemptTest;
+import api.usage.businessflow.IsTechnicalFailureTest;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -43,7 +46,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static api.ApiDocumentation.apiDocumentation;
+import static api.wiki.ApiDocumentation.apiDocumentation;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createDirectories;
@@ -85,9 +88,9 @@ public class WikiGenerator {
         createDirectories(wikiDirectory());
         removeAllMarkdownFiles();
         List<ApiDocumentation> apiDocumentations = Arrays.asList(
-                apiDocumentation(HappyAttemptApiTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)),
-                apiDocumentation(GetTechnicalFailureApiTest.class, BusinessFlow.class.getMethod("getTechnicalFailure")),
-                apiDocumentation(IsTechnicalFailureApiTest.class, BusinessFlow.class.getMethod("isTechnicalFailure"))
+                apiDocumentation(HappyAttemptTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)),
+                apiDocumentation(GetTechnicalFailureTest.class, BusinessFlow.class.getMethod("getTechnicalFailure")),
+                apiDocumentation(IsTechnicalFailureTest.class, BusinessFlow.class.getMethod("isTechnicalFailure"))
         );
         for (ApiDocumentation apiDocumentation : apiDocumentations) {
             writeWikiPage(apiDocumentation);
@@ -126,8 +129,8 @@ public class WikiGenerator {
 
     private static String indexMarkup(List<ApiDocumentation> apiDocumentations) throws IOException {
         return pageTitle("API Usage Examples") + "\n"
-                + "This is an index of usage examples of the API, with the aim of demonstrating what you can do as a learning aid.\n"
-                + "All of these examples were generated from real tests, so you can be confident that the usage shown is up to date." + "\n\n"
+                + "This is an index of usage usage of the API, with the aim of demonstrating what you can do as a learning aid.\n"
+                + "All of these usage were generated from real tests, so you can be confident that the usage shown is up to date." + "\n\n"
                 + apiLinksGroupedByApiClass(apiDocumentations);
     }
 
@@ -186,7 +189,7 @@ public class WikiGenerator {
 
     private String usageLink(Class<?> apiTestClass) {
         String packagePath = apiTestClass.getPackage().getName().replace('.', '/');
-        // always master copy, since there is only ever one live copy of the documentation site
+        // always master copy, since there is only ever one live copy of the wiki site
         return "https://github.com/theangrydev/business-flows/blob/master/src/test/java/" + packagePath + "/" + apiTestClass.getSimpleName() + ".java";
     }
 
@@ -222,8 +225,7 @@ public class WikiGenerator {
     }
 
     private String apiMarkup(Class<?> apiTestClass) throws ParseException, IOException {
-        String apiTestName = apiTestClass.getSimpleName();
-        TypeDeclaration typeDeclaration = JavaParser.parse(Paths.get("./src/test/java/api/" + apiTestName + ".java").toFile()).getTypes().get(0);
+        TypeDeclaration typeDeclaration = JavaParser.parse(Paths.get("./src/test/java/" + pathToClass(apiTestClass) + ".java").toFile()).getTypes().get(0);
         String description = description(typeDeclaration.getJavaDoc());
         String examples = typeDeclaration.getMembers().stream()
                 .filter(bodyDeclaration -> bodyDeclaration instanceof MethodDeclaration)
@@ -233,6 +235,10 @@ public class WikiGenerator {
                 .collect(joining("\n"));
         return description + "\n"
                 + examples + "\n";
+    }
+
+    private String pathToClass(Class<?> testClass) {
+        return testClass.getName().replace('.', '/');
     }
 
     private static String description(JavadocComment comment) {

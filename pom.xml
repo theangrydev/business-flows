@@ -404,7 +404,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.5.0</version>
                 <configuration>
-                    <mainClass>api.WikiGenerator</mainClass>
+                    <mainClass>api.wiki.WikiGenerator</mainClass>
                     <classpathScope>test</classpathScope>
                 </configuration>
                 <executions>

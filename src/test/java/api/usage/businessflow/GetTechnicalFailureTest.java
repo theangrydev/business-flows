@@ -15,14 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package api;
+package api.usage.businessflow;
 
+import api.usage.Happy;
+import api.usage.Sad;
 import io.github.theangrydev.businessflows.HappyPath;
 import io.github.theangrydev.businessflows.TechnicalFailure;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
-public class GetTechnicalFailureApiTest implements WithAssertions {
+public class GetTechnicalFailureTest implements WithAssertions {
 
     @Test
     public void canGetTechnicalFailure() {

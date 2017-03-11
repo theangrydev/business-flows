@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package api;
+package api.regression;
 
 import io.github.theangrydev.businessflows.ApiVersionHistory;
 import org.assertj.core.api.WithAssertions;
@@ -23,6 +23,9 @@ import org.junit.Test;
 
 import static io.github.theangrydev.businessflows.ApiVersionHistory.valueOf;
 
+/**
+ * Make sure the constants are not inadvertently renamed
+ */
 public class ApiVersionHistoryTest implements WithAssertions {
 
     @Test

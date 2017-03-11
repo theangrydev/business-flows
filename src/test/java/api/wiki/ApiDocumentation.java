@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package api;
+package api.wiki;
 
 import io.github.theangrydev.businessflows.ApiFeature;
 
