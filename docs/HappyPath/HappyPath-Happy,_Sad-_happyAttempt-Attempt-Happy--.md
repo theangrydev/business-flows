@@ -12,7 +12,7 @@ Added in version 2.5.0
 ## Happy attempt can fail
 ```java
 RuntimeException technicalFailure = new RuntimeException();
-Attempt<Happy> attempt = () -> throw technicalFailure;;
+Attempt<Happy> attempt = () -> {throw technicalFailure;};
 
 HappyPath<Happy, Sad> happyPath = HappyPath.happyAttempt(attempt);
 

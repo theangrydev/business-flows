@@ -1626,6 +1626,10 @@ public class DumpVisitor implements VoidVisitor<Object> {
         if (body instanceof ExpressionStmt) {
             // Print the expression directly
             ((ExpressionStmt) body).getExpression().accept(this, arg);
+        } else if (body instanceof BlockStmt) {
+            printer.print("{");
+            body.accept(this, arg);
+            printer.print("}");
         } else {
             body.accept(this, arg);
         }
