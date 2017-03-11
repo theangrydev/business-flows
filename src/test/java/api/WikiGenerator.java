@@ -51,7 +51,8 @@ import static java.nio.file.Files.newBufferedReader;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Arrays.stream;
-import static java.util.Collections.singletonList;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import static org.apache.commons.lang3.StringUtils.*;
@@ -139,9 +140,19 @@ public class WikiGenerator {
 
     private static String apiLinks(List<ApiDocumentation> apiDocumentations) throws IOException {
         return apiDocumentations.stream()
-                .map(apiDocumentation -> apiDocumentation.apiMethod)
-                .map(apiMethod -> hyperLink(pageDisplayName(apiMethod), pageName(apiMethod)))
+                .collect(groupingBy((java.util.function.Function<ApiDocumentation, ? extends Class<?>>) (apiDocumentation) -> apiDocumentation.apiMethod.getDeclaringClass()))
+                .entrySet()
+                .stream()
+                .map(entry -> apiLinks(entry.getKey(), entry.getValue()))
                 .collect(joining("\n\n"));
+    }
+
+    private static String apiLinks(Class<?> declaringClass, List<ApiDocumentation> apiDocumentations) {
+        return "## " + declaringClass.getSimpleName() + "\n" + apiDocumentations.stream()
+                .sorted(comparing((apiDocumentation1) -> apiDocumentation1.apiMethod.getName()))
+                .map(apiDocumentation -> apiDocumentation.apiMethod)
+                .map(apiMethod -> "* " + hyperLink(pageDisplayName(apiMethod), pageName(apiMethod)))
+                .collect(joining("\n"));
     }
 
     private static String hyperLink(String displayName, String pageName) {
