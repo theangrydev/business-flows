@@ -67,6 +67,8 @@ import static org.apache.commons.lang3.text.WordUtils.uncapitalize;
 //TODO: refactor before this gets out of hand
 public class WikiGenerator {
 
+    private static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile(".*(\\d+)-SNAPSHOT");
+
     private static final String INDEX_PAGE = "index.md";
     private static final String MARKDOWN_FILE_EXTENSION = ".md";
 
@@ -84,7 +86,32 @@ public class WikiGenerator {
         MavenXpp3Reader mavenXpp3Reader = new MavenXpp3Reader();
         Model model = mavenXpp3Reader.read(newBufferedReader(Paths.get("pom.xml"), UTF_8));
         WikiGenerator wikiGenerator = new WikiGenerator(model.getGroupId(), model.getArtifactId(), model.getVersion());
+        if (wikiGenerator.weAreReleasing()) {
+            wikiGenerator.copyDocsToReleaseDirectory();
+        }
         wikiGenerator.generate();
+    }
+
+    public boolean weAreReleasing() {
+        return !SNAPSHOT_VERSION_PATTERN.matcher(version).matches();
+    }
+
+    public void copyDocsToReleaseDirectory() throws IOException {
+        Path releaseDirectory = versionDocsDirectory();
+        Files.createDirectories(releaseDirectory);
+        Files.walk(masterDocsDirectory())
+                .filter(WikiGenerator::isMarkdownFile)
+                .forEach(path -> copyToReleaseDirectory(path, releaseDirectory));
+    }
+
+    private Path copyToReleaseDirectory(Path file, Path releaseDirectory) {
+        try {
+            Path target = releaseDirectory.resolve(file.subpath(wikiDirectory().getNameCount(), file.getNameCount()));
+            Files.createDirectories(target.subpath(1, target.getNameCount() - 1));
+            return Files.copy(file, target);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public void generate() throws IOException, ParseException, NoSuchMethodException {
@@ -104,8 +131,7 @@ public class WikiGenerator {
     }
 
     private static String latestReleasedVersion(String version) {
-        Pattern pattern = Pattern.compile(".*(\\d+)-SNAPSHOT");
-        Matcher matcher = pattern.matcher(version);
+        Matcher matcher = SNAPSHOT_VERSION_PATTERN.matcher(version);
         if (matcher.matches()) {
             // assume that if e.g. we are 10.1.8-SNAPSHOT then the most recent release was 10.1.7
             // this works even for major bumps, e.g. 11.0.1-SNAPSHOT will mean 11.0.0 was just released
@@ -118,15 +144,19 @@ public class WikiGenerator {
         }
     }
 
-    private static void removeAllMarkdownFiles() throws IOException {
+    private void removeAllMarkdownFiles() throws IOException {
         Files.walk(wikiDirectory())
                 .sorted(Comparator.reverseOrder())
+                .filter(WikiGenerator::isMarkdownFile)
                 .map(Path::toFile)
-                .filter(file -> file.getName().endsWith(MARKDOWN_FILE_EXTENSION))
                 .forEach(File::delete);
     }
 
-    private static void writeIndexPage(List<ApiDocumentation> apiDocumentations) throws IOException {
+    private static boolean isMarkdownFile(Path file) {
+        return file.getFileName().toString().endsWith(MARKDOWN_FILE_EXTENSION);
+    }
+
+    private void writeIndexPage(List<ApiDocumentation> apiDocumentations) throws IOException {
         Path page = wikiDirectory().resolve(INDEX_PAGE);
         String markup = indexMarkup(apiDocumentations);
         writePage(page, markup);
@@ -195,7 +225,15 @@ public class WikiGenerator {
     private String usageLink(Class<?> apiTestClass) {
         String packagePath = apiTestClass.getPackage().getName().replace('.', '/');
         // always master copy, since there is only ever one live copy of the wiki site
-        return "https://github.com/theangrydev/business-flows/blob/master/src/test/java/" + packagePath + "/" + apiTestClass.getSimpleName() + ".java";
+        return "https://github.com/theangrydev/business-flows/blob/" + blobBranch() + "/src/test/java/" + packagePath + "/" + apiTestClass.getSimpleName() + ".java";
+    }
+
+    private String blobBranch() {
+        if (weAreReleasing()) {
+            return "business-flows-" + version;
+        } else {
+            return "master";
+        }
     }
 
     private static String pageName(Method apiMethod) {
@@ -225,7 +263,23 @@ public class WikiGenerator {
         Files.write(page, markup.getBytes(UTF_8), CREATE, TRUNCATE_EXISTING);
     }
 
-    private static Path wikiDirectory() {
+    private Path wikiDirectory() {
+        if (weAreReleasing()) {
+            return versionDocsDirectory();
+        } else {
+            return masterDocsDirectory();
+        }
+    }
+
+    private Path versionDocsDirectory() {
+        return docsDirectory().resolve(version);
+    }
+
+    private Path masterDocsDirectory() {
+        return docsDirectory().resolve("master");
+    }
+
+    private Path docsDirectory() {
         return Paths.get("./docs");
     }
 
