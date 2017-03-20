@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="{{ site.github.url }}/styles.css">
+    <link rel="stylesheet" href="{{ '/styles.css' | prepend: site.github.url | replace: 'http://', '//' }}">
     <title>{{ page.title }}</title>
 </head>
 <body>
