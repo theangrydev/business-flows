@@ -48,6 +48,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static api.wiki.ApiDocumentation.apiDocumentation;
 import static java.lang.String.format;
@@ -89,7 +90,8 @@ public class WikiGenerator {
         if (wikiGenerator.weAreReleasing()) {
             wikiGenerator.copyDocsToReleaseDirectory();
         }
-        wikiGenerator.generate();
+        wikiGenerator.generateCurrentDocumentation();
+        wikiGenerator.generateVersionsIndexPage();
     }
 
     public boolean weAreReleasing() {
@@ -104,19 +106,15 @@ public class WikiGenerator {
                 .forEach(path -> copyToReleaseDirectory(path, releaseDirectory));
     }
 
-    private Path copyToReleaseDirectory(Path file, Path releaseDirectory) {
-        try {
-            Path target = releaseDirectory.resolve(file.subpath(wikiDirectory().getNameCount(), file.getNameCount()));
-            Files.createDirectories(target.subpath(1, target.getNameCount() - 1));
-            return Files.copy(file, target);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+    public void generateVersionsIndexPage() throws IOException {
+        Path indexPage = docsDirectory().resolve(INDEX_PAGE);
+        String markup = versionsIndexMarkup();
+        writePage(indexPage, markup);
     }
 
-    public void generate() throws IOException, ParseException, NoSuchMethodException {
+    public void generateCurrentDocumentation() throws IOException, ParseException, NoSuchMethodException {
         createDirectories(wikiDirectory());
-        removeAllMarkdownFiles();
+        removeAllMarkdownFiles(wikiDirectory());
         List<ApiDocumentation> apiDocumentations = Arrays.asList(
                 apiDocumentation(HappyPathAttemptTest.class, HappyPath.class.getMethod("happyPathAttempt", Attempt.class)),
                 apiDocumentation(HappyAttemptTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)),
@@ -128,6 +126,36 @@ public class WikiGenerator {
             writeWikiPage(apiDocumentation);
         }
         writeIndexPage(apiDocumentations);
+    }
+
+    private String versionsIndexMarkup() throws IOException {
+        return pageTitle("API Usage Examples") + "\n"
+                + versionIndexPageLinks(versionsWithDocumentation());
+    }
+
+    private String versionIndexPageLinks(List<String> versionsWithDocumentation) {
+        return versionsWithDocumentation.stream()
+                .map(version -> hyperLink(version, version + "/index"))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private List<String> versionsWithDocumentation() throws IOException {
+        return Files.list(docsDirectory())
+                .map(Path::toFile)
+                .filter(File::isDirectory)
+                .map(File::getName)
+                .filter(name -> !name.startsWith("_"))
+                .collect(Collectors.toList());
+    }
+
+    private Path copyToReleaseDirectory(Path file, Path releaseDirectory) {
+        try {
+            Path target = releaseDirectory.resolve(file.subpath(wikiDirectory().getNameCount(), file.getNameCount()));
+            Files.createDirectories(target.subpath(1, target.getNameCount() - 1));
+            return Files.copy(file, target);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private static String latestReleasedVersion(String version) {
@@ -144,8 +172,8 @@ public class WikiGenerator {
         }
     }
 
-    private void removeAllMarkdownFiles() throws IOException {
-        Files.walk(wikiDirectory())
+    private void removeAllMarkdownFiles(Path wikiDirectory) throws IOException {
+        Files.walk(wikiDirectory)
                 .sorted(Comparator.reverseOrder())
                 .filter(WikiGenerator::isMarkdownFile)
                 .map(Path::toFile)
