@@ -21,6 +21,7 @@ import api.usage.businessflow.GetTechnicalFailureTest;
 import api.usage.happypath.HappyAttemptTest;
 import api.usage.businessflow.IsTechnicalFailureTest;
 import api.usage.happypath.HappyAttemptWithFailureMappingTest;
+import api.usage.happypath.HappyPathAttemptTest;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -90,6 +91,7 @@ public class WikiGenerator {
         createDirectories(wikiDirectory());
         removeAllMarkdownFiles();
         List<ApiDocumentation> apiDocumentations = Arrays.asList(
+                apiDocumentation(HappyPathAttemptTest.class, HappyPath.class.getMethod("happyPathAttempt", Attempt.class)),
                 apiDocumentation(HappyAttemptTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)),
                 apiDocumentation(HappyAttemptWithFailureMappingTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class, Mapping.class)),
                 apiDocumentation(GetTechnicalFailureTest.class, BusinessFlow.class.getMethod("getTechnicalFailure")),
