@@ -22,18 +22,18 @@ package api.usage;
  */
 public class Happy {
 
-    private final String name;
+    private final String content;
 
     public Happy() {
         this("");
     }
 
-    public Happy(String name) {
-        this.name = name;
+    public Happy(String content) {
+        this.content = content;
     }
 
     @Override
     public String toString() {
-        return name;
+        return content;
     }
 }

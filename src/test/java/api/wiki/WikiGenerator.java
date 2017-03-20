@@ -20,6 +20,7 @@ package api.wiki;
 import api.usage.businessflow.GetTechnicalFailureTest;
 import api.usage.happypath.HappyAttemptTest;
 import api.usage.businessflow.IsTechnicalFailureTest;
+import api.usage.happypath.HappyAttemptWithFailureMappingTest;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -28,6 +29,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import io.github.theangrydev.businessflows.Attempt;
 import io.github.theangrydev.businessflows.BusinessFlow;
 import io.github.theangrydev.businessflows.HappyPath;
+import io.github.theangrydev.businessflows.Mapping;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -89,6 +91,7 @@ public class WikiGenerator {
         removeAllMarkdownFiles();
         List<ApiDocumentation> apiDocumentations = Arrays.asList(
                 apiDocumentation(HappyAttemptTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)),
+                apiDocumentation(HappyAttemptWithFailureMappingTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class, Mapping.class)),
                 apiDocumentation(GetTechnicalFailureTest.class, BusinessFlow.class.getMethod("getTechnicalFailure")),
                 apiDocumentation(IsTechnicalFailureTest.class, BusinessFlow.class.getMethod("isTechnicalFailure"))
         );

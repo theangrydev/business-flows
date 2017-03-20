@@ -21,4 +21,19 @@ package api.usage;
  * Sad type to use in tests.
  */
 public class Sad {
+
+    private final String content;
+
+    public Sad() {
+        this("");
+    }
+
+    public Sad(String content) {
+        this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return content;
+    }
 }
