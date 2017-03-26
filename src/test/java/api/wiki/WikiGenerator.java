@@ -120,6 +120,7 @@ public class WikiGenerator {
                 apiDocumentation(HappyPathTest.class, HappyPath.class.getMethod("happyPath", Object.class)),
                 apiDocumentation(SadPathTest.class, HappyPath.class.getMethod("sadPath", Object.class)),
                 apiDocumentation(TechnicalFailureTest.class, HappyPath.class.getMethod("technicalFailure", Exception.class)),
+                apiDocumentation(MapTest.class, HappyPath.class.getMethod("map", Mapping.class)),
                 apiDocumentation(GetTechnicalFailureTest.class, BusinessFlow.class.getMethod("getTechnicalFailure")),
                 apiDocumentation(IsTechnicalFailureTest.class, BusinessFlow.class.getMethod("isTechnicalFailure"))
         );
