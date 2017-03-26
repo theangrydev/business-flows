@@ -18,11 +18,8 @@
 package api.wiki;
 
 import api.usage.businessflow.GetTechnicalFailureTest;
-import api.usage.happypath.HappyAttemptTest;
+import api.usage.happypath.*;
 import api.usage.businessflow.IsTechnicalFailureTest;
-import api.usage.happypath.HappyAttemptWithFailureMappingTest;
-import api.usage.happypath.HappyPathAttemptTest;
-import api.usage.happypath.HappyPathBaseCasesTest;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -120,9 +117,9 @@ public class WikiGenerator {
                 apiDocumentation(HappyPathAttemptTest.class, HappyPath.class.getMethod("happyPathAttempt", Attempt.class)),
                 apiDocumentation(HappyAttemptTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class)),
                 apiDocumentation(HappyAttemptWithFailureMappingTest.class, HappyPath.class.getMethod("happyAttempt", Attempt.class, Mapping.class)),
-                apiDocumentation(HappyPathBaseCasesTest.class, HappyPath.class.getMethod("happyPath", Object.class)),
-                apiDocumentation(HappyPathBaseCasesTest.class, HappyPath.class.getMethod("sadPath", Object.class)),
-                apiDocumentation(HappyPathBaseCasesTest.class, HappyPath.class.getMethod("technicalFailure", Exception.class)),
+                apiDocumentation(HappyPathTest.class, HappyPath.class.getMethod("happyPath", Object.class)),
+                apiDocumentation(SadPathTest.class, HappyPath.class.getMethod("sadPath", Object.class)),
+                apiDocumentation(TechnicalFailureTest.class, HappyPath.class.getMethod("technicalFailure", Exception.class)),
                 apiDocumentation(GetTechnicalFailureTest.class, BusinessFlow.class.getMethod("getTechnicalFailure")),
                 apiDocumentation(IsTechnicalFailureTest.class, BusinessFlow.class.getMethod("isTechnicalFailure"))
         );
