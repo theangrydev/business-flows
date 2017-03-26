@@ -12,4 +12,7 @@ All of these examples were generated from real tests, so you can be confident th
 ## HappyPath
 * [HappyPath&lt;Happy, Sad&gt; happyAttempt(Attempt&lt;Happy&gt;)](HappyPath/HappyPath-Happy,_Sad-_happyAttempt-Attempt-Happy--)
 * [HappyPath&lt;Happy, Sad&gt; happyAttempt(Attempt&lt;Happy&gt;, Exception, Sad&gt;)](HappyPath/HappyPath-Happy,_Sad-_happyAttempt-Attempt-Happy-,_Exception,_Sad--)
+* [HappyPath&lt;Happy, Sad&gt; happyPath(Happy)](HappyPath/HappyPath-Happy,_Sad-_happyPath-Happy-)
 * [HappyPath&lt;Happy, Sad&gt; happyPathAttempt(BusinessFlow&lt;Happy, Sad&gt;&gt;)](HappyPath/HappyPath-Happy,_Sad-_happyPathAttempt-BusinessFlow-Happy,_Sad---)
+* [HappyPath&lt;Happy, Sad&gt; sadPath(Sad)](HappyPath/HappyPath-Happy,_Sad-_sadPath-Sad-)
+* [HappyPath&lt;Happy, Sad&gt; technicalFailure(Exception)](HappyPath/HappyPath-Happy,_Sad-_technicalFailure-Exception-)

@@ -19,7 +19,9 @@ package api.usage.happypath;
 
 import api.usage.Happy;
 import api.usage.Sad;
+import io.github.theangrydev.businessflows.Attempt;
 import io.github.theangrydev.businessflows.HappyPath;
+import io.github.theangrydev.businessflows.Mapping;
 import org.assertj.core.api.WithAssertions;
 import org.junit.Test;
 
@@ -53,5 +55,71 @@ public class HappyPathBaseCasesTest implements WithAssertions {
         HappyPath<Happy, Sad> happyPath = HappyPath.technicalFailure(technicalFailure);
 
         assertThat(happyPath.getTechnicalFailure()).isEqualTo(technicalFailure);
+    }
+
+    /**
+     * An attempt can fail and turn into a technical failure.
+     */
+    @Test
+    public void happyAttemptCanFail() {
+        RuntimeException technicalFailure = new RuntimeException();
+        Attempt<Happy> attempt = () -> {throw technicalFailure;};
+
+        HappyPath<Happy, Sad> happyPath = HappyPath.happyAttempt(attempt);
+
+        assertThat(happyPath.getTechnicalFailure()).isEqualTo(technicalFailure);
+    }
+
+    /**
+     * In this case, the technical failure is mapped to a sad path that contains the exception message.
+     */
+    @Test
+    public void happyAttemptCanFailAndMapTechnicalFailureToASadPath() {
+        Attempt<Happy> attempt = () -> {throw new RuntimeException("message");};
+        Mapping<Exception, Sad> sadMapping = technicalFailure -> new Sad(technicalFailure.getMessage());
+
+        HappyPath<Happy, Sad> happyPath = HappyPath.happyAttempt(attempt, sadMapping);
+
+        assertThat(happyPath.getSad()).hasToString("message");
+    }
+
+    /**
+     * An attempt that was once happy can be turned into a sad path.
+     * The `happyAttempt` method is playing the role of the Try monad here, but is lifted into the Either monad immediately, which is why the `Sad` type has to be specified up front.
+     */
+    @Test
+    public void happyAttemptCanIntroduceSadTypeViaThen() {
+        Sad sad = new Sad();
+
+        HappyPath<Happy, Sad> happyPath = HappyPath.<Happy, Sad>happyAttempt(Happy::new)
+                .then(happy -> HappyPath.sadPath(sad));
+
+        assertThat(happyPath.getSad()).isEqualTo(sad);
+    }
+
+    /**
+     * An attempt can fail and turn into a technical failure.
+     */
+    @Test
+    public void happyPathAttemptCanFail() {
+        RuntimeException technicalFailure = new RuntimeException();
+        Attempt<HappyPath<Happy, Sad>> attempt = () -> {throw technicalFailure;};
+
+        HappyPath<Happy, Sad> happyPath = HappyPath.happyPathAttempt(attempt);
+
+        assertThat(happyPath.getTechnicalFailure()).isEqualTo(technicalFailure);
+    }
+
+    /**
+     * An attempt can succeed and produce a happy path
+     */
+    @Test
+    public void happyPathAttemptCanSucceed() {
+        Happy happy = new Happy();
+        Attempt<HappyPath<Happy, Sad>> attempt = () -> HappyPath.happyPath(happy);
+
+        HappyPath<Happy, Sad> happyPath = HappyPath.happyPathAttempt(attempt);
+
+        assertThat(happyPath.getHappy()).isSameAs(happy);
     }
 }
