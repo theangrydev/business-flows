@@ -12,7 +12,9 @@
 
 A combination of the Try monad and the Either monad, to help tame complex business flows
 
-[Example Usage](https://github.com/tjheslin1/DogFoster/blob/master/src/main/java/io/github/tjheslin1/DogShelter.java) (thanks [@tjheslin1](https://github.com/tjheslin1))
+[Example Usage 1](https://github.com/tjheslin1/DogFoster/blob/master/src/main/java/io/github/tjheslin1/DogShelter.java) (thanks [@tjheslin1](https://github.com/tjheslin1))
+
+[Example Usage 2](https://github.com/hanfak/railway-prog-examples) (thanks [@hanfak](https://github.com/hanfak))
 
 ## Frequently asked questions
 ### What is it?
