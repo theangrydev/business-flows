@@ -1,4 +1,5 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.theangrydev/business-flows/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/io.github.theangrydev/business-flows)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.theangrydev/business-flows.svg)](https://mvnrepository.com/artifact/io.github.theangrydev/business-flows)
+
 [![Javadoc](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows.svg?label=javadoc)](http://javadoc-badge.appspot.com/io.github.theangrydev/business-flows)
 [![Gitter](https://badges.gitter.im/business-flows/Lobby.svg)](https://gitter.im/business-flows/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
