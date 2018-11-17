@@ -48,7 +48,7 @@ public interface Mapping<Old, New> {
      * @return The identity mapping
      */
     @ApiFeature(since = VERSION_6_0_0, stability = STABLE)
-    static <Old> Mapping<Old, Old> identity() {
+    static <Old extends New, New> Mapping<Old, New> identity() {
         return old -> old;
     }
 }

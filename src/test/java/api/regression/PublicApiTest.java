@@ -468,7 +468,7 @@ public class PublicApiTest implements WithAssertions {
             "public abstract New io.github.theangrydev.businessflows.Mapping.map(Old) throws java.lang.Exception\n" +
             "\n" +
             "[@io.github.theangrydev.businessflows.ApiFeature(comments=, since=6.0.0, stability=STABLE)]\n" +
-            "public static <Old> io.github.theangrydev.businessflows.Mapping<Old, Old> io.github.theangrydev.businessflows.Mapping.identity()\n" +
+            "public static <Old,New> io.github.theangrydev.businessflows.Mapping<Old, New> io.github.theangrydev.businessflows.Mapping.identity()\n" +
             "\n" +
             "Annotations:\n" +
             "[@java.lang.FunctionalInterface(), @io.github.theangrydev.businessflows.ApiFeature(comments=, since=1.0.0, stability=STABLE)]\n" +
